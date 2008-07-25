@@ -28,6 +28,7 @@ testversion: ilaver.o LAPACK_version.o
 
 clean:
 	rm -f *.o
+	rm -f testlsame testslamch testdlamch testsecond testdsecnd testieee testversion
 
 slamch.o: slamch.f ; $(FORTRAN) $(NOOPT) -c $< -o $@
 dlamch.o: dlamch.f ; $(FORTRAN) $(NOOPT) -c $< -o $@
