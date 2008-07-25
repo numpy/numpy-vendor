@@ -1,0 +1,79 @@
+include Make.inc
+mySRCdir = $(SRCdir)/src/blas/ger
+
+sobj = ATL_sger.o
+dobj = ATL_dger.o
+cobj = ATL_cgeru.o ATL_cgerc.o
+zobj = ATL_zgeru.o ATL_zgerc.o
+
+lib : all
+all : slib dlib clib zlib
+lvl2 : all
+dlvl2 : dlib
+slvl2 : slib
+clvl2 : clib
+zlvl2 : zlib
+clean : sclean dclean cclean zclean
+
+dlib :
+	$(PMAKE) dlib.grd
+	$(PMAKE) -f Make_dr1 lib
+dlib.grd : $(dobj)
+	$(ARCHIVER) $(ARFLAGS) $(ATLASlib) $(dobj)
+	$(RANLIB) $(ATLASlib)
+	touch dlib.grd
+dclean : 
+	rm -f $(dobj) d*.grd
+slib :
+	$(PMAKE) slib.grd
+	$(PMAKE) -f Make_sr1 lib
+slib.grd : $(sobj)
+	$(ARCHIVER) $(ARFLAGS) $(ATLASlib) $(sobj)
+	$(RANLIB) $(ATLASlib)
+	touch slib.grd
+sclean : 
+	rm -f $(sobj) s*.grd
+clib :
+	$(PMAKE) clib.grd
+	$(PMAKE) -f Make_cr1 lib
+clib.grd : $(cobj)
+	$(ARCHIVER) $(ARFLAGS) $(ATLASlib) $(cobj)
+	$(RANLIB) $(ATLASlib)
+	touch clib.grd
+cclean : 
+	rm -f $(cobj) c*.grd
+zlib :
+	$(PMAKE) zlib.grd
+	$(PMAKE) -f Make_zr1 lib
+zlib.grd : $(zobj)
+	$(ARCHIVER) $(ARFLAGS) $(ATLASlib) $(zobj)
+	$(RANLIB) $(ATLASlib)
+	touch zlib.grd
+zclean : 
+	rm -f $(zobj) z*.grd
+
+ATL_sger.o : $(mySRCdir)/ATL_ger.c $(INCSdir)/atlas_r1.h
+	$(SKC) -o $@ -c $(sKCFLAGS) -DSREAL $(mySRCdir)/ATL_ger.c
+ATL_sger1_a1_x1_yX.o : ATL_sger1.c
+	$(SKC) -o $@ -c $(sKCFLAGS) -DSREAL ATL_sger1.c
+ATL_dger.o : $(mySRCdir)/ATL_ger.c $(INCSdir)/atlas_r1.h
+	$(DKC) -o $@ -c $(dKCFLAGS) -DDREAL $(mySRCdir)/ATL_ger.c
+ATL_dger1_a1_x1_yX.o : ATL_dger1.c
+	$(DKC) -o $@ -c $(dKCFLAGS) -DDREAL ATL_dger1.c
+
+ATL_cgeru.o : $(mySRCdir)/ATL_ger.c $(INCSdir)/atlas_r1.h
+	$(CKC) -o $@ -c $(cKCFLAGS) -DSCPLX $(mySRCdir)/ATL_ger.c
+ATL_cgerc.o : $(mySRCdir)/ATL_ger.c $(INCSdir)/atlas_r1.h
+	$(CKC) -o $@ -c $(cKCFLAGS) -DSCPLX -DConj_ $(mySRCdir)/ATL_ger.c
+ATL_cger1u_a1_x1_yX.o : ATL_cger1.c
+	$(CKC) -o $@ -c $(cKCFLAGS) -DSCPLX ATL_cger1.c
+ATL_cger1c_a1_x1_yX.o : ATL_cger1.c
+	$(CKC) -o $@ -c $(cKCFLAGS) -DSCPLX -DConj_ ATL_cger1.c
+ATL_zgeru.o : $(mySRCdir)/ATL_ger.c $(INCSdir)/atlas_r1.h
+	$(ZKC) -o $@ -c $(zKCFLAGS) -DDCPLX $(mySRCdir)/ATL_ger.c
+ATL_zgerc.o : $(mySRCdir)/ATL_ger.c $(INCSdir)/atlas_r1.h
+	$(ZKC) -o $@ -c $(zKCFLAGS) -DDCPLX -DConj_ $(mySRCdir)/ATL_ger.c
+ATL_zger1u_a1_x1_yX.o : ATL_zger1.c
+	$(ZKC) -o $@ -c $(zKCFLAGS) -DDCPLX ATL_zger1.c
+ATL_zger1c_a1_x1_yX.o : ATL_zger1.c
+	$(ZKC) -o $@ -c $(zKCFLAGS) -DDCPLX -DConj_ ATL_zger1.c

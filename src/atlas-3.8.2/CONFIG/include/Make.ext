@@ -1,0 +1,31 @@
+
+topd = /home/whaley/atlas3.8/AtlasBase
+incs = -def topd /home/whaley/atlas3.8/AtlasBase \
+       -def incd /home/whaley/atlas3.8/AtlasBase/Clint \
+       -def BASEdir /home/whaley/atlas3.8/AtlasBase/Antoine/ \
+       -def basd /home/whaley/atlas3.8/AtlasBase/Clint
+ext  = extract
+extF = $(ext) -langF -lnlen71 -Remtblank -llwarn2 -LAPACK1 $(incs)
+extC = $(ext) -langC -lnlen79 -Remtblank -llwarn2 $(incs)
+extM = $(ext) -langM -lnlen79 -llwarn2 $(incs)
+
+default: all
+force_build:
+basd = /home/whaley/atlas3.8/AtlasBase/Clint
+basdRCW = /home/whaley/atlas3.8/AtlasBase/Clint
+basdAPP = /home/whaley/atlas3.8/AtlasBase/Antoine
+incf = /home/whaley/atlas3.8/AtlasBase/gen.inc
+
+basf = $(basdRCW)/atlconf.base
+
+files = atlas_asm.h atlconf.h atlconf_misc.h
+
+all : $(files)
+
+atlas_asm.h : $(basf)
+	$(extC) -b $(basf) -o atlas_asm.h rout=atlas_asm.h
+atlconf_misc.h : $(basf)
+	$(extC) -b $(basf) -o atlconf_misc.h rout=atlconf_misc.h
+atlconf.h : $(basf)
+	$(extC) -b $(basf) -o atlconf.h rout=atlconf.h
+
