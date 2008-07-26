@@ -3,7 +3,7 @@
 from subprocess import Popen
 import shutil
 import os.path
-from os.path import join as pjoin, dirname
+from os.path import join as pjoin, dirname, abspath
 import glob
 import tarfile
 from ConfigParser import ConfigParser
@@ -13,10 +13,11 @@ if os.name == 'nt' and not sys.platform == 'cygwin':
     raise ValueError("You should use cygwin python on windows for now !")
 
 # Configuration (this should be put in a config file at some point)
+# All path are relative to top directory (vendor)
 LAPACK_SRC = pjoin('src', 'lapack-lite-3.1.1')
-LAPACK_LIB = pjoin(LAPACK_SRC, 'lapack_MINGW32.a')
+LAPACK_LIB = abspath(pjoin(LAPACK_SRC, 'lapack_MINGW32.a'))
 ATLAS_SRC = pjoin('src', 'atlas-3.8.2')
-ATLAS_BUILDDIR = os.path.join(ATLAS_SRC, "MyObj")
+ATLAS_BUILDDIR = pjoin(ATLAS_SRC, "MyObj")
 # Use INT_ETIME for lapack if building with gfortran
 #TIMER = 'INT_ETIME'
 
