@@ -78,7 +78,7 @@ TARGETS = {'atlas' : [configure_atlas, build_atlas, build_atlas_tarball],
 
 class Config(object):
     def __init__(self):
-        self.arch = None
+        self.arch = 'NOSSE'
         self.cpuclass = 'i386'
         self.freq = 0
         self.pw = 32
@@ -120,11 +120,11 @@ def read_config(file):
     return cfg
 
 if __name__ == '__main__':
-    try:
-        cfg = read_config(pjoin(dirname(__file__), 'site.cfg'))
-    except IOError:
-        print "Using default config (site.cfg not found)"
+    argc = len(sys.argv)
+    if argc < 2:
         cfg = Config()
+    else:
+        cfg = read_config(sys.argv[1])
 
     ARCH = cfg.arch
     FC = cfg.f77
