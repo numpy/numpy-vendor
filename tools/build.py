@@ -40,7 +40,7 @@ def configure_atlas():
     if os.path.exists(ATLAS_BUILDDIR):
         shutil.rmtree(ATLAS_BUILDDIR)
     os.makedirs(ATLAS_BUILDDIR)
-    p = Popen(['../configure',  '--with-netlib-lapack=%s' % LAPACK_LIB, '-C', 'if', FC], cwd = ATLAS_BUILDDIR)
+    p = Popen(['../configure',  '--with-netlib-lapack=%s' % LAPACK_LIB, '-C', 'if', FC, "-b %d" % ATLAS_PW, "-m %d" ATLAS_MHZ], cwd = ATLAS_BUILDDIR)
     os.waitpid(p.pid, 0)
 
 def build_lapack():
@@ -101,7 +101,7 @@ def read_config(file):
     if len(f) < 1:
         raise IOError("file %s not found" % file)
 
-    cfg = Config() 
+    cfg = Config()
     if cfgp.has_section('CPU'):
         if cfgp.has_option('CPU', 'ARCH'):
             cfg.arch = cfgp.get('CPU', 'ARCH')
@@ -130,6 +130,8 @@ if __name__ == '__main__':
     FC = cfg.f77
     LAPACK_F77_FLAGS = cfg.lapack_flags
     ATLAS_TARBALL = 'atlas-3.8.2-%s.tbz2' % ARCH
+    ATLAS_PW = cfg.pw
+    ATLAS_MHZ = cfg.freq
 
     clean()
     for t in cfg.targets:
