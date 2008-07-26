@@ -46,3 +46,16 @@ cross-compilable AFAIK), the installer itself can be built under linux. Debian
 contains nsis ported on Linux:
 
 makensis tools/basic.nsis
+
+CAVEATS
+=======
+
+The build.py script is really basic. It does not handle failure well, and it
+may be difficult to interrupt (windows indiosyncraties wrt process management
+and lack of signals do not help; add cygwin on the top of it to make things
+more complex).
+
+The only solution I can see would be to use ctypes to use windows specific
+ProcessTerminate. To stop atlas build is not easy either: even from cygwin
+shell, you cannot stop it easily. The easiest way I am aware of is to kill the
+AtlasTee.exe process (from cygwin or from the windows TaksManager).
