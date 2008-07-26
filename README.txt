@@ -37,3 +37,12 @@ SSE3, etc...
 
 It will look for binaries in the binaries directory: one directory per arch. A
 subdir mingw32 is used for differentiatin with the not-yet supported Win64.
+
+Note
+----
+
+Although the binaries themselves have to be built on windows (ATLAS is not
+cross-compilable AFAIK), the installer itself can be built under linux. Debian
+contains nsis ported on Linux:
+
+makensis tools/basic.nsis
