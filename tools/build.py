@@ -121,5 +121,5 @@ if __name__ == '__main__':
     ATLAS_TARBALL = 'atlas-3.8.2-%s.tbz2' % ARCH
 
     clean()
-    #for i in cfg.targets:
-    #    TARGETS[i]()
+    for i in cfg.targets:
+        TARGETS[i]()
