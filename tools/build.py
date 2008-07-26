@@ -40,7 +40,7 @@ def configure_atlas():
     if os.path.exists(ATLAS_BUILDDIR):
         shutil.rmtree(ATLAS_BUILDDIR)
     os.makedirs(ATLAS_BUILDDIR)
-    p = Popen(['../configure',  '--with-netlib-lapack=%s' % LAPACK_LIB, '-C', 'if', FC, "-b %d" % ATLAS_PW, "-m %d" ATLAS_MHZ], cwd = ATLAS_BUILDDIR)
+    p = Popen(['../configure',  '--with-netlib-lapack=%s' % LAPACK_LIB, '-C', 'if', FC, "-b %d" % ATLAS_PW, "-m %d" % ATLAS_MHZ], cwd = ATLAS_BUILDDIR)
     os.waitpid(p.pid, 0)
 
 def build_lapack():
