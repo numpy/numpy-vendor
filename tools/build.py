@@ -73,8 +73,8 @@ def clean():
     clean_lapack()
 
 TARGETS = {'atlas' : [configure_atlas, build_atlas, build_atlas_tarball],
-        'lapack' : build_lapack,
-        'blas' : build_blas}
+        'lapack' : [build_lapack],
+        'blas' : [build_blas]}
 
 class Config(object):
     def __init__(self):
@@ -132,5 +132,7 @@ if __name__ == '__main__':
     ATLAS_TARBALL = 'atlas-3.8.2-%s.tbz2' % ARCH
 
     clean()
-    for i in cfg.targets:
-        TARGETS[i]()
+    for t in cfg.targets:
+        target = TARGETS[t]
+        for action in target:
+            action()
