@@ -48,9 +48,19 @@ def build_lapack():
     p = Popen(["make", "lapacklib", "FORTRAN=%s" % FC, "LOADER=%s" % FC, "OPTS=%s" % LAPACK_F77_FLAGS], cwd = LAPACK_SRC)
     os.waitpid(p.pid, 0)
 
+def build_blas():
+    print "====== Build BLAS ======"
+    p = Popen(["make", "blaslib", "FORTRAN=%s" % FC, "LOADER=%s" % FC, "OPTS=%s" % LAPACK_F77_FLAGS], cwd = LAPACK_SRC)
+    os.waitpid(p.pid, 0)
+
 def clean_lapack():
     print "====== Clean LAPACK ======"
     p = Popen(['make', 'cleanlib'],  cwd = LAPACK_SRC)
+    os.waitpid(p.pid, 0)
+
+def clean_blas():
+    print "====== Clean BLAS ======"
+    p = Popen(['make', 'clean'],  cwd = LAPACK_SRC)
     os.waitpid(p.pid, 0)
 
 def clean_atlas():
@@ -63,7 +73,8 @@ def clean():
     clean_lapack()
 
 TARGETS = {'atlas' : [configure_atlas, build_atlas, build_atlas_tarball],
-        'lapack' : build_lapack}
+        'lapack' : build_lapack,
+        'blas' : build_blas}
 
 class Config(object):
     def __init__(self):
