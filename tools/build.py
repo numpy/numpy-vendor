@@ -3,7 +3,7 @@
 from subprocess import Popen
 import shutil
 import os.path
-from os.path import join as pjoin, dirname, abspath
+from os.path import join as pjoin, dirname, abspath, basename
 import glob
 import tarfile
 from ConfigParser import ConfigParser
@@ -16,6 +16,8 @@ if os.name == 'nt' and not sys.platform == 'cygwin':
 # All path are relative to top directory (vendor)
 LAPACK_SRC = pjoin('src', 'lapack-lite-3.1.1')
 LAPACK_LIB = abspath(pjoin(LAPACK_SRC, 'lapack_MINGW32.a'))
+BLAS_LIB = abspath(pjoin(LAPACK_SRC, 'blas_MINGW32.a'))
+LAPACK_TARBALL = 'lapack-3.1.1.tbz2'
 ATLAS_SRC = pjoin('src', 'atlas-3.8.2')
 ATLAS_BUILDDIR = pjoin(ATLAS_SRC, "MyObj")
 # Use INT_ETIME for lapack if building with gfortran
@@ -27,7 +29,19 @@ def build_atlas_tarball():
     fid = tarfile.open(ATLAS_TARBALL, 'w:bz2')
     try:
         for f in files:
+            af = pjoin(ARCH.lower(), 'mingw32', basename(f))
             fid.add(f)
+    finally:
+        fid.close()
+
+def build_lapack_tarball():
+    print "====== Building BLAS/LAPACK tarbal ======"
+    fid = tarfile.open(LAPACK_TARBALL, 'w:bz2')
+    try:
+        af = pjoin(ARCH.lower(), 'mingw32', 'libblas.a')
+        fid.add(BLAS_LIB, af)
+        af = pjoin(ARCH.lower(), 'mingw32', 'liblapack.a')
+        fid.add(LAPACK_LIB, af)
     finally:
         fid.close()
 
@@ -75,7 +89,7 @@ def clean():
 
 TARGETS = {'atlas' : [configure_atlas, build_atlas, build_atlas_tarball],
         'lapack' : [build_lapack],
-        'blas' : [build_blas]}
+        'blas-lapack' : [build_blas, build_lapack, build_lapack_tarball]}
 
 class Config(object):
     def __init__(self):
