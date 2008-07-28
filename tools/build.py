@@ -73,9 +73,15 @@ def clean_lapack():
     p = Popen(['make', 'cleanlib'],  cwd = LAPACK_SRC)
     os.waitpid(p.pid, 0)
 
+    p = Popen(['make', 'cleanall'],  cwd = LAPACK_SRC)
+    os.waitpid(p.pid, 0)
+
 def clean_blas():
     print "====== Clean BLAS ======"
     p = Popen(['make', 'clean'],  cwd = LAPACK_SRC)
+    os.waitpid(p.pid, 0)
+
+    p = Popen(['make', 'cleanall'],  cwd = LAPACK_SRC)
     os.waitpid(p.pid, 0)
 
 def clean_atlas():
