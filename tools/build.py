@@ -142,20 +142,23 @@ def read_config(file):
 
 if __name__ == '__main__':
     argc = len(sys.argv)
-    if argc < 2:
-        cfg = Config()
+    if '-c' in sys.argv:
+        clean()
     else:
-        cfg = read_config(sys.argv[1])
+        if argc < 2:
+            cfg = Config()
+        else:
+            cfg = read_config(sys.argv[1])
 
-    ARCH = cfg.arch
-    FC = cfg.f77
-    LAPACK_F77_FLAGS = cfg.lapack_flags
-    ATLAS_TARBALL = 'atlas-3.8.2-%s.tbz2' % ARCH
-    ATLAS_PW = cfg.pw
-    ATLAS_MHZ = cfg.freq
+        ARCH = cfg.arch
+        FC = cfg.f77
+        LAPACK_F77_FLAGS = cfg.lapack_flags
+        ATLAS_TARBALL = 'atlas-3.8.2-%s.tbz2' % ARCH
+        ATLAS_PW = cfg.pw
+        ATLAS_MHZ = cfg.freq
 
-    clean()
-    for t in cfg.targets:
-        target = TARGETS[t]
-        for action in target:
-            action()
+        clean()
+        for t in cfg.targets:
+            target = TARGETS[t]
+            for action in target:
+                action()
