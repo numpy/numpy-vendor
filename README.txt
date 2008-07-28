@@ -59,3 +59,7 @@ The only solution I can see would be to use ctypes to use windows specific
 ProcessTerminate. To stop atlas build is not easy either: even from cygwin
 shell, you cannot stop it easily. The easiest way I am aware of is to kill the
 AtlasTee.exe process (from cygwin or from the windows TaksManager).
+
+For this reason, for now, the build.py always starts from scratch. A better
+solution would be to use a build system like rake or scons. But rake would mean
+more dependencies, and scons is too slow.
