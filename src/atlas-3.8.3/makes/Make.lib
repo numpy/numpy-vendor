@@ -1,0 +1,110 @@
+include Make.inc
+mySRCdir = $(SRCdir)/lib
+#
+# override with libatlas.so only when atlas is built to one lib
+#
+DYNlibs = liblapack.so libf77blas.so libcblas.so libatlas.so 
+PTDYNlibs = liblapack.so libptf77blas.so libptcblas.so libatlas.so 
+CDYNlibs = liblapack.so libcblas.so libatlas.so 
+CPTDYNlibs = liblapack.so libptcblas.so libatlas.so 
+
+VER=3.8.3
+tarnam = atlas$(VER)_$(ARCH)
+tar : tarfile
+tarfile : $(tarnam).tgz
+$(tarnam).tgz :
+	mkdir $(ARCH)
+	cd $(ARCH) ; mkdir include lib
+	cp $(TOPdir)/doc/LibReadme.txt $(ARCH)/README
+	cp $(TOPdir)/Make.$(ARCH) $(ARCH)/.
+	cp $(BINdir)/INSTALL_LOG/SUMMARY.LOG $(ARCH)/.
+	cp $(INCSdir)/cblas.h $(ARCH)/include/.
+	cp $(INCSdir)/clapack.h $(ARCH)/include/.
+	cp $(LIBdir)/libatlas.a $(ARCH)/lib/.
+	cp $(LIBdir)/libf77blas.a $(ARCH)/lib/.
+	cp $(LIBdir)/libcblas.a $(ARCH)/lib/.
+	cp $(LIBdir)/liblapack.a $(ARCH)/lib/.
+	- cp $(LIBdir)/libptcblas.a $(ARCH)/lib/.
+	- cp $(LIBdir)/libptf77blas.a $(ARCH)/lib/.
+	$(TAR) cf $(tarnam).tar $(ARCH)
+	rm -rf $(ARCH)
+	$(GZIP) --best $(tarnam).tar
+	mv $(tarnam).tar.gz $(tarnam).tgz
+
+ptshared :
+	- rm -f libatlas.so liblapack.so
+	$(MAKE) libatlas.so liblapack.so libptf77blas.so libf77blas.so \
+                libptcblas.so libcblas.so liblapack.so
+shared :
+	- rm -f libatlas.so liblapack.so
+	$(MAKE) libatlas.so liblapack.so libf77blas.so libcblas.so liblapack.so
+cptshared :
+	- rm -f libatlas.so libclapack.so
+	$(MAKE) libatlas.so libclapack.so libptcblas.so libcblas.so
+cshared :
+	- rm -f libatlas.so libclapack.so
+	$(MAKE) libatlas.so libclapack.so libcblas.so
+
+libatlas.so : libatlas.a
+	ld $(LDFLAGS) -shared -soname libatlas.so -o libatlas.so \
+        --whole-archive libatlas.a --no-whole-archive -lc $(LIBS)
+liblapack.so : liblapack.a
+	ld $(LDFLAGS) -shared -soname $@ -o $@ --whole-archive \
+           liblapack.a --no-whole-archive $(F77SYSLIB)
+libclapack.so : libclapack.a
+	ld $(LDFLAGS) -shared -soname liblapack.so -o liblapack.so \
+           --whole-archive libclapack.a
+libptf77blas.so : libptf77blas.a
+	ld $(LDFLAGS) -shared -soname $@ -o $@ --whole-archive libptf77blas.a \
+           --no-whole-archive $(F77SYSLIB)
+libf77blas.so : libf77blas.a
+	ld $(LDFLAGS) -shared -soname $@ -o $@ --whole-archive libf77blas.a \
+           --no-whole-archive $(F77SYSLIB)
+libptcblas.so : libptcblas.a
+	ld $(LDFLAGS) -shared -soname $@ -o $@ --whole-archive libptcblas.a
+libcblas.so : libcblas.a
+	ld $(LDFLAGS) -shared -soname $@ -o $@ --whole-archive libcblas.a
+#
+# Builds one shared lib from all ATLAS files
+#
+fat_ptshared :                              # threaded target
+	ld $(LDFLAGS) -shared -soname libatlas.so -o libatlas.so \
+        --whole-archive liblapack.a libptf77blas.a libptcblas.a libatlas.a \
+           --no-whole-archive -lc $(F77SYSLIB) $(LIBS)
+fat_shared :                                # unthreaded target
+	ld $(LDFLAGS) -shared -soname libatlas.so -o libatlas.so \
+        --whole-archive liblapack.a libf77blas.a libcblas.a libatlas.a \
+           --no-whole-archive -lc $(F77SYSLIB) $(LIBS)
+#
+# Builds shared lib, not include fortran codes from LAPACK
+#
+fat_cptshared : libclapack.a                # threaded target
+	ld $(LDFLAGS) -shared -soname libcatlas.so -o libcatlas.so \
+        --whole-archive libclapack.a libptcblas.a libatlas.a \
+        --no-whole-archive -lc $(LIBS)
+fat_cshared : libclapack.a                  # unthreaded target
+	ld $(LDFLAGS) -shared -soname libcatlas.so -o libcatlas.so \
+        --whole-archive libclapack.a libcblas.a libatlas.a \
+        --no-whole-archive -lc $(LIBS)
+
+libclapack.a : liblapack.a
+	rm -rf clapack libclapack.a
+	mkdir clapack
+	cd clapack ; ar x ../liblapack.a
+	rm -f clapack/*f77wrap* 
+	ar r libclapack.a clapack/ATL_* clapack/clapack_*
+	rm -rf clapack
+xtst_lp: $(DYNlibs)
+	$(ICC) $(CDEFS) -o $@ $(mySRCdir)/qr.c $(DYNlibs) -Wl,--rpath ./
+xtst : $(DYNlibs)
+	$(ICC) $(CDEFS) -o $@ $(mySRCdir)/test_dynlink.c $(DYNlibs) \
+           -Wl,--rpath ./
+
+xtry_lp:
+	$(ICC) $(CDEFS) -o $@ $(mySRCdir)/qr.c libatlas.so -Wl,--rpath ./
+xtry :
+	$(ICC) $(CDEFS) -o $@ $(mySRCdir)/test_dynlink.c libatlas.so \
+           -Wl,--rpath ./
+xtry_c :
+	$(ICC) $(CDEFS) -o $@ $(mySRCdir)/test_dynlink.c libcatlas.so \
+           -Wl,--rpath ./

@@ -1,0 +1,1212 @@
+########################################################################
+#  
+#  -- Automatically Tuned Linear Algebra Software (ATLAS)
+#     (C) Copyright 2000 All Rights Reserved
+#
+########################################################################
+#
+#  -- Copyright notice and Licensing terms:
+#
+#  Redistribution  and  use in  source and binary forms, with or without
+#  modification, are  permitted provided  that the following  conditions
+#  are met:
+#
+#  1. Redistributions  of  source  code  must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#  2. Redistributions in binary form must reproduce  the above copyright
+#     notice,  this list of conditions, and the  following disclaimer in
+#     the documentation and/or other materials provided with the distri-
+#     bution.
+#  3. The name of the University,  the ATLAS group,  or the names of its
+#     contributors  may not be used to endorse or promote products deri-
+#     ved from this software without specific written permission.
+#
+#  -- Disclaimer:
+#
+#  THIS  SOFTWARE  IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+#  ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES,  INCLUDING,  BUT NOT
+#  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+#  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE UNIVERSITY
+#  OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  INDIRECT, INCIDENTAL, SPE-
+#  CIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+#  TO,  PROCUREMENT  OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+#  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEO-
+#  RY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT  (IN-
+#  CLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+#  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#  
+########################################################################
+#
+include Make.inc
+mySRCdir = $(SRCdir)/src/blas/level2/kernel
+#
+########################################################################
+#
+INC2dep     = \
+   $(INCSdir)/atlas_misc.h      $(INCSdir)/atlas_kernel2.h \
+   $(INCSdir)/atlas_lvl2.h      $(INCSdir)/atlas_mv.h      \
+   $(INCSdir)/atlas_r1.h        $(INCSdir)/atlas_reflvl2.h \
+   $(INCSdir)/atlas_reflevel2.h
+#
+## Object files ########################################################
+# 
+SRBLAS2 = \
+   ATL_ssbmvL.o ATL_ssbmvU.o ATL_sspmvL.o ATL_sspmvU.o ATL_sspr2L.o \
+   ATL_sspr2U.o ATL_ssprL.o ATL_ssprU.o ATL_ssymvL.o ATL_ssymvU.o \
+   ATL_ssyr2L.o ATL_ssyr2U.o ATL_ssyrL.o ATL_ssyrU.o ATL_stbmvLN.o \
+   ATL_stbmvLNN.o ATL_stbmvLNU.o ATL_stbmvLT.o ATL_stbmvLTN.o ATL_stbmvLTU.o \
+   ATL_stbmvUN.o ATL_stbmvUNN.o ATL_stbmvUNU.o ATL_stbmvUT.o ATL_stbmvUTN.o \
+   ATL_stbmvUTU.o ATL_stbsvLN.o ATL_stbsvLNN.o ATL_stbsvLNU.o ATL_stbsvLT.o \
+   ATL_stbsvLTN.o ATL_stbsvLTU.o ATL_stbsvUN.o ATL_stbsvUNN.o ATL_stbsvUNU.o \
+   ATL_stbsvUT.o ATL_stbsvUTN.o ATL_stbsvUTU.o ATL_stpmvLN.o ATL_stpmvLNN.o \
+   ATL_stpmvLNU.o ATL_stpmvLT.o ATL_stpmvLTN.o ATL_stpmvLTU.o ATL_stpmvUN.o \
+   ATL_stpmvUNN.o ATL_stpmvUNU.o ATL_stpmvUT.o ATL_stpmvUTN.o ATL_stpmvUTU.o \
+   ATL_stpsvLN.o ATL_stpsvLNN.o ATL_stpsvLNU.o ATL_stpsvLT.o ATL_stpsvLTN.o \
+   ATL_stpsvLTU.o ATL_stpsvUN.o ATL_stpsvUNN.o ATL_stpsvUNU.o ATL_stpsvUT.o \
+   ATL_stpsvUTN.o ATL_stpsvUTU.o ATL_strmvLN.o ATL_strmvLNN.o ATL_strmvLNU.o \
+   ATL_strmvLT.o ATL_strmvLTN.o ATL_strmvLTU.o ATL_strmvUN.o ATL_strmvUNN.o \
+   ATL_strmvUNU.o ATL_strmvUT.o ATL_strmvUTN.o ATL_strmvUTU.o ATL_strsvLN.o \
+   ATL_strsvLNN.o ATL_strsvLNU.o ATL_strsvLT.o ATL_strsvLTN.o ATL_strsvLTU.o \
+   ATL_strsvUN.o ATL_strsvUNN.o ATL_strsvUNU.o ATL_strsvUT.o ATL_strsvUTN.o \
+   ATL_strsvUTU.o
+#
+DRBLAS2 = \
+   ATL_dsbmvL.o ATL_dsbmvU.o ATL_dspmvL.o ATL_dspmvU.o ATL_dspr2L.o \
+   ATL_dspr2U.o ATL_dsprL.o ATL_dsprU.o ATL_dsymvL.o ATL_dsymvU.o \
+   ATL_dsyr2L.o ATL_dsyr2U.o ATL_dsyrL.o ATL_dsyrU.o ATL_dtbmvLN.o \
+   ATL_dtbmvLNN.o ATL_dtbmvLNU.o ATL_dtbmvLT.o ATL_dtbmvLTN.o ATL_dtbmvLTU.o \
+   ATL_dtbmvUN.o ATL_dtbmvUNN.o ATL_dtbmvUNU.o ATL_dtbmvUT.o ATL_dtbmvUTN.o \
+   ATL_dtbmvUTU.o ATL_dtbsvLN.o ATL_dtbsvLNN.o ATL_dtbsvLNU.o ATL_dtbsvLT.o \
+   ATL_dtbsvLTN.o ATL_dtbsvLTU.o ATL_dtbsvUN.o ATL_dtbsvUNN.o ATL_dtbsvUNU.o \
+   ATL_dtbsvUT.o ATL_dtbsvUTN.o ATL_dtbsvUTU.o ATL_dtpmvLN.o ATL_dtpmvLNN.o \
+   ATL_dtpmvLNU.o ATL_dtpmvLT.o ATL_dtpmvLTN.o ATL_dtpmvLTU.o ATL_dtpmvUN.o \
+   ATL_dtpmvUNN.o ATL_dtpmvUNU.o ATL_dtpmvUT.o ATL_dtpmvUTN.o ATL_dtpmvUTU.o \
+   ATL_dtpsvLN.o ATL_dtpsvLNN.o ATL_dtpsvLNU.o ATL_dtpsvLT.o ATL_dtpsvLTN.o \
+   ATL_dtpsvLTU.o ATL_dtpsvUN.o ATL_dtpsvUNN.o ATL_dtpsvUNU.o ATL_dtpsvUT.o \
+   ATL_dtpsvUTN.o ATL_dtpsvUTU.o ATL_dtrmvLN.o ATL_dtrmvLNN.o ATL_dtrmvLNU.o \
+   ATL_dtrmvLT.o ATL_dtrmvLTN.o ATL_dtrmvLTU.o ATL_dtrmvUN.o ATL_dtrmvUNN.o \
+   ATL_dtrmvUNU.o ATL_dtrmvUT.o ATL_dtrmvUTN.o ATL_dtrmvUTU.o ATL_dtrsvLN.o \
+   ATL_dtrsvLNN.o ATL_dtrsvLNU.o ATL_dtrsvLT.o ATL_dtrsvLTN.o ATL_dtrsvLTU.o \
+   ATL_dtrsvUN.o ATL_dtrsvUNN.o ATL_dtrsvUNU.o ATL_dtrsvUT.o ATL_dtrsvUTN.o \
+   ATL_dtrsvUTU.o
+#
+CRBLAS2 = \
+   ATL_chbmvL.o ATL_chbmvU.o ATL_chemvL.o ATL_chemvU.o ATL_cher2L.o \
+   ATL_cher2U.o ATL_cherL.o ATL_cherU.o ATL_chpmvL.o ATL_chpmvU.o \
+   ATL_chpr2L.o ATL_chpr2U.o ATL_chprL.o ATL_chprU.o ATL_ctbmvLC.o \
+   ATL_ctbmvLCN.o ATL_ctbmvLCU.o ATL_ctbmvLH.o ATL_ctbmvLHN.o ATL_ctbmvLHU.o \
+   ATL_ctbmvLN.o ATL_ctbmvLNN.o ATL_ctbmvLNU.o ATL_ctbmvLT.o ATL_ctbmvLTN.o \
+   ATL_ctbmvLTU.o ATL_ctbmvUC.o ATL_ctbmvUCN.o ATL_ctbmvUCU.o ATL_ctbmvUH.o \
+   ATL_ctbmvUHN.o ATL_ctbmvUHU.o ATL_ctbmvUN.o ATL_ctbmvUNN.o ATL_ctbmvUNU.o \
+   ATL_ctbmvUT.o ATL_ctbmvUTN.o ATL_ctbmvUTU.o ATL_ctbsvLC.o ATL_ctbsvLCN.o \
+   ATL_ctbsvLCU.o ATL_ctbsvLH.o ATL_ctbsvLHN.o ATL_ctbsvLHU.o ATL_ctbsvLN.o \
+   ATL_ctbsvLNN.o ATL_ctbsvLNU.o ATL_ctbsvLT.o ATL_ctbsvLTN.o ATL_ctbsvLTU.o \
+   ATL_ctbsvUC.o ATL_ctbsvUCN.o ATL_ctbsvUCU.o ATL_ctbsvUH.o ATL_ctbsvUHN.o \
+   ATL_ctbsvUHU.o ATL_ctbsvUN.o ATL_ctbsvUNN.o ATL_ctbsvUNU.o ATL_ctbsvUT.o \
+   ATL_ctbsvUTN.o ATL_ctbsvUTU.o ATL_ctpmvLC.o ATL_ctpmvLCN.o ATL_ctpmvLCU.o \
+   ATL_ctpmvLH.o ATL_ctpmvLHN.o ATL_ctpmvLHU.o ATL_ctpmvLN.o ATL_ctpmvLNN.o \
+   ATL_ctpmvLNU.o ATL_ctpmvLT.o ATL_ctpmvLTN.o ATL_ctpmvLTU.o ATL_ctpmvUC.o \
+   ATL_ctpmvUCN.o ATL_ctpmvUCU.o ATL_ctpmvUH.o ATL_ctpmvUHN.o ATL_ctpmvUHU.o \
+   ATL_ctpmvUN.o ATL_ctpmvUNN.o ATL_ctpmvUNU.o ATL_ctpmvUT.o ATL_ctpmvUTN.o \
+   ATL_ctpmvUTU.o ATL_ctpsvLC.o ATL_ctpsvLCN.o ATL_ctpsvLCU.o ATL_ctpsvLH.o \
+   ATL_ctpsvLHN.o ATL_ctpsvLHU.o ATL_ctpsvLN.o ATL_ctpsvLNN.o ATL_ctpsvLNU.o \
+   ATL_ctpsvLT.o ATL_ctpsvLTN.o ATL_ctpsvLTU.o ATL_ctpsvUC.o ATL_ctpsvUCN.o \
+   ATL_ctpsvUCU.o ATL_ctpsvUH.o ATL_ctpsvUHN.o ATL_ctpsvUHU.o ATL_ctpsvUN.o \
+   ATL_ctpsvUNN.o ATL_ctpsvUNU.o ATL_ctpsvUT.o ATL_ctpsvUTN.o ATL_ctpsvUTU.o \
+   ATL_ctrmvLC.o ATL_ctrmvLCN.o ATL_ctrmvLCU.o ATL_ctrmvLH.o ATL_ctrmvLHN.o \
+   ATL_ctrmvLHU.o ATL_ctrmvLN.o ATL_ctrmvLNN.o ATL_ctrmvLNU.o ATL_ctrmvLT.o \
+   ATL_ctrmvLTN.o ATL_ctrmvLTU.o ATL_ctrmvUC.o ATL_ctrmvUCN.o ATL_ctrmvUCU.o \
+   ATL_ctrmvUH.o ATL_ctrmvUHN.o ATL_ctrmvUHU.o ATL_ctrmvUN.o ATL_ctrmvUNN.o \
+   ATL_ctrmvUNU.o ATL_ctrmvUT.o ATL_ctrmvUTN.o ATL_ctrmvUTU.o ATL_ctrsvLC.o \
+   ATL_ctrsvLCN.o ATL_ctrsvLCU.o ATL_ctrsvLH.o ATL_ctrsvLHN.o ATL_ctrsvLHU.o \
+   ATL_ctrsvLN.o ATL_ctrsvLNN.o ATL_ctrsvLNU.o ATL_ctrsvLT.o ATL_ctrsvLTN.o \
+   ATL_ctrsvLTU.o ATL_ctrsvUC.o ATL_ctrsvUCN.o ATL_ctrsvUCU.o ATL_ctrsvUH.o \
+   ATL_ctrsvUHN.o ATL_ctrsvUHU.o ATL_ctrsvUN.o ATL_ctrsvUNN.o ATL_ctrsvUNU.o \
+   ATL_ctrsvUT.o ATL_ctrsvUTN.o ATL_ctrsvUTU.o
+#
+ZRBLAS2 = \
+   ATL_zhbmvL.o ATL_zhbmvU.o ATL_zhemvL.o ATL_zhemvU.o ATL_zher2L.o \
+   ATL_zher2U.o ATL_zherL.o ATL_zherU.o ATL_zhpmvL.o ATL_zhpmvU.o \
+   ATL_zhpr2L.o ATL_zhpr2U.o ATL_zhprL.o ATL_zhprU.o ATL_ztbmvLC.o \
+   ATL_ztbmvLCN.o ATL_ztbmvLCU.o ATL_ztbmvLH.o ATL_ztbmvLHN.o ATL_ztbmvLHU.o \
+   ATL_ztbmvLN.o ATL_ztbmvLNN.o ATL_ztbmvLNU.o ATL_ztbmvLT.o ATL_ztbmvLTN.o \
+   ATL_ztbmvLTU.o ATL_ztbmvUC.o ATL_ztbmvUCN.o ATL_ztbmvUCU.o ATL_ztbmvUH.o \
+   ATL_ztbmvUHN.o ATL_ztbmvUHU.o ATL_ztbmvUN.o ATL_ztbmvUNN.o ATL_ztbmvUNU.o \
+   ATL_ztbmvUT.o ATL_ztbmvUTN.o ATL_ztbmvUTU.o ATL_ztbsvLC.o ATL_ztbsvLCN.o \
+   ATL_ztbsvLCU.o ATL_ztbsvLH.o ATL_ztbsvLHN.o ATL_ztbsvLHU.o ATL_ztbsvLN.o \
+   ATL_ztbsvLNN.o ATL_ztbsvLNU.o ATL_ztbsvLT.o ATL_ztbsvLTN.o ATL_ztbsvLTU.o \
+   ATL_ztbsvUC.o ATL_ztbsvUCN.o ATL_ztbsvUCU.o ATL_ztbsvUH.o ATL_ztbsvUHN.o \
+   ATL_ztbsvUHU.o ATL_ztbsvUN.o ATL_ztbsvUNN.o ATL_ztbsvUNU.o ATL_ztbsvUT.o \
+   ATL_ztbsvUTN.o ATL_ztbsvUTU.o ATL_ztpmvLC.o ATL_ztpmvLCN.o ATL_ztpmvLCU.o \
+   ATL_ztpmvLH.o ATL_ztpmvLHN.o ATL_ztpmvLHU.o ATL_ztpmvLN.o ATL_ztpmvLNN.o \
+   ATL_ztpmvLNU.o ATL_ztpmvLT.o ATL_ztpmvLTN.o ATL_ztpmvLTU.o ATL_ztpmvUC.o \
+   ATL_ztpmvUCN.o ATL_ztpmvUCU.o ATL_ztpmvUH.o ATL_ztpmvUHN.o ATL_ztpmvUHU.o \
+   ATL_ztpmvUN.o ATL_ztpmvUNN.o ATL_ztpmvUNU.o ATL_ztpmvUT.o ATL_ztpmvUTN.o \
+   ATL_ztpmvUTU.o ATL_ztpsvLC.o ATL_ztpsvLCN.o ATL_ztpsvLCU.o ATL_ztpsvLH.o \
+   ATL_ztpsvLHN.o ATL_ztpsvLHU.o ATL_ztpsvLN.o ATL_ztpsvLNN.o ATL_ztpsvLNU.o \
+   ATL_ztpsvLT.o ATL_ztpsvLTN.o ATL_ztpsvLTU.o ATL_ztpsvUC.o ATL_ztpsvUCN.o \
+   ATL_ztpsvUCU.o ATL_ztpsvUH.o ATL_ztpsvUHN.o ATL_ztpsvUHU.o ATL_ztpsvUN.o \
+   ATL_ztpsvUNN.o ATL_ztpsvUNU.o ATL_ztpsvUT.o ATL_ztpsvUTN.o ATL_ztpsvUTU.o \
+   ATL_ztrmvLC.o ATL_ztrmvLCN.o ATL_ztrmvLCU.o ATL_ztrmvLH.o ATL_ztrmvLHN.o \
+   ATL_ztrmvLHU.o ATL_ztrmvLN.o ATL_ztrmvLNN.o ATL_ztrmvLNU.o ATL_ztrmvLT.o \
+   ATL_ztrmvLTN.o ATL_ztrmvLTU.o ATL_ztrmvUC.o ATL_ztrmvUCN.o ATL_ztrmvUCU.o \
+   ATL_ztrmvUH.o ATL_ztrmvUHN.o ATL_ztrmvUHU.o ATL_ztrmvUN.o ATL_ztrmvUNN.o \
+   ATL_ztrmvUNU.o ATL_ztrmvUT.o ATL_ztrmvUTN.o ATL_ztrmvUTU.o ATL_ztrsvLC.o \
+   ATL_ztrsvLCN.o ATL_ztrsvLCU.o ATL_ztrsvLH.o ATL_ztrsvLHN.o ATL_ztrsvLHU.o \
+   ATL_ztrsvLN.o ATL_ztrsvLNN.o ATL_ztrsvLNU.o ATL_ztrsvLT.o ATL_ztrsvLTN.o \
+   ATL_ztrsvLTU.o ATL_ztrsvUC.o ATL_ztrsvUCN.o ATL_ztrsvUCU.o ATL_ztrsvUH.o \
+   ATL_ztrsvUHN.o ATL_ztrsvUHU.o ATL_ztrsvUN.o ATL_ztrsvUNN.o ATL_ztrsvUNU.o \
+   ATL_ztrsvUT.o ATL_ztrsvUTN.o ATL_ztrsvUTU.o
+#
+## Targets #############################################################
+#
+all   : lib
+#
+lvl2  : lib
+#
+lib   : slib dlib clib zlib
+#
+slvl2 : slib
+dlvl2 : dlib
+clvl2 : clib
+zlvl2 : zlib
+#
+slib  : slib.grd srefblas2
+dlib  : dlib.grd drefblas2
+clib  : clib.grd crefblas2
+zlib  : zlib.grd zrefblas2
+#
+srefblas2:
+	( cd ../../reference/level2; $(MAKE) slib )
+drefblas2:
+	( cd ../../reference/level2; $(MAKE) dlib )
+crefblas2:
+	( cd ../../reference/level2; $(MAKE) clib )
+zrefblas2:
+	( cd ../../reference/level2; $(MAKE) zlib )
+#
+slib.grd  : $(SRBLAS2)
+	$(ARCHIVER) $(ARFLAGS) $(ATLASlib) $(SRBLAS2)
+	$(RANLIB) $(ATLASlib)
+	touch slib.grd
+#
+dlib.grd  : $(DRBLAS2)
+	$(ARCHIVER) $(ARFLAGS) $(ATLASlib) $(DRBLAS2)
+	$(RANLIB) $(ATLASlib)
+	touch dlib.grd
+#
+clib.grd  : $(CRBLAS2)
+	$(ARCHIVER) $(ARFLAGS) $(ATLASlib) $(CRBLAS2)
+	$(RANLIB) $(ATLASlib)
+	touch clib.grd
+#
+zlib.grd  : $(ZRBLAS2)
+	$(ARCHIVER) $(ARFLAGS) $(ATLASlib) $(ZRBLAS2)
+	$(RANLIB) $(ATLASlib)
+	touch zlib.grd
+#
+########################################################################
+#
+ATL_strsvLTU.o           : $(mySRCdir)/ATL_trsvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trsvLTU.c
+ATL_strsvLNU.o           : $(mySRCdir)/ATL_trsvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trsvLNU.c
+ATL_strsvLTN.o           : $(mySRCdir)/ATL_trsvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trsvLTN.c
+ATL_strsvLNN.o           : $(mySRCdir)/ATL_trsvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trsvLNN.c
+ATL_strsvUTU.o           : $(mySRCdir)/ATL_trsvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trsvUTU.c
+ATL_strsvUNU.o           : $(mySRCdir)/ATL_trsvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trsvUNU.c
+ATL_strsvUTN.o           : $(mySRCdir)/ATL_trsvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trsvUTN.c
+ATL_strsvUNN.o           : $(mySRCdir)/ATL_trsvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trsvUNN.c
+ATL_strsvLT.o            : $(mySRCdir)/ATL_trsvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trsvLT.c
+ATL_strsvLN.o            : $(mySRCdir)/ATL_trsvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trsvLN.c
+ATL_strsvUT.o            : $(mySRCdir)/ATL_trsvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trsvUT.c
+ATL_strsvUN.o            : $(mySRCdir)/ATL_trsvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trsvUN.c
+ATL_stpsvLTU.o           : $(mySRCdir)/ATL_tpsvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpsvLTU.c
+ATL_stpsvLNU.o           : $(mySRCdir)/ATL_tpsvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpsvLNU.c
+ATL_stpsvLTN.o           : $(mySRCdir)/ATL_tpsvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpsvLTN.c
+ATL_stpsvLNN.o           : $(mySRCdir)/ATL_tpsvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpsvLNN.c
+ATL_stpsvUTU.o           : $(mySRCdir)/ATL_tpsvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpsvUTU.c
+ATL_stpsvUNU.o           : $(mySRCdir)/ATL_tpsvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpsvUNU.c
+ATL_stpsvUTN.o           : $(mySRCdir)/ATL_tpsvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpsvUTN.c
+ATL_stpsvUNN.o           : $(mySRCdir)/ATL_tpsvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpsvUNN.c
+ATL_stpsvLT.o            : $(mySRCdir)/ATL_tpsvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpsvLT.c
+ATL_stpsvLN.o            : $(mySRCdir)/ATL_tpsvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpsvLN.c
+ATL_stpsvUT.o            : $(mySRCdir)/ATL_tpsvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpsvUT.c
+ATL_stpsvUN.o            : $(mySRCdir)/ATL_tpsvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpsvUN.c
+ATL_stbsvLTU.o           : $(mySRCdir)/ATL_tbsvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbsvLTU.c
+ATL_stbsvLNU.o           : $(mySRCdir)/ATL_tbsvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbsvLNU.c
+ATL_stbsvLTN.o           : $(mySRCdir)/ATL_tbsvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbsvLTN.c
+ATL_stbsvLNN.o           : $(mySRCdir)/ATL_tbsvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbsvLNN.c
+ATL_stbsvUTU.o           : $(mySRCdir)/ATL_tbsvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbsvUTU.c
+ATL_stbsvUNU.o           : $(mySRCdir)/ATL_tbsvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbsvUNU.c
+ATL_stbsvUTN.o           : $(mySRCdir)/ATL_tbsvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbsvUTN.c
+ATL_stbsvUNN.o           : $(mySRCdir)/ATL_tbsvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbsvUNN.c
+ATL_stbsvLT.o            : $(mySRCdir)/ATL_tbsvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbsvLT.c
+ATL_stbsvLN.o            : $(mySRCdir)/ATL_tbsvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbsvLN.c
+ATL_stbsvUT.o            : $(mySRCdir)/ATL_tbsvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbsvUT.c
+ATL_stbsvUN.o            : $(mySRCdir)/ATL_tbsvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbsvUN.c
+ATL_strmvLTU.o           : $(mySRCdir)/ATL_trmvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trmvLTU.c
+ATL_strmvLNU.o           : $(mySRCdir)/ATL_trmvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trmvLNU.c
+ATL_strmvLTN.o           : $(mySRCdir)/ATL_trmvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trmvLTN.c
+ATL_strmvLNN.o           : $(mySRCdir)/ATL_trmvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trmvLNN.c
+ATL_strmvUTU.o           : $(mySRCdir)/ATL_trmvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trmvUTU.c
+ATL_strmvUNU.o           : $(mySRCdir)/ATL_trmvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trmvUNU.c
+ATL_strmvUTN.o           : $(mySRCdir)/ATL_trmvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trmvUTN.c
+ATL_strmvUNN.o           : $(mySRCdir)/ATL_trmvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trmvUNN.c
+ATL_strmvLT.o            : $(mySRCdir)/ATL_trmvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trmvLT.c
+ATL_strmvLN.o            : $(mySRCdir)/ATL_trmvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trmvLN.c
+ATL_strmvUT.o            : $(mySRCdir)/ATL_trmvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trmvUT.c
+ATL_strmvUN.o            : $(mySRCdir)/ATL_trmvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_trmvUN.c
+ATL_stpmvLTU.o           : $(mySRCdir)/ATL_tpmvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpmvLTU.c
+ATL_stpmvLNU.o           : $(mySRCdir)/ATL_tpmvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpmvLNU.c
+ATL_stpmvLTN.o           : $(mySRCdir)/ATL_tpmvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpmvLTN.c
+ATL_stpmvLNN.o           : $(mySRCdir)/ATL_tpmvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpmvLNN.c
+ATL_stpmvUTU.o           : $(mySRCdir)/ATL_tpmvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpmvUTU.c
+ATL_stpmvUNU.o           : $(mySRCdir)/ATL_tpmvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpmvUNU.c
+ATL_stpmvUTN.o           : $(mySRCdir)/ATL_tpmvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpmvUTN.c
+ATL_stpmvUNN.o           : $(mySRCdir)/ATL_tpmvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpmvUNN.c
+ATL_stpmvLT.o            : $(mySRCdir)/ATL_tpmvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpmvLT.c
+ATL_stpmvLN.o            : $(mySRCdir)/ATL_tpmvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpmvLN.c
+ATL_stpmvUT.o            : $(mySRCdir)/ATL_tpmvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpmvUT.c
+ATL_stpmvUN.o            : $(mySRCdir)/ATL_tpmvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tpmvUN.c
+ATL_stbmvLTU.o           : $(mySRCdir)/ATL_tbmvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbmvLTU.c
+ATL_stbmvLNU.o           : $(mySRCdir)/ATL_tbmvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbmvLNU.c
+ATL_stbmvLTN.o           : $(mySRCdir)/ATL_tbmvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbmvLTN.c
+ATL_stbmvLNN.o           : $(mySRCdir)/ATL_tbmvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbmvLNN.c
+ATL_stbmvUTU.o           : $(mySRCdir)/ATL_tbmvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbmvUTU.c
+ATL_stbmvUNU.o           : $(mySRCdir)/ATL_tbmvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbmvUNU.c
+ATL_stbmvUTN.o           : $(mySRCdir)/ATL_tbmvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbmvUTN.c
+ATL_stbmvUNN.o           : $(mySRCdir)/ATL_tbmvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbmvUNN.c
+ATL_stbmvLT.o            : $(mySRCdir)/ATL_tbmvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbmvLT.c
+ATL_stbmvLN.o            : $(mySRCdir)/ATL_tbmvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbmvLN.c
+ATL_stbmvUT.o            : $(mySRCdir)/ATL_tbmvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbmvUT.c
+ATL_stbmvUN.o            : $(mySRCdir)/ATL_tbmvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_tbmvUN.c
+ATL_ssyr2U.o             : $(mySRCdir)/ATL_syr2U.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_syr2U.c
+ATL_ssyr2L.o             : $(mySRCdir)/ATL_syr2L.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_syr2L.c
+ATL_sspr2U.o             : $(mySRCdir)/ATL_spr2U.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_spr2U.c
+ATL_sspr2L.o             : $(mySRCdir)/ATL_spr2L.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_spr2L.c
+ATL_ssyrU.o              : $(mySRCdir)/ATL_syrU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_syrU.c
+ATL_ssyrL.o              : $(mySRCdir)/ATL_syrL.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_syrL.c
+ATL_ssprU.o              : $(mySRCdir)/ATL_sprU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_sprU.c
+ATL_ssprL.o              : $(mySRCdir)/ATL_sprL.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_sprL.c
+ATL_ssymvU.o             : $(mySRCdir)/ATL_symvU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_symvU.c
+ATL_ssymvL.o             : $(mySRCdir)/ATL_symvL.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_symvL.c
+ATL_sspmvU.o             : $(mySRCdir)/ATL_spmvU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_spmvU.c
+ATL_sspmvL.o             : $(mySRCdir)/ATL_spmvL.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_spmvL.c
+ATL_ssbmvU.o             : $(mySRCdir)/ATL_sbmvU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_sbmvU.c
+ATL_ssbmvL.o             : $(mySRCdir)/ATL_sbmvL.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSREAL $(mySRCdir)/ATL_sbmvL.c
+#
+ATL_dtrsvLTU.o           : $(mySRCdir)/ATL_trsvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trsvLTU.c
+ATL_dtrsvLNU.o           : $(mySRCdir)/ATL_trsvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trsvLNU.c
+ATL_dtrsvLTN.o           : $(mySRCdir)/ATL_trsvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trsvLTN.c
+ATL_dtrsvLNN.o           : $(mySRCdir)/ATL_trsvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trsvLNN.c
+ATL_dtrsvUTU.o           : $(mySRCdir)/ATL_trsvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trsvUTU.c
+ATL_dtrsvUNU.o           : $(mySRCdir)/ATL_trsvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trsvUNU.c
+ATL_dtrsvUTN.o           : $(mySRCdir)/ATL_trsvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trsvUTN.c
+ATL_dtrsvUNN.o           : $(mySRCdir)/ATL_trsvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trsvUNN.c
+ATL_dtrsvLT.o            : $(mySRCdir)/ATL_trsvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trsvLT.c
+ATL_dtrsvLN.o            : $(mySRCdir)/ATL_trsvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trsvLN.c
+ATL_dtrsvUT.o            : $(mySRCdir)/ATL_trsvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trsvUT.c
+ATL_dtrsvUN.o            : $(mySRCdir)/ATL_trsvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trsvUN.c
+ATL_dtpsvLTU.o           : $(mySRCdir)/ATL_tpsvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpsvLTU.c
+ATL_dtpsvLNU.o           : $(mySRCdir)/ATL_tpsvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpsvLNU.c
+ATL_dtpsvLTN.o           : $(mySRCdir)/ATL_tpsvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpsvLTN.c
+ATL_dtpsvLNN.o           : $(mySRCdir)/ATL_tpsvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpsvLNN.c
+ATL_dtpsvUTU.o           : $(mySRCdir)/ATL_tpsvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpsvUTU.c
+ATL_dtpsvUNU.o           : $(mySRCdir)/ATL_tpsvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpsvUNU.c
+ATL_dtpsvUTN.o           : $(mySRCdir)/ATL_tpsvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpsvUTN.c
+ATL_dtpsvUNN.o           : $(mySRCdir)/ATL_tpsvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpsvUNN.c
+ATL_dtpsvLT.o            : $(mySRCdir)/ATL_tpsvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpsvLT.c
+ATL_dtpsvLN.o            : $(mySRCdir)/ATL_tpsvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpsvLN.c
+ATL_dtpsvUT.o            : $(mySRCdir)/ATL_tpsvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpsvUT.c
+ATL_dtpsvUN.o            : $(mySRCdir)/ATL_tpsvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpsvUN.c
+ATL_dtbsvLTU.o           : $(mySRCdir)/ATL_tbsvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbsvLTU.c
+ATL_dtbsvLNU.o           : $(mySRCdir)/ATL_tbsvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbsvLNU.c
+ATL_dtbsvLTN.o           : $(mySRCdir)/ATL_tbsvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbsvLTN.c
+ATL_dtbsvLNN.o           : $(mySRCdir)/ATL_tbsvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbsvLNN.c
+ATL_dtbsvUTU.o           : $(mySRCdir)/ATL_tbsvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbsvUTU.c
+ATL_dtbsvUNU.o           : $(mySRCdir)/ATL_tbsvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbsvUNU.c
+ATL_dtbsvUTN.o           : $(mySRCdir)/ATL_tbsvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbsvUTN.c
+ATL_dtbsvUNN.o           : $(mySRCdir)/ATL_tbsvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbsvUNN.c
+ATL_dtbsvLT.o            : $(mySRCdir)/ATL_tbsvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbsvLT.c
+ATL_dtbsvLN.o            : $(mySRCdir)/ATL_tbsvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbsvLN.c
+ATL_dtbsvUT.o            : $(mySRCdir)/ATL_tbsvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbsvUT.c
+ATL_dtbsvUN.o            : $(mySRCdir)/ATL_tbsvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbsvUN.c
+ATL_dtrmvLTU.o           : $(mySRCdir)/ATL_trmvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trmvLTU.c
+ATL_dtrmvLNU.o           : $(mySRCdir)/ATL_trmvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trmvLNU.c
+ATL_dtrmvLTN.o           : $(mySRCdir)/ATL_trmvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trmvLTN.c
+ATL_dtrmvLNN.o           : $(mySRCdir)/ATL_trmvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trmvLNN.c
+ATL_dtrmvUTU.o           : $(mySRCdir)/ATL_trmvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trmvUTU.c
+ATL_dtrmvUNU.o           : $(mySRCdir)/ATL_trmvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trmvUNU.c
+ATL_dtrmvUTN.o           : $(mySRCdir)/ATL_trmvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trmvUTN.c
+ATL_dtrmvUNN.o           : $(mySRCdir)/ATL_trmvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trmvUNN.c
+ATL_dtrmvLT.o            : $(mySRCdir)/ATL_trmvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trmvLT.c
+ATL_dtrmvLN.o            : $(mySRCdir)/ATL_trmvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trmvLN.c
+ATL_dtrmvUT.o            : $(mySRCdir)/ATL_trmvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trmvUT.c
+ATL_dtrmvUN.o            : $(mySRCdir)/ATL_trmvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_trmvUN.c
+ATL_dtpmvLTU.o           : $(mySRCdir)/ATL_tpmvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpmvLTU.c
+ATL_dtpmvLNU.o           : $(mySRCdir)/ATL_tpmvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpmvLNU.c
+ATL_dtpmvLTN.o           : $(mySRCdir)/ATL_tpmvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpmvLTN.c
+ATL_dtpmvLNN.o           : $(mySRCdir)/ATL_tpmvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpmvLNN.c
+ATL_dtpmvUTU.o           : $(mySRCdir)/ATL_tpmvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpmvUTU.c
+ATL_dtpmvUNU.o           : $(mySRCdir)/ATL_tpmvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpmvUNU.c
+ATL_dtpmvUTN.o           : $(mySRCdir)/ATL_tpmvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpmvUTN.c
+ATL_dtpmvUNN.o           : $(mySRCdir)/ATL_tpmvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpmvUNN.c
+ATL_dtpmvLT.o            : $(mySRCdir)/ATL_tpmvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpmvLT.c
+ATL_dtpmvLN.o            : $(mySRCdir)/ATL_tpmvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpmvLN.c
+ATL_dtpmvUT.o            : $(mySRCdir)/ATL_tpmvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpmvUT.c
+ATL_dtpmvUN.o            : $(mySRCdir)/ATL_tpmvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tpmvUN.c
+ATL_dtbmvLTU.o           : $(mySRCdir)/ATL_tbmvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbmvLTU.c
+ATL_dtbmvLNU.o           : $(mySRCdir)/ATL_tbmvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbmvLNU.c
+ATL_dtbmvLTN.o           : $(mySRCdir)/ATL_tbmvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbmvLTN.c
+ATL_dtbmvLNN.o           : $(mySRCdir)/ATL_tbmvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbmvLNN.c
+ATL_dtbmvUTU.o           : $(mySRCdir)/ATL_tbmvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbmvUTU.c
+ATL_dtbmvUNU.o           : $(mySRCdir)/ATL_tbmvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbmvUNU.c
+ATL_dtbmvUTN.o           : $(mySRCdir)/ATL_tbmvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbmvUTN.c
+ATL_dtbmvUNN.o           : $(mySRCdir)/ATL_tbmvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbmvUNN.c
+ATL_dtbmvLT.o            : $(mySRCdir)/ATL_tbmvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbmvLT.c
+ATL_dtbmvLN.o            : $(mySRCdir)/ATL_tbmvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbmvLN.c
+ATL_dtbmvUT.o            : $(mySRCdir)/ATL_tbmvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbmvUT.c
+ATL_dtbmvUN.o            : $(mySRCdir)/ATL_tbmvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_tbmvUN.c
+ATL_dsyr2U.o             : $(mySRCdir)/ATL_syr2U.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_syr2U.c
+ATL_dsyr2L.o             : $(mySRCdir)/ATL_syr2L.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_syr2L.c
+ATL_dspr2U.o             : $(mySRCdir)/ATL_spr2U.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_spr2U.c
+ATL_dspr2L.o             : $(mySRCdir)/ATL_spr2L.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_spr2L.c
+ATL_dsyrU.o              : $(mySRCdir)/ATL_syrU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_syrU.c
+ATL_dsyrL.o              : $(mySRCdir)/ATL_syrL.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_syrL.c
+ATL_dsprU.o              : $(mySRCdir)/ATL_sprU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_sprU.c
+ATL_dsprL.o              : $(mySRCdir)/ATL_sprL.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_sprL.c
+ATL_dsymvU.o             : $(mySRCdir)/ATL_symvU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_symvU.c
+ATL_dsymvL.o             : $(mySRCdir)/ATL_symvL.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_symvL.c
+ATL_dspmvU.o             : $(mySRCdir)/ATL_spmvU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_spmvU.c
+ATL_dspmvL.o             : $(mySRCdir)/ATL_spmvL.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_spmvL.c
+ATL_dsbmvU.o             : $(mySRCdir)/ATL_sbmvU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_sbmvU.c
+ATL_dsbmvL.o             : $(mySRCdir)/ATL_sbmvL.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDREAL $(mySRCdir)/ATL_sbmvL.c
+#
+ATL_ctrsvLHU.o           : $(mySRCdir)/ATL_trsvLHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvLHU.c
+ATL_ctrsvLCU.o           : $(mySRCdir)/ATL_trsvLCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvLCU.c
+ATL_ctrsvLTU.o           : $(mySRCdir)/ATL_trsvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvLTU.c
+ATL_ctrsvLNU.o           : $(mySRCdir)/ATL_trsvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvLNU.c
+ATL_ctrsvLHN.o           : $(mySRCdir)/ATL_trsvLHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvLHN.c
+ATL_ctrsvLCN.o           : $(mySRCdir)/ATL_trsvLCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvLCN.c
+ATL_ctrsvLTN.o           : $(mySRCdir)/ATL_trsvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvLTN.c
+ATL_ctrsvLNN.o           : $(mySRCdir)/ATL_trsvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvLNN.c
+ATL_ctrsvUHU.o           : $(mySRCdir)/ATL_trsvUHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvUHU.c
+ATL_ctrsvUCU.o           : $(mySRCdir)/ATL_trsvUCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvUCU.c
+ATL_ctrsvUTU.o           : $(mySRCdir)/ATL_trsvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvUTU.c
+ATL_ctrsvUNU.o           : $(mySRCdir)/ATL_trsvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvUNU.c
+ATL_ctrsvUHN.o           : $(mySRCdir)/ATL_trsvUHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvUHN.c
+ATL_ctrsvUCN.o           : $(mySRCdir)/ATL_trsvUCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvUCN.c
+ATL_ctrsvUTN.o           : $(mySRCdir)/ATL_trsvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvUTN.c
+ATL_ctrsvUNN.o           : $(mySRCdir)/ATL_trsvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvUNN.c
+ATL_ctrsvLH.o            : $(mySRCdir)/ATL_trsvLH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvLH.c
+ATL_ctrsvLC.o            : $(mySRCdir)/ATL_trsvLC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvLC.c
+ATL_ctrsvLT.o            : $(mySRCdir)/ATL_trsvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvLT.c
+ATL_ctrsvLN.o            : $(mySRCdir)/ATL_trsvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvLN.c
+ATL_ctrsvUH.o            : $(mySRCdir)/ATL_trsvUH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvUH.c
+ATL_ctrsvUC.o            : $(mySRCdir)/ATL_trsvUC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvUC.c
+ATL_ctrsvUT.o            : $(mySRCdir)/ATL_trsvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvUT.c
+ATL_ctrsvUN.o            : $(mySRCdir)/ATL_trsvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trsvUN.c
+ATL_ctpsvLHU.o           : $(mySRCdir)/ATL_tpsvLHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvLHU.c
+ATL_ctpsvLCU.o           : $(mySRCdir)/ATL_tpsvLCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvLCU.c
+ATL_ctpsvLTU.o           : $(mySRCdir)/ATL_tpsvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvLTU.c
+ATL_ctpsvLNU.o           : $(mySRCdir)/ATL_tpsvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvLNU.c
+ATL_ctpsvLHN.o           : $(mySRCdir)/ATL_tpsvLHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvLHN.c
+ATL_ctpsvLCN.o           : $(mySRCdir)/ATL_tpsvLCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvLCN.c
+ATL_ctpsvLTN.o           : $(mySRCdir)/ATL_tpsvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvLTN.c
+ATL_ctpsvLNN.o           : $(mySRCdir)/ATL_tpsvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvLNN.c
+ATL_ctpsvUHU.o           : $(mySRCdir)/ATL_tpsvUHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvUHU.c
+ATL_ctpsvUCU.o           : $(mySRCdir)/ATL_tpsvUCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvUCU.c
+ATL_ctpsvUTU.o           : $(mySRCdir)/ATL_tpsvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvUTU.c
+ATL_ctpsvUNU.o           : $(mySRCdir)/ATL_tpsvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvUNU.c
+ATL_ctpsvUHN.o           : $(mySRCdir)/ATL_tpsvUHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvUHN.c
+ATL_ctpsvUCN.o           : $(mySRCdir)/ATL_tpsvUCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvUCN.c
+ATL_ctpsvUTN.o           : $(mySRCdir)/ATL_tpsvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvUTN.c
+ATL_ctpsvUNN.o           : $(mySRCdir)/ATL_tpsvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvUNN.c
+ATL_ctpsvLH.o            : $(mySRCdir)/ATL_tpsvLH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvLH.c
+ATL_ctpsvLC.o            : $(mySRCdir)/ATL_tpsvLC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvLC.c
+ATL_ctpsvLT.o            : $(mySRCdir)/ATL_tpsvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvLT.c
+ATL_ctpsvLN.o            : $(mySRCdir)/ATL_tpsvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvLN.c
+ATL_ctpsvUH.o            : $(mySRCdir)/ATL_tpsvUH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvUH.c
+ATL_ctpsvUC.o            : $(mySRCdir)/ATL_tpsvUC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvUC.c
+ATL_ctpsvUT.o            : $(mySRCdir)/ATL_tpsvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvUT.c
+ATL_ctpsvUN.o            : $(mySRCdir)/ATL_tpsvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpsvUN.c
+ATL_ctbsvLHU.o           : $(mySRCdir)/ATL_tbsvLHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvLHU.c
+ATL_ctbsvLCU.o           : $(mySRCdir)/ATL_tbsvLCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvLCU.c
+ATL_ctbsvLTU.o           : $(mySRCdir)/ATL_tbsvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvLTU.c
+ATL_ctbsvLNU.o           : $(mySRCdir)/ATL_tbsvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvLNU.c
+ATL_ctbsvLHN.o           : $(mySRCdir)/ATL_tbsvLHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvLHN.c
+ATL_ctbsvLCN.o           : $(mySRCdir)/ATL_tbsvLCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvLCN.c
+ATL_ctbsvLTN.o           : $(mySRCdir)/ATL_tbsvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvLTN.c
+ATL_ctbsvLNN.o           : $(mySRCdir)/ATL_tbsvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvLNN.c
+ATL_ctbsvUHU.o           : $(mySRCdir)/ATL_tbsvUHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvUHU.c
+ATL_ctbsvUCU.o           : $(mySRCdir)/ATL_tbsvUCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvUCU.c
+ATL_ctbsvUTU.o           : $(mySRCdir)/ATL_tbsvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvUTU.c
+ATL_ctbsvUNU.o           : $(mySRCdir)/ATL_tbsvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvUNU.c
+ATL_ctbsvUHN.o           : $(mySRCdir)/ATL_tbsvUHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvUHN.c
+ATL_ctbsvUCN.o           : $(mySRCdir)/ATL_tbsvUCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvUCN.c
+ATL_ctbsvUTN.o           : $(mySRCdir)/ATL_tbsvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvUTN.c
+ATL_ctbsvUNN.o           : $(mySRCdir)/ATL_tbsvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvUNN.c
+ATL_ctbsvLH.o            : $(mySRCdir)/ATL_tbsvLH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvLH.c
+ATL_ctbsvLC.o            : $(mySRCdir)/ATL_tbsvLC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvLC.c
+ATL_ctbsvLT.o            : $(mySRCdir)/ATL_tbsvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvLT.c
+ATL_ctbsvLN.o            : $(mySRCdir)/ATL_tbsvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvLN.c
+ATL_ctbsvUH.o            : $(mySRCdir)/ATL_tbsvUH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvUH.c
+ATL_ctbsvUC.o            : $(mySRCdir)/ATL_tbsvUC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvUC.c
+ATL_ctbsvUT.o            : $(mySRCdir)/ATL_tbsvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvUT.c
+ATL_ctbsvUN.o            : $(mySRCdir)/ATL_tbsvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbsvUN.c
+ATL_ctrmvLHU.o           : $(mySRCdir)/ATL_trmvLHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvLHU.c
+ATL_ctrmvLCU.o           : $(mySRCdir)/ATL_trmvLCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvLCU.c
+ATL_ctrmvLTU.o           : $(mySRCdir)/ATL_trmvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvLTU.c
+ATL_ctrmvLNU.o           : $(mySRCdir)/ATL_trmvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvLNU.c
+ATL_ctrmvLHN.o           : $(mySRCdir)/ATL_trmvLHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvLHN.c
+ATL_ctrmvLCN.o           : $(mySRCdir)/ATL_trmvLCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvLCN.c
+ATL_ctrmvLTN.o           : $(mySRCdir)/ATL_trmvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvLTN.c
+ATL_ctrmvLNN.o           : $(mySRCdir)/ATL_trmvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvLNN.c
+ATL_ctrmvUHU.o           : $(mySRCdir)/ATL_trmvUHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvUHU.c
+ATL_ctrmvUCU.o           : $(mySRCdir)/ATL_trmvUCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvUCU.c
+ATL_ctrmvUTU.o           : $(mySRCdir)/ATL_trmvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvUTU.c
+ATL_ctrmvUNU.o           : $(mySRCdir)/ATL_trmvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvUNU.c
+ATL_ctrmvUHN.o           : $(mySRCdir)/ATL_trmvUHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvUHN.c
+ATL_ctrmvUCN.o           : $(mySRCdir)/ATL_trmvUCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvUCN.c
+ATL_ctrmvUTN.o           : $(mySRCdir)/ATL_trmvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvUTN.c
+ATL_ctrmvUNN.o           : $(mySRCdir)/ATL_trmvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvUNN.c
+ATL_ctrmvLH.o            : $(mySRCdir)/ATL_trmvLH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvLH.c
+ATL_ctrmvLC.o            : $(mySRCdir)/ATL_trmvLC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvLC.c
+ATL_ctrmvLT.o            : $(mySRCdir)/ATL_trmvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvLT.c
+ATL_ctrmvLN.o            : $(mySRCdir)/ATL_trmvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvLN.c
+ATL_ctrmvUH.o            : $(mySRCdir)/ATL_trmvUH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvUH.c
+ATL_ctrmvUC.o            : $(mySRCdir)/ATL_trmvUC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvUC.c
+ATL_ctrmvUT.o            : $(mySRCdir)/ATL_trmvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvUT.c
+ATL_ctrmvUN.o            : $(mySRCdir)/ATL_trmvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_trmvUN.c
+ATL_ctpmvLHU.o           : $(mySRCdir)/ATL_tpmvLHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvLHU.c
+ATL_ctpmvLCU.o           : $(mySRCdir)/ATL_tpmvLCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvLCU.c
+ATL_ctpmvLTU.o           : $(mySRCdir)/ATL_tpmvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvLTU.c
+ATL_ctpmvLNU.o           : $(mySRCdir)/ATL_tpmvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvLNU.c
+ATL_ctpmvLHN.o           : $(mySRCdir)/ATL_tpmvLHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvLHN.c
+ATL_ctpmvLCN.o           : $(mySRCdir)/ATL_tpmvLCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvLCN.c
+ATL_ctpmvLTN.o           : $(mySRCdir)/ATL_tpmvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvLTN.c
+ATL_ctpmvLNN.o           : $(mySRCdir)/ATL_tpmvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvLNN.c
+ATL_ctpmvUHU.o           : $(mySRCdir)/ATL_tpmvUHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvUHU.c
+ATL_ctpmvUCU.o           : $(mySRCdir)/ATL_tpmvUCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvUCU.c
+ATL_ctpmvUTU.o           : $(mySRCdir)/ATL_tpmvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvUTU.c
+ATL_ctpmvUNU.o           : $(mySRCdir)/ATL_tpmvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvUNU.c
+ATL_ctpmvUHN.o           : $(mySRCdir)/ATL_tpmvUHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvUHN.c
+ATL_ctpmvUCN.o           : $(mySRCdir)/ATL_tpmvUCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvUCN.c
+ATL_ctpmvUTN.o           : $(mySRCdir)/ATL_tpmvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvUTN.c
+ATL_ctpmvUNN.o           : $(mySRCdir)/ATL_tpmvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvUNN.c
+ATL_ctpmvLH.o            : $(mySRCdir)/ATL_tpmvLH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvLH.c
+ATL_ctpmvLC.o            : $(mySRCdir)/ATL_tpmvLC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvLC.c
+ATL_ctpmvLT.o            : $(mySRCdir)/ATL_tpmvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvLT.c
+ATL_ctpmvLN.o            : $(mySRCdir)/ATL_tpmvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvLN.c
+ATL_ctpmvUH.o            : $(mySRCdir)/ATL_tpmvUH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvUH.c
+ATL_ctpmvUC.o            : $(mySRCdir)/ATL_tpmvUC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvUC.c
+ATL_ctpmvUT.o            : $(mySRCdir)/ATL_tpmvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvUT.c
+ATL_ctpmvUN.o            : $(mySRCdir)/ATL_tpmvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tpmvUN.c
+ATL_ctbmvLHU.o           : $(mySRCdir)/ATL_tbmvLHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvLHU.c
+ATL_ctbmvLCU.o           : $(mySRCdir)/ATL_tbmvLCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvLCU.c
+ATL_ctbmvLTU.o           : $(mySRCdir)/ATL_tbmvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvLTU.c
+ATL_ctbmvLNU.o           : $(mySRCdir)/ATL_tbmvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvLNU.c
+ATL_ctbmvLHN.o           : $(mySRCdir)/ATL_tbmvLHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvLHN.c
+ATL_ctbmvLCN.o           : $(mySRCdir)/ATL_tbmvLCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvLCN.c
+ATL_ctbmvLTN.o           : $(mySRCdir)/ATL_tbmvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvLTN.c
+ATL_ctbmvLNN.o           : $(mySRCdir)/ATL_tbmvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvLNN.c
+ATL_ctbmvUHU.o           : $(mySRCdir)/ATL_tbmvUHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvUHU.c
+ATL_ctbmvUCU.o           : $(mySRCdir)/ATL_tbmvUCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvUCU.c
+ATL_ctbmvUTU.o           : $(mySRCdir)/ATL_tbmvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvUTU.c
+ATL_ctbmvUNU.o           : $(mySRCdir)/ATL_tbmvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvUNU.c
+ATL_ctbmvUHN.o           : $(mySRCdir)/ATL_tbmvUHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvUHN.c
+ATL_ctbmvUCN.o           : $(mySRCdir)/ATL_tbmvUCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvUCN.c
+ATL_ctbmvUTN.o           : $(mySRCdir)/ATL_tbmvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvUTN.c
+ATL_ctbmvUNN.o           : $(mySRCdir)/ATL_tbmvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvUNN.c
+ATL_ctbmvLH.o            : $(mySRCdir)/ATL_tbmvLH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvLH.c
+ATL_ctbmvLC.o            : $(mySRCdir)/ATL_tbmvLC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvLC.c
+ATL_ctbmvLT.o            : $(mySRCdir)/ATL_tbmvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvLT.c
+ATL_ctbmvLN.o            : $(mySRCdir)/ATL_tbmvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvLN.c
+ATL_ctbmvUH.o            : $(mySRCdir)/ATL_tbmvUH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvUH.c
+ATL_ctbmvUC.o            : $(mySRCdir)/ATL_tbmvUC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvUC.c
+ATL_ctbmvUT.o            : $(mySRCdir)/ATL_tbmvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvUT.c
+ATL_ctbmvUN.o            : $(mySRCdir)/ATL_tbmvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_tbmvUN.c
+ATL_cher2U.o             : $(mySRCdir)/ATL_her2U.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_her2U.c
+ATL_cher2L.o             : $(mySRCdir)/ATL_her2L.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_her2L.c
+ATL_chpr2U.o             : $(mySRCdir)/ATL_hpr2U.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_hpr2U.c
+ATL_chpr2L.o             : $(mySRCdir)/ATL_hpr2L.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_hpr2L.c
+ATL_cherU.o              : $(mySRCdir)/ATL_herU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_herU.c
+ATL_cherL.o              : $(mySRCdir)/ATL_herL.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_herL.c
+ATL_chprU.o              : $(mySRCdir)/ATL_hprU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_hprU.c
+ATL_chprL.o              : $(mySRCdir)/ATL_hprL.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_hprL.c
+ATL_chemvU.o             : $(mySRCdir)/ATL_hemvU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_hemvU.c
+ATL_chemvL.o             : $(mySRCdir)/ATL_hemvL.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_hemvL.c
+ATL_chpmvU.o             : $(mySRCdir)/ATL_hpmvU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_hpmvU.c
+ATL_chpmvL.o             : $(mySRCdir)/ATL_hpmvL.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_hpmvL.c
+ATL_chbmvU.o             : $(mySRCdir)/ATL_hbmvU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_hbmvU.c
+ATL_chbmvL.o             : $(mySRCdir)/ATL_hbmvL.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DSCPLX $(mySRCdir)/ATL_hbmvL.c
+#
+ATL_ztrsvLHU.o           : $(mySRCdir)/ATL_trsvLHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvLHU.c
+ATL_ztrsvLCU.o           : $(mySRCdir)/ATL_trsvLCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvLCU.c
+ATL_ztrsvLTU.o           : $(mySRCdir)/ATL_trsvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvLTU.c
+ATL_ztrsvLNU.o           : $(mySRCdir)/ATL_trsvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvLNU.c
+ATL_ztrsvLHN.o           : $(mySRCdir)/ATL_trsvLHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvLHN.c
+ATL_ztrsvLCN.o           : $(mySRCdir)/ATL_trsvLCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvLCN.c
+ATL_ztrsvLTN.o           : $(mySRCdir)/ATL_trsvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvLTN.c
+ATL_ztrsvLNN.o           : $(mySRCdir)/ATL_trsvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvLNN.c
+ATL_ztrsvUHU.o           : $(mySRCdir)/ATL_trsvUHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvUHU.c
+ATL_ztrsvUCU.o           : $(mySRCdir)/ATL_trsvUCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvUCU.c
+ATL_ztrsvUTU.o           : $(mySRCdir)/ATL_trsvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvUTU.c
+ATL_ztrsvUNU.o           : $(mySRCdir)/ATL_trsvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvUNU.c
+ATL_ztrsvUHN.o           : $(mySRCdir)/ATL_trsvUHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvUHN.c
+ATL_ztrsvUCN.o           : $(mySRCdir)/ATL_trsvUCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvUCN.c
+ATL_ztrsvUTN.o           : $(mySRCdir)/ATL_trsvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvUTN.c
+ATL_ztrsvUNN.o           : $(mySRCdir)/ATL_trsvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvUNN.c
+ATL_ztrsvLH.o            : $(mySRCdir)/ATL_trsvLH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvLH.c
+ATL_ztrsvLC.o            : $(mySRCdir)/ATL_trsvLC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvLC.c
+ATL_ztrsvLT.o            : $(mySRCdir)/ATL_trsvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvLT.c
+ATL_ztrsvLN.o            : $(mySRCdir)/ATL_trsvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvLN.c
+ATL_ztrsvUH.o            : $(mySRCdir)/ATL_trsvUH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvUH.c
+ATL_ztrsvUC.o            : $(mySRCdir)/ATL_trsvUC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvUC.c
+ATL_ztrsvUT.o            : $(mySRCdir)/ATL_trsvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvUT.c
+ATL_ztrsvUN.o            : $(mySRCdir)/ATL_trsvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trsvUN.c
+ATL_ztpsvLHU.o           : $(mySRCdir)/ATL_tpsvLHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvLHU.c
+ATL_ztpsvLCU.o           : $(mySRCdir)/ATL_tpsvLCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvLCU.c
+ATL_ztpsvLTU.o           : $(mySRCdir)/ATL_tpsvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvLTU.c
+ATL_ztpsvLNU.o           : $(mySRCdir)/ATL_tpsvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvLNU.c
+ATL_ztpsvLHN.o           : $(mySRCdir)/ATL_tpsvLHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvLHN.c
+ATL_ztpsvLCN.o           : $(mySRCdir)/ATL_tpsvLCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvLCN.c
+ATL_ztpsvLTN.o           : $(mySRCdir)/ATL_tpsvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvLTN.c
+ATL_ztpsvLNN.o           : $(mySRCdir)/ATL_tpsvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvLNN.c
+ATL_ztpsvUHU.o           : $(mySRCdir)/ATL_tpsvUHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvUHU.c
+ATL_ztpsvUCU.o           : $(mySRCdir)/ATL_tpsvUCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvUCU.c
+ATL_ztpsvUTU.o           : $(mySRCdir)/ATL_tpsvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvUTU.c
+ATL_ztpsvUNU.o           : $(mySRCdir)/ATL_tpsvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvUNU.c
+ATL_ztpsvUHN.o           : $(mySRCdir)/ATL_tpsvUHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvUHN.c
+ATL_ztpsvUCN.o           : $(mySRCdir)/ATL_tpsvUCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvUCN.c
+ATL_ztpsvUTN.o           : $(mySRCdir)/ATL_tpsvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvUTN.c
+ATL_ztpsvUNN.o           : $(mySRCdir)/ATL_tpsvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvUNN.c
+ATL_ztpsvLH.o            : $(mySRCdir)/ATL_tpsvLH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvLH.c
+ATL_ztpsvLC.o            : $(mySRCdir)/ATL_tpsvLC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvLC.c
+ATL_ztpsvLT.o            : $(mySRCdir)/ATL_tpsvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvLT.c
+ATL_ztpsvLN.o            : $(mySRCdir)/ATL_tpsvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvLN.c
+ATL_ztpsvUH.o            : $(mySRCdir)/ATL_tpsvUH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvUH.c
+ATL_ztpsvUC.o            : $(mySRCdir)/ATL_tpsvUC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvUC.c
+ATL_ztpsvUT.o            : $(mySRCdir)/ATL_tpsvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvUT.c
+ATL_ztpsvUN.o            : $(mySRCdir)/ATL_tpsvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpsvUN.c
+ATL_ztbsvLHU.o           : $(mySRCdir)/ATL_tbsvLHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvLHU.c
+ATL_ztbsvLCU.o           : $(mySRCdir)/ATL_tbsvLCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvLCU.c
+ATL_ztbsvLTU.o           : $(mySRCdir)/ATL_tbsvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvLTU.c
+ATL_ztbsvLNU.o           : $(mySRCdir)/ATL_tbsvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvLNU.c
+ATL_ztbsvLHN.o           : $(mySRCdir)/ATL_tbsvLHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvLHN.c
+ATL_ztbsvLCN.o           : $(mySRCdir)/ATL_tbsvLCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvLCN.c
+ATL_ztbsvLTN.o           : $(mySRCdir)/ATL_tbsvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvLTN.c
+ATL_ztbsvLNN.o           : $(mySRCdir)/ATL_tbsvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvLNN.c
+ATL_ztbsvUHU.o           : $(mySRCdir)/ATL_tbsvUHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvUHU.c
+ATL_ztbsvUCU.o           : $(mySRCdir)/ATL_tbsvUCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvUCU.c
+ATL_ztbsvUTU.o           : $(mySRCdir)/ATL_tbsvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvUTU.c
+ATL_ztbsvUNU.o           : $(mySRCdir)/ATL_tbsvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvUNU.c
+ATL_ztbsvUHN.o           : $(mySRCdir)/ATL_tbsvUHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvUHN.c
+ATL_ztbsvUCN.o           : $(mySRCdir)/ATL_tbsvUCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvUCN.c
+ATL_ztbsvUTN.o           : $(mySRCdir)/ATL_tbsvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvUTN.c
+ATL_ztbsvUNN.o           : $(mySRCdir)/ATL_tbsvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvUNN.c
+ATL_ztbsvLH.o            : $(mySRCdir)/ATL_tbsvLH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvLH.c
+ATL_ztbsvLC.o            : $(mySRCdir)/ATL_tbsvLC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvLC.c
+ATL_ztbsvLT.o            : $(mySRCdir)/ATL_tbsvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvLT.c
+ATL_ztbsvLN.o            : $(mySRCdir)/ATL_tbsvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvLN.c
+ATL_ztbsvUH.o            : $(mySRCdir)/ATL_tbsvUH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvUH.c
+ATL_ztbsvUC.o            : $(mySRCdir)/ATL_tbsvUC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvUC.c
+ATL_ztbsvUT.o            : $(mySRCdir)/ATL_tbsvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvUT.c
+ATL_ztbsvUN.o            : $(mySRCdir)/ATL_tbsvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbsvUN.c
+ATL_ztrmvLHU.o           : $(mySRCdir)/ATL_trmvLHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvLHU.c
+ATL_ztrmvLCU.o           : $(mySRCdir)/ATL_trmvLCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvLCU.c
+ATL_ztrmvLTU.o           : $(mySRCdir)/ATL_trmvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvLTU.c
+ATL_ztrmvLNU.o           : $(mySRCdir)/ATL_trmvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvLNU.c
+ATL_ztrmvLHN.o           : $(mySRCdir)/ATL_trmvLHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvLHN.c
+ATL_ztrmvLCN.o           : $(mySRCdir)/ATL_trmvLCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvLCN.c
+ATL_ztrmvLTN.o           : $(mySRCdir)/ATL_trmvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvLTN.c
+ATL_ztrmvLNN.o           : $(mySRCdir)/ATL_trmvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvLNN.c
+ATL_ztrmvUHU.o           : $(mySRCdir)/ATL_trmvUHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvUHU.c
+ATL_ztrmvUCU.o           : $(mySRCdir)/ATL_trmvUCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvUCU.c
+ATL_ztrmvUTU.o           : $(mySRCdir)/ATL_trmvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvUTU.c
+ATL_ztrmvUNU.o           : $(mySRCdir)/ATL_trmvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvUNU.c
+ATL_ztrmvUHN.o           : $(mySRCdir)/ATL_trmvUHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvUHN.c
+ATL_ztrmvUCN.o           : $(mySRCdir)/ATL_trmvUCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvUCN.c
+ATL_ztrmvUTN.o           : $(mySRCdir)/ATL_trmvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvUTN.c
+ATL_ztrmvUNN.o           : $(mySRCdir)/ATL_trmvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvUNN.c
+ATL_ztrmvLH.o            : $(mySRCdir)/ATL_trmvLH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvLH.c
+ATL_ztrmvLC.o            : $(mySRCdir)/ATL_trmvLC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvLC.c
+ATL_ztrmvLT.o            : $(mySRCdir)/ATL_trmvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvLT.c
+ATL_ztrmvLN.o            : $(mySRCdir)/ATL_trmvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvLN.c
+ATL_ztrmvUH.o            : $(mySRCdir)/ATL_trmvUH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvUH.c
+ATL_ztrmvUC.o            : $(mySRCdir)/ATL_trmvUC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvUC.c
+ATL_ztrmvUT.o            : $(mySRCdir)/ATL_trmvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvUT.c
+ATL_ztrmvUN.o            : $(mySRCdir)/ATL_trmvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_trmvUN.c
+ATL_ztpmvLHU.o           : $(mySRCdir)/ATL_tpmvLHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvLHU.c
+ATL_ztpmvLCU.o           : $(mySRCdir)/ATL_tpmvLCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvLCU.c
+ATL_ztpmvLTU.o           : $(mySRCdir)/ATL_tpmvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvLTU.c
+ATL_ztpmvLNU.o           : $(mySRCdir)/ATL_tpmvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvLNU.c
+ATL_ztpmvLHN.o           : $(mySRCdir)/ATL_tpmvLHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvLHN.c
+ATL_ztpmvLCN.o           : $(mySRCdir)/ATL_tpmvLCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvLCN.c
+ATL_ztpmvLTN.o           : $(mySRCdir)/ATL_tpmvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvLTN.c
+ATL_ztpmvLNN.o           : $(mySRCdir)/ATL_tpmvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvLNN.c
+ATL_ztpmvUHU.o           : $(mySRCdir)/ATL_tpmvUHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvUHU.c
+ATL_ztpmvUCU.o           : $(mySRCdir)/ATL_tpmvUCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvUCU.c
+ATL_ztpmvUTU.o           : $(mySRCdir)/ATL_tpmvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvUTU.c
+ATL_ztpmvUNU.o           : $(mySRCdir)/ATL_tpmvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvUNU.c
+ATL_ztpmvUHN.o           : $(mySRCdir)/ATL_tpmvUHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvUHN.c
+ATL_ztpmvUCN.o           : $(mySRCdir)/ATL_tpmvUCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvUCN.c
+ATL_ztpmvUTN.o           : $(mySRCdir)/ATL_tpmvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvUTN.c
+ATL_ztpmvUNN.o           : $(mySRCdir)/ATL_tpmvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvUNN.c
+ATL_ztpmvLH.o            : $(mySRCdir)/ATL_tpmvLH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvLH.c
+ATL_ztpmvLC.o            : $(mySRCdir)/ATL_tpmvLC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvLC.c
+ATL_ztpmvLT.o            : $(mySRCdir)/ATL_tpmvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvLT.c
+ATL_ztpmvLN.o            : $(mySRCdir)/ATL_tpmvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvLN.c
+ATL_ztpmvUH.o            : $(mySRCdir)/ATL_tpmvUH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvUH.c
+ATL_ztpmvUC.o            : $(mySRCdir)/ATL_tpmvUC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvUC.c
+ATL_ztpmvUT.o            : $(mySRCdir)/ATL_tpmvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvUT.c
+ATL_ztpmvUN.o            : $(mySRCdir)/ATL_tpmvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tpmvUN.c
+ATL_ztbmvLHU.o           : $(mySRCdir)/ATL_tbmvLHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvLHU.c
+ATL_ztbmvLCU.o           : $(mySRCdir)/ATL_tbmvLCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvLCU.c
+ATL_ztbmvLTU.o           : $(mySRCdir)/ATL_tbmvLTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvLTU.c
+ATL_ztbmvLNU.o           : $(mySRCdir)/ATL_tbmvLNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvLNU.c
+ATL_ztbmvLHN.o           : $(mySRCdir)/ATL_tbmvLHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvLHN.c
+ATL_ztbmvLCN.o           : $(mySRCdir)/ATL_tbmvLCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvLCN.c
+ATL_ztbmvLTN.o           : $(mySRCdir)/ATL_tbmvLTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvLTN.c
+ATL_ztbmvLNN.o           : $(mySRCdir)/ATL_tbmvLNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvLNN.c
+ATL_ztbmvUHU.o           : $(mySRCdir)/ATL_tbmvUHU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvUHU.c
+ATL_ztbmvUCU.o           : $(mySRCdir)/ATL_tbmvUCU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvUCU.c
+ATL_ztbmvUTU.o           : $(mySRCdir)/ATL_tbmvUTU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvUTU.c
+ATL_ztbmvUNU.o           : $(mySRCdir)/ATL_tbmvUNU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvUNU.c
+ATL_ztbmvUHN.o           : $(mySRCdir)/ATL_tbmvUHN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvUHN.c
+ATL_ztbmvUCN.o           : $(mySRCdir)/ATL_tbmvUCN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvUCN.c
+ATL_ztbmvUTN.o           : $(mySRCdir)/ATL_tbmvUTN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvUTN.c
+ATL_ztbmvUNN.o           : $(mySRCdir)/ATL_tbmvUNN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvUNN.c
+ATL_ztbmvLH.o            : $(mySRCdir)/ATL_tbmvLH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvLH.c
+ATL_ztbmvLC.o            : $(mySRCdir)/ATL_tbmvLC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvLC.c
+ATL_ztbmvLT.o            : $(mySRCdir)/ATL_tbmvLT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvLT.c
+ATL_ztbmvLN.o            : $(mySRCdir)/ATL_tbmvLN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvLN.c
+ATL_ztbmvUH.o            : $(mySRCdir)/ATL_tbmvUH.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvUH.c
+ATL_ztbmvUC.o            : $(mySRCdir)/ATL_tbmvUC.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvUC.c
+ATL_ztbmvUT.o            : $(mySRCdir)/ATL_tbmvUT.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvUT.c
+ATL_ztbmvUN.o            : $(mySRCdir)/ATL_tbmvUN.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_tbmvUN.c
+ATL_zher2U.o             : $(mySRCdir)/ATL_her2U.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_her2U.c
+ATL_zher2L.o             : $(mySRCdir)/ATL_her2L.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_her2L.c
+ATL_zhpr2U.o             : $(mySRCdir)/ATL_hpr2U.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_hpr2U.c
+ATL_zhpr2L.o             : $(mySRCdir)/ATL_hpr2L.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_hpr2L.c
+ATL_zherU.o              : $(mySRCdir)/ATL_herU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_herU.c
+ATL_zherL.o              : $(mySRCdir)/ATL_herL.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_herL.c
+ATL_zhprU.o              : $(mySRCdir)/ATL_hprU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_hprU.c
+ATL_zhprL.o              : $(mySRCdir)/ATL_hprL.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_hprL.c
+ATL_zhemvU.o             : $(mySRCdir)/ATL_hemvU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_hemvU.c
+ATL_zhemvL.o             : $(mySRCdir)/ATL_hemvL.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_hemvL.c
+ATL_zhpmvU.o             : $(mySRCdir)/ATL_hpmvU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_hpmvU.c
+ATL_zhpmvL.o             : $(mySRCdir)/ATL_hpmvL.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_hpmvL.c
+ATL_zhbmvU.o             : $(mySRCdir)/ATL_hbmvU.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_hbmvU.c
+ATL_zhbmvL.o             : $(mySRCdir)/ATL_hbmvL.c $(INC2dep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DDCPLX $(mySRCdir)/ATL_hbmvL.c
+#
+########################################################################
+#
+sclean           :
+	( cd ../../reference/level2; $(MAKE) sclean )
+	rm -f $(SRBLAS2) s*.grd
+#
+dclean           :
+	( cd ../../reference/level2; $(MAKE) dclean )
+	rm -f $(DRBLAS2) d*.grd
+#
+cclean           :
+	( cd ../../reference/level2; $(MAKE) cclean )
+	rm -f $(CRBLAS2) c*.grd
+#
+zclean           :
+	( cd ../../reference/level2; $(MAKE) zclean )
+	rm -f $(ZRBLAS2) z*.grd
+#
+clean            :
+	( cd ../../reference/level2; $(MAKE)  clean )
+	rm -f *.o *.grd
+#
+########################################################################

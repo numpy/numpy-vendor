@@ -1,0 +1,233 @@
+include Make.inc
+mySRCdir = $(SRCdir)/interfaces/lapack/F77/src
+
+sobj = ATL_f77wrap_sgesv.o ATL_f77wrap_sgetnb.o ATL_f77wrap_sgetrf.o \
+       ATL_f77wrap_sgetri.o ATL_f77wrap_sgetrs.o ATL_f77wrap_slauum.o \
+       ATL_f77wrap_sposv.o ATL_f77wrap_spotrf.o ATL_f77wrap_spotrs.o \
+       ATL_f77wrap_strtri.o ieeeck.o ilaenv.o sgesv.o sgetrf.o sgetri.o \
+       sgetrs.o slauum.o sposv.o spotrf.o spotri.o spotrs.o strtri.o
+
+dobj = ATL_f77wrap_dgesv.o ATL_f77wrap_dgetnb.o ATL_f77wrap_dgetrf.o \
+       ATL_f77wrap_dgetri.o ATL_f77wrap_dgetrs.o ATL_f77wrap_dlauum.o \
+       ATL_f77wrap_dposv.o ATL_f77wrap_dpotrf.o ATL_f77wrap_dpotrs.o \
+       ATL_f77wrap_dtrtri.o dgesv.o dgetrf.o dgetri.o dgetrs.o dlauum.o \
+       dposv.o dpotrf.o dpotri.o dpotrs.o dtrtri.o ieeeck.o ilaenv.o
+
+cobj = ATL_f77wrap_cgesv.o ATL_f77wrap_cgetnb.o ATL_f77wrap_cgetrf.o \
+       ATL_f77wrap_cgetri.o ATL_f77wrap_cgetrs.o ATL_f77wrap_clauum.o \
+       ATL_f77wrap_cposv.o ATL_f77wrap_cpotrf.o ATL_f77wrap_cpotrs.o \
+       ATL_f77wrap_ctrtri.o cgesv.o cgetrf.o cgetri.o cgetrs.o clauum.o \
+       cposv.o cpotrf.o cpotri.o cpotrs.o ctrtri.o ieeeck.o ilaenv.o
+
+zobj = ATL_f77wrap_zgesv.o ATL_f77wrap_zgetnb.o ATL_f77wrap_zgetrf.o \
+       ATL_f77wrap_zgetri.o ATL_f77wrap_zgetrs.o ATL_f77wrap_zlauum.o \
+       ATL_f77wrap_zposv.o ATL_f77wrap_zpotrf.o ATL_f77wrap_zpotrs.o \
+       ATL_f77wrap_ztrtri.o ieeeck.o ilaenv.o zgesv.o zgetrf.o zgetri.o \
+       zgetrs.o zlauum.o zposv.o zpotrf.o zpotri.o zpotrs.o ztrtri.o
+
+all : lib
+lib : dlib slib zlib clib
+clean : dclean sclean zclean cclean
+
+sclean :
+	rm -f $(sobj) slib.grd
+slib : slib.grd
+slib.grd : $(sobj)
+	$(ARCHIVER) $(ARFLAGS) $(LAPACKlib) $(sobj)
+	$(RANLIB) $(LAPACKlib)
+	touch slib.grd
+
+dclean :
+	rm -f $(dobj) dlib.grd
+dlib : dlib.grd
+dlib.grd : $(dobj)
+	$(ARCHIVER) $(ARFLAGS) $(LAPACKlib) $(dobj)
+	$(RANLIB) $(LAPACKlib)
+	touch dlib.grd
+
+cclean :
+	rm -f $(cobj) clib.grd
+clib : clib.grd
+clib.grd : $(cobj)
+	$(ARCHIVER) $(ARFLAGS) $(LAPACKlib) $(cobj)
+	$(RANLIB) $(LAPACKlib)
+	touch clib.grd
+
+zclean :
+	rm -f $(zobj) zlib.grd
+zlib : zlib.grd
+zlib.grd : $(zobj)
+	$(ARCHIVER) $(ARFLAGS) $(LAPACKlib) $(zobj)
+	$(RANLIB) $(LAPACKlib)
+	touch zlib.grd
+
+
+spotri.o : $(mySRCdir)/spotri.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/spotri.f
+sgetri.o : $(mySRCdir)/sgetri.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/sgetri.f
+ATL_f77wrap_sgetri.o : $(mySRCdir)/f77wrap/ATL_f77wrap_getri.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DSREAL $(mySRCdir)/f77wrap/ATL_f77wrap_getri.c
+slauum.o : $(mySRCdir)/slauum.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/slauum.f
+ATL_f77wrap_slauum.o : $(mySRCdir)/f77wrap/ATL_f77wrap_lauum.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DSREAL $(mySRCdir)/f77wrap/ATL_f77wrap_lauum.c
+strtri.o : $(mySRCdir)/strtri.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/strtri.f
+ATL_f77wrap_strtri.o : $(mySRCdir)/f77wrap/ATL_f77wrap_trtri.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DSREAL $(mySRCdir)/f77wrap/ATL_f77wrap_trtri.c
+sgetrs.o : $(mySRCdir)/sgetrs.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/sgetrs.f
+ATL_f77wrap_sgetrs.o : $(mySRCdir)/f77wrap/ATL_f77wrap_getrs.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DSREAL $(mySRCdir)/f77wrap/ATL_f77wrap_getrs.c
+sgetrf.o : $(mySRCdir)/sgetrf.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/sgetrf.f
+ATL_f77wrap_sgetrf.o : $(mySRCdir)/f77wrap/ATL_f77wrap_getrf.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DSREAL $(mySRCdir)/f77wrap/ATL_f77wrap_getrf.c
+sgesv.o : $(mySRCdir)/sgesv.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/sgesv.f
+ATL_f77wrap_sgesv.o : $(mySRCdir)/f77wrap/ATL_f77wrap_gesv.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DSREAL $(mySRCdir)/f77wrap/ATL_f77wrap_gesv.c
+spotrs.o : $(mySRCdir)/spotrs.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/spotrs.f
+ATL_f77wrap_spotrs.o : $(mySRCdir)/f77wrap/ATL_f77wrap_potrs.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DSREAL $(mySRCdir)/f77wrap/ATL_f77wrap_potrs.c
+spotrf.o : $(mySRCdir)/spotrf.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/spotrf.f
+ATL_f77wrap_spotrf.o : $(mySRCdir)/f77wrap/ATL_f77wrap_potrf.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DSREAL $(mySRCdir)/f77wrap/ATL_f77wrap_potrf.c
+sposv.o : $(mySRCdir)/sposv.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/sposv.f
+ATL_f77wrap_sposv.o : $(mySRCdir)/f77wrap/ATL_f77wrap_posv.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DSREAL $(mySRCdir)/f77wrap/ATL_f77wrap_posv.c
+ATL_f77wrap_sgetnb.o : $(mySRCdir)/f77wrap/ATL_f77wrap_getnb.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DSREAL $(mySRCdir)/f77wrap/ATL_f77wrap_getnb.c
+
+dpotri.o : $(mySRCdir)/dpotri.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/dpotri.f
+dgetri.o : $(mySRCdir)/dgetri.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/dgetri.f
+ATL_f77wrap_dgetri.o : $(mySRCdir)/f77wrap/ATL_f77wrap_getri.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DDREAL $(mySRCdir)/f77wrap/ATL_f77wrap_getri.c
+dlauum.o : $(mySRCdir)/dlauum.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/dlauum.f
+ATL_f77wrap_dlauum.o : $(mySRCdir)/f77wrap/ATL_f77wrap_lauum.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DDREAL $(mySRCdir)/f77wrap/ATL_f77wrap_lauum.c
+dtrtri.o : $(mySRCdir)/dtrtri.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/dtrtri.f
+ATL_f77wrap_dtrtri.o : $(mySRCdir)/f77wrap/ATL_f77wrap_trtri.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DDREAL $(mySRCdir)/f77wrap/ATL_f77wrap_trtri.c
+dgetrs.o : $(mySRCdir)/dgetrs.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/dgetrs.f
+ATL_f77wrap_dgetrs.o : $(mySRCdir)/f77wrap/ATL_f77wrap_getrs.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DDREAL $(mySRCdir)/f77wrap/ATL_f77wrap_getrs.c
+dgetrf.o : $(mySRCdir)/dgetrf.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/dgetrf.f
+ATL_f77wrap_dgetrf.o : $(mySRCdir)/f77wrap/ATL_f77wrap_getrf.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DDREAL $(mySRCdir)/f77wrap/ATL_f77wrap_getrf.c
+dgesv.o : $(mySRCdir)/dgesv.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/dgesv.f
+ATL_f77wrap_dgesv.o : $(mySRCdir)/f77wrap/ATL_f77wrap_gesv.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DDREAL $(mySRCdir)/f77wrap/ATL_f77wrap_gesv.c
+dpotrs.o : $(mySRCdir)/dpotrs.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/dpotrs.f
+ATL_f77wrap_dpotrs.o : $(mySRCdir)/f77wrap/ATL_f77wrap_potrs.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DDREAL $(mySRCdir)/f77wrap/ATL_f77wrap_potrs.c
+dpotrf.o : $(mySRCdir)/dpotrf.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/dpotrf.f
+ATL_f77wrap_dpotrf.o : $(mySRCdir)/f77wrap/ATL_f77wrap_potrf.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DDREAL $(mySRCdir)/f77wrap/ATL_f77wrap_potrf.c
+dposv.o : $(mySRCdir)/dposv.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/dposv.f
+ATL_f77wrap_dposv.o : $(mySRCdir)/f77wrap/ATL_f77wrap_posv.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DDREAL $(mySRCdir)/f77wrap/ATL_f77wrap_posv.c
+ATL_f77wrap_dgetnb.o : $(mySRCdir)/f77wrap/ATL_f77wrap_getnb.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DDREAL $(mySRCdir)/f77wrap/ATL_f77wrap_getnb.c
+
+cpotri.o : $(mySRCdir)/cpotri.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/cpotri.f
+cgetri.o : $(mySRCdir)/cgetri.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/cgetri.f
+ATL_f77wrap_cgetri.o : $(mySRCdir)/f77wrap/ATL_f77wrap_getri.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DSCPLX $(mySRCdir)/f77wrap/ATL_f77wrap_getri.c
+clauum.o : $(mySRCdir)/clauum.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/clauum.f
+ATL_f77wrap_clauum.o : $(mySRCdir)/f77wrap/ATL_f77wrap_lauum.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DSCPLX $(mySRCdir)/f77wrap/ATL_f77wrap_lauum.c
+ctrtri.o : $(mySRCdir)/ctrtri.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/ctrtri.f
+ATL_f77wrap_ctrtri.o : $(mySRCdir)/f77wrap/ATL_f77wrap_trtri.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DSCPLX $(mySRCdir)/f77wrap/ATL_f77wrap_trtri.c
+cgetrs.o : $(mySRCdir)/cgetrs.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/cgetrs.f
+ATL_f77wrap_cgetrs.o : $(mySRCdir)/f77wrap/ATL_f77wrap_getrs.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DSCPLX $(mySRCdir)/f77wrap/ATL_f77wrap_getrs.c
+cgetrf.o : $(mySRCdir)/cgetrf.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/cgetrf.f
+ATL_f77wrap_cgetrf.o : $(mySRCdir)/f77wrap/ATL_f77wrap_getrf.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DSCPLX $(mySRCdir)/f77wrap/ATL_f77wrap_getrf.c
+cgesv.o : $(mySRCdir)/cgesv.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/cgesv.f
+ATL_f77wrap_cgesv.o : $(mySRCdir)/f77wrap/ATL_f77wrap_gesv.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DSCPLX $(mySRCdir)/f77wrap/ATL_f77wrap_gesv.c
+cpotrs.o : $(mySRCdir)/cpotrs.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/cpotrs.f
+ATL_f77wrap_cpotrs.o : $(mySRCdir)/f77wrap/ATL_f77wrap_potrs.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DSCPLX $(mySRCdir)/f77wrap/ATL_f77wrap_potrs.c
+cpotrf.o : $(mySRCdir)/cpotrf.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/cpotrf.f
+ATL_f77wrap_cpotrf.o : $(mySRCdir)/f77wrap/ATL_f77wrap_potrf.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DSCPLX $(mySRCdir)/f77wrap/ATL_f77wrap_potrf.c
+cposv.o : $(mySRCdir)/cposv.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/cposv.f
+ATL_f77wrap_cposv.o : $(mySRCdir)/f77wrap/ATL_f77wrap_posv.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DSCPLX $(mySRCdir)/f77wrap/ATL_f77wrap_posv.c
+ATL_f77wrap_cgetnb.o : $(mySRCdir)/f77wrap/ATL_f77wrap_getnb.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DSCPLX $(mySRCdir)/f77wrap/ATL_f77wrap_getnb.c
+
+zpotri.o : $(mySRCdir)/zpotri.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/zpotri.f
+zgetri.o : $(mySRCdir)/zgetri.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/zgetri.f
+ATL_f77wrap_zgetri.o : $(mySRCdir)/f77wrap/ATL_f77wrap_getri.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DDCPLX $(mySRCdir)/f77wrap/ATL_f77wrap_getri.c
+zlauum.o : $(mySRCdir)/zlauum.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/zlauum.f
+ATL_f77wrap_zlauum.o : $(mySRCdir)/f77wrap/ATL_f77wrap_lauum.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DDCPLX $(mySRCdir)/f77wrap/ATL_f77wrap_lauum.c
+ztrtri.o : $(mySRCdir)/ztrtri.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/ztrtri.f
+ATL_f77wrap_ztrtri.o : $(mySRCdir)/f77wrap/ATL_f77wrap_trtri.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DDCPLX $(mySRCdir)/f77wrap/ATL_f77wrap_trtri.c
+zgetrs.o : $(mySRCdir)/zgetrs.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/zgetrs.f
+ATL_f77wrap_zgetrs.o : $(mySRCdir)/f77wrap/ATL_f77wrap_getrs.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DDCPLX $(mySRCdir)/f77wrap/ATL_f77wrap_getrs.c
+zgetrf.o : $(mySRCdir)/zgetrf.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/zgetrf.f
+ATL_f77wrap_zgetrf.o : $(mySRCdir)/f77wrap/ATL_f77wrap_getrf.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DDCPLX $(mySRCdir)/f77wrap/ATL_f77wrap_getrf.c
+zgesv.o : $(mySRCdir)/zgesv.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/zgesv.f
+ATL_f77wrap_zgesv.o : $(mySRCdir)/f77wrap/ATL_f77wrap_gesv.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DDCPLX $(mySRCdir)/f77wrap/ATL_f77wrap_gesv.c
+zpotrs.o : $(mySRCdir)/zpotrs.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/zpotrs.f
+ATL_f77wrap_zpotrs.o : $(mySRCdir)/f77wrap/ATL_f77wrap_potrs.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DDCPLX $(mySRCdir)/f77wrap/ATL_f77wrap_potrs.c
+zpotrf.o : $(mySRCdir)/zpotrf.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/zpotrf.f
+ATL_f77wrap_zpotrf.o : $(mySRCdir)/f77wrap/ATL_f77wrap_potrf.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DDCPLX $(mySRCdir)/f77wrap/ATL_f77wrap_potrf.c
+zposv.o : $(mySRCdir)/zposv.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/zposv.f
+ATL_f77wrap_zposv.o : $(mySRCdir)/f77wrap/ATL_f77wrap_posv.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DDCPLX $(mySRCdir)/f77wrap/ATL_f77wrap_posv.c
+ATL_f77wrap_zgetnb.o : $(mySRCdir)/f77wrap/ATL_f77wrap_getnb.c
+	$(ICC) $(ICCFLAGS) -o $@ -c -DDCPLX $(mySRCdir)/f77wrap/ATL_f77wrap_getnb.c
+
+
+ieeeck.o : $(mySRCdir)/ieeeck.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/ieeeck.f
+ilaenv.o : $(mySRCdir)/ilaenv.f
+	$(F77) -o $@ -c $(F77FLAGS) $(mySRCdir)/ilaenv.f

@@ -1,0 +1,265 @@
+include Make.inc
+mySRCdir = $(SRCdir)/tune/blas/ger
+
+sR1CC = $(SKC)
+sR1CFLAGS = $(SKCFLAGS)
+cR1CC = $(SKC)
+cR1CFLAGS = $(SKCFLAGS)
+dR1CC = $(DKC)
+dR1CFLAGS = $(DKCFLAGS)
+zR1CC = $(DKC)
+zR1CFLAGS = $(DKCFLAGS)
+cas=0
+xu=16
+yu=2
+l1mul=75
+iflag=0
+Mt=297
+Nt=177
+ldat=$(Mt)
+M=1000
+N=1000
+lda=$(M)
+incy=3
+
+xr1search : xemit_r1h r1search.o l1lib tstlib
+	$(XCC) $(XCCFLAGS) -o xr1search r1search.o
+r1search.o : $(mySRCdir)/r1search.c scases.dsc dcases.dsc ccases.dsc zcases.dsc
+	$(XCC) -c $(XCCFLAGS) -o r1search.o $(mySRCdir)/r1search.c
+
+xemit_r1h : emit_r1h.o
+	$(XCC) $(XCCFLAGS) -o $@ emit_r1h.o
+emit_r1h.o : $(INCAdir)/atlas_type.h $(mySRCdir)/emit_r1h.c
+	$(XCC) -c $(XCCFLAGS) -o $@ $(mySRCdir)/emit_r1h.c
+$(INCAdir)/atlas_type.h :
+	cd $(SYSdir) ; $(MAKE) RunTyp
+l1lib : sl1lib dl1lib cl1lib zl1lib 
+tstlib : ststlib dtstlib ctstlib ztstlib
+
+force_build :
+
+res/L1CacheSize : $(SYSdir)/res/L1CacheSize
+	cd $(SYSdir) ; $(MAKE) res/L1CacheSize
+	ln -s $(SYSdir)/res/L1CacheSize res/L1CacheSize
+
+ATL_ger.c :
+	cp $(mySRCdir)/ATL_ger.c .
+
+ststobj = ATL_sger1.o
+sobj = ATL_sger.o ATL_sger1.o
+
+sr1case : sger1tune.o xemit_r1h xccobj
+	rm -f $(sobj) ATL_sger1.c $(INCAdir)/atlas_sr1.h res/sger1_0_*
+	./xemit_r1h -p s -l $(l1mul) -x $(xu) -y $(yu) -f $(iflag)
+	cp -f $(mySRCdir)/CASES/$(r1rout) ATL_sger1.c
+	$(MAKE) $(sobj)
+	$(CLINKER) $(CLINKFLAGS) -o xsr1 sger1tune.o \
+                   $(sobj) $(TESTlib) $(ATLASlib)
+	$(ATLRUN) $(R1Tdir) xsr1 -C $(cas) -l $(l1mul) -m $(M) -n $(N) \
+	          -f $(iflag)
+
+sr1tstcase : sr1test.o
+	rm -f $(ststobj) ATL_sger1.c $(INCAdir)/atlas_sr1.h
+	./xemit_r1h -p s -l $(l1mul) -x $(xu) -y $(yu) -f $(iflag)
+	cp -f $(mySRCdir)/CASES/$(r1rout) ATL_sger1.c
+	$(MAKE) $(ststobj)
+	$(CLINKER) $(CLINKFLAGS) -o xsr1tst sr1test.o \
+                   $(ststobj) $(TESTlib) $(ATLASlib)
+	$(ATLRUN) $(R1Tdir) xsr1tst -m $(Mt) -n $(Nt) -Y $(incy) -l $(ldat)
+
+sr1test.o : $(mySRCdir)/r1test.c
+	$(ICC) -c $(ICCFLAGS) -o $@ -DSREAL $(mySRCdir)/r1test.c
+sger1tune.o : $(mySRCdir)/ger1tune.c
+	$(ICC) -c $(ICCFLAGS) -o $@ -DSREAL $(mySRCdir)/ger1tune.c
+ATL_sger.o : ATL_ger.c atlas_sr1.h
+	$(ICC) -c $(ICCFLAGS) -o $@ -DSREAL -I$(R1Tdir) ATL_ger.c
+ATL_sger1.o : ATL_sger1.c
+	$(sR1CC) -c $(CDEFS) $(sR1CFLAGS) -I$(R1Tdir) -o $@ -DSREAL ATL_sger1.c
+ATL_sger1c.o : ATL_sger1.c
+	$(sR1CC) -c $(CDEFS) $(sR1CFLAGS) -I$(R1Tdir) -o $@ -DSREAL -DConj_ \
+              ATL_sger1.c
+ATL_sger1_dummy.o : ATL_sger1_dummy.c
+	$(ICC) -c $(ICCFLAGS) -I$(R1Tdir) -o $@ -DSREAL ATL_sger1_dummy.c
+
+res/sR1RES : xr1search force_build
+	./xr1search -p s
+sinstall : xccobj
+	cp -f $(mySRCdir)/CASES/$(r1rout) $(GR1dir)/ATL_sger1.c
+	cp -f Make_sr1 $(GR1dir)/.
+	cp -f atlas_sr1.h $(INCAdir)/.
+	-@ cp -f xccobj $(GR1dir)/.
+	-@ cp -f xccobj.exe $(GR1dir)/.
+	touch $(INCSdir)/atlas_r1.h
+sl1lib :
+	cd $(BINdir) ; $(MAKE) sl1lib
+ststlib :
+	cd $(BINdir) ; $(MAKE) ststlib
+scases.dsc : $(BINdir)/xsubstr $(mySRCdir)/CASES/scases.dsc
+	$(BINdir)/xsubstr -i $(mySRCdir)/CASES/scases.dsc -o $@ \
+           -s '^gcc' '$(GOODGCC)' -s ' gcc' ' $(GOODGCC)'
+dtstobj = ATL_dger1.o
+dobj = ATL_dger.o ATL_dger1.o
+
+dr1case : dger1tune.o xemit_r1h xccobj
+	rm -f $(dobj) ATL_dger1.c $(INCAdir)/atlas_dr1.h res/dger1_0_*
+	./xemit_r1h -p d -l $(l1mul) -x $(xu) -y $(yu) -f $(iflag)
+	cp -f $(mySRCdir)/CASES/$(r1rout) ATL_dger1.c
+	$(MAKE) $(dobj)
+	$(CLINKER) $(CLINKFLAGS) -o xdr1 dger1tune.o \
+                   $(dobj) $(TESTlib) $(ATLASlib)
+	$(ATLRUN) $(R1Tdir) xdr1 -C $(cas) -l $(l1mul) -m $(M) -n $(N) \
+	          -f $(iflag)
+
+dr1tstcase : dr1test.o
+	rm -f $(dtstobj) ATL_dger1.c $(INCAdir)/atlas_dr1.h
+	./xemit_r1h -p d -l $(l1mul) -x $(xu) -y $(yu) -f $(iflag)
+	cp -f $(mySRCdir)/CASES/$(r1rout) ATL_dger1.c
+	$(MAKE) $(dtstobj)
+	$(CLINKER) $(CLINKFLAGS) -o xdr1tst dr1test.o \
+                   $(dtstobj) $(TESTlib) $(ATLASlib)
+	$(ATLRUN) $(R1Tdir) xdr1tst -m $(Mt) -n $(Nt) -Y $(incy) -l $(ldat)
+
+dr1test.o : $(mySRCdir)/r1test.c
+	$(ICC) -c $(ICCFLAGS) -o $@ -DDREAL $(mySRCdir)/r1test.c
+dger1tune.o : $(mySRCdir)/ger1tune.c
+	$(ICC) -c $(ICCFLAGS) -o $@ -DDREAL $(mySRCdir)/ger1tune.c
+ATL_dger.o : ATL_ger.c atlas_dr1.h
+	$(ICC) -c $(ICCFLAGS) -o $@ -DDREAL -I$(R1Tdir) ATL_ger.c
+ATL_dger1.o : ATL_dger1.c
+	$(dR1CC) -c $(CDEFS) $(dR1CFLAGS) -I$(R1Tdir) -o $@ -DDREAL ATL_dger1.c
+ATL_dger1c.o : ATL_dger1.c
+	$(dR1CC) -c $(CDEFS) $(dR1CFLAGS) -I$(R1Tdir) -o $@ -DDREAL -DConj_ \
+              ATL_dger1.c
+ATL_dger1_dummy.o : ATL_dger1_dummy.c
+	$(ICC) -c $(ICCFLAGS) -I$(R1Tdir) -o $@ -DDREAL ATL_dger1_dummy.c
+
+res/dR1RES : xr1search force_build
+	./xr1search -p d
+dinstall : xccobj
+	cp -f $(mySRCdir)/CASES/$(r1rout) $(GR1dir)/ATL_dger1.c
+	cp -f Make_dr1 $(GR1dir)/.
+	cp -f atlas_dr1.h $(INCAdir)/.
+	-@ cp -f xccobj $(GR1dir)/.
+	-@ cp -f xccobj.exe $(GR1dir)/.
+	touch $(INCSdir)/atlas_r1.h
+dl1lib :
+	cd $(BINdir) ; $(MAKE) dl1lib
+dtstlib :
+	cd $(BINdir) ; $(MAKE) dtstlib
+dcases.dsc : $(BINdir)/xsubstr $(mySRCdir)/CASES/dcases.dsc
+	$(BINdir)/xsubstr -i $(mySRCdir)/CASES/dcases.dsc -o $@ \
+           -s '^gcc' '$(GOODGCC)' -s ' gcc' ' $(GOODGCC)'
+ctstobj = ATL_cger1.o  ATL_cger1c.o 
+cobj = ATL_cger.o ATL_cger1.o ATL_cger1_dummy.o
+
+cr1case : cger1tune.o xemit_r1h xccobj
+	rm -f $(cobj) ATL_cger1.c $(INCAdir)/atlas_cr1.h res/cger1_0_*
+	./xemit_r1h -p c -l $(l1mul) -x $(xu) -y $(yu) -f $(iflag)
+	cp -f $(mySRCdir)/CASES/$(r1rout) ATL_cger1.c
+	cp -f $(mySRCdir)/CASES/ATL_cger1_dummy.c ATL_cger1_dummy.c
+	$(MAKE) $(cobj)
+	$(CLINKER) $(CLINKFLAGS) -o xcr1 cger1tune.o \
+                   $(cobj) $(TESTlib) $(ATLASlib)
+	$(ATLRUN) $(R1Tdir) xcr1 -C $(cas) -l $(l1mul) -m $(M) -n $(N) \
+	          -f $(iflag)
+
+cr1tstcase : cr1test.o
+	rm -f $(ctstobj) ATL_cger1.c $(INCAdir)/atlas_cr1.h
+	./xemit_r1h -p c -l $(l1mul) -x $(xu) -y $(yu) -f $(iflag)
+	cp -f $(mySRCdir)/CASES/$(r1rout) ATL_cger1.c
+	$(MAKE) $(ctstobj)
+	$(CLINKER) $(CLINKFLAGS) -o xcr1tst cr1test.o \
+                   $(ctstobj) $(TESTlib) $(ATLASlib)
+	$(ATLRUN) $(R1Tdir) xcr1tst -m $(Mt) -n $(Nt) -Y $(incy) -l $(ldat)
+
+cr1test.o : $(mySRCdir)/r1test.c
+	$(ICC) -c $(ICCFLAGS) -o $@ -DSCPLX $(mySRCdir)/r1test.c
+cger1tune.o : $(mySRCdir)/ger1tune.c
+	$(ICC) -c $(ICCFLAGS) -o $@ -DSCPLX $(mySRCdir)/ger1tune.c
+ATL_cger.o : ATL_ger.c atlas_cr1.h
+	$(ICC) -c $(ICCFLAGS) -o $@ -DSCPLX -I$(R1Tdir) ATL_ger.c
+ATL_cger1.o : ATL_cger1.c
+	$(cR1CC) -c $(CDEFS) $(cR1CFLAGS) -I$(R1Tdir) -o $@ -DSCPLX ATL_cger1.c
+ATL_cger1c.o : ATL_cger1.c
+	$(cR1CC) -c $(CDEFS) $(cR1CFLAGS) -I$(R1Tdir) -o $@ -DSCPLX -DConj_ \
+              ATL_cger1.c
+ATL_cger1_dummy.o : ATL_cger1_dummy.c
+	$(ICC) -c $(ICCFLAGS) -I$(R1Tdir) -o $@ -DSCPLX ATL_cger1_dummy.c
+
+res/cR1RES : xr1search force_build
+	./xr1search -p c
+cinstall : xccobj
+	cp -f $(mySRCdir)/CASES/$(r1rout) $(GR1dir)/ATL_cger1.c
+	cp -f Make_cr1 $(GR1dir)/.
+	cp -f atlas_cr1.h $(INCAdir)/.
+	-@ cp -f xccobj $(GR1dir)/.
+	-@ cp -f xccobj.exe $(GR1dir)/.
+	touch $(INCSdir)/atlas_r1.h
+cl1lib :
+	cd $(BINdir) ; $(MAKE) cl1lib
+ctstlib :
+	cd $(BINdir) ; $(MAKE) ctstlib
+ccases.dsc : $(BINdir)/xsubstr $(mySRCdir)/CASES/ccases.dsc
+	$(BINdir)/xsubstr -i $(mySRCdir)/CASES/ccases.dsc -o $@ \
+           -s '^gcc' '$(GOODGCC)' -s ' gcc' ' $(GOODGCC)'
+ztstobj = ATL_zger1.o  ATL_zger1c.o 
+zobj = ATL_zger.o ATL_zger1.o ATL_zger1_dummy.o
+
+zr1case : zger1tune.o xemit_r1h xccobj
+	rm -f $(zobj) ATL_zger1.c $(INCAdir)/atlas_zr1.h res/zger1_0_*
+	./xemit_r1h -p z -l $(l1mul) -x $(xu) -y $(yu) -f $(iflag)
+	cp -f $(mySRCdir)/CASES/$(r1rout) ATL_zger1.c
+	cp -f $(mySRCdir)/CASES/ATL_cger1_dummy.c ATL_zger1_dummy.c
+	$(MAKE) $(zobj)
+	$(CLINKER) $(CLINKFLAGS) -o xzr1 zger1tune.o \
+                   $(zobj) $(TESTlib) $(ATLASlib)
+	$(ATLRUN) $(R1Tdir) xzr1 -C $(cas) -l $(l1mul) -m $(M) -n $(N) \
+	          -f $(iflag)
+
+zr1tstcase : zr1test.o
+	rm -f $(ztstobj) ATL_zger1.c $(INCAdir)/atlas_zr1.h
+	./xemit_r1h -p z -l $(l1mul) -x $(xu) -y $(yu) -f $(iflag)
+	cp -f $(mySRCdir)/CASES/$(r1rout) ATL_zger1.c
+	$(MAKE) $(ztstobj)
+	$(CLINKER) $(CLINKFLAGS) -o xzr1tst zr1test.o \
+                   $(ztstobj) $(TESTlib) $(ATLASlib)
+	$(ATLRUN) $(R1Tdir) xzr1tst -m $(Mt) -n $(Nt) -Y $(incy) -l $(ldat)
+
+zr1test.o : $(mySRCdir)/r1test.c
+	$(ICC) -c $(ICCFLAGS) -o $@ -DDCPLX $(mySRCdir)/r1test.c
+zger1tune.o : $(mySRCdir)/ger1tune.c
+	$(ICC) -c $(ICCFLAGS) -o $@ -DDCPLX $(mySRCdir)/ger1tune.c
+ATL_zger.o : ATL_ger.c atlas_zr1.h
+	$(ICC) -c $(ICCFLAGS) -o $@ -DDCPLX -I$(R1Tdir) ATL_ger.c
+ATL_zger1.o : ATL_zger1.c
+	$(zR1CC) -c $(CDEFS) $(zR1CFLAGS) -I$(R1Tdir) -o $@ -DDCPLX ATL_zger1.c
+ATL_zger1c.o : ATL_zger1.c
+	$(zR1CC) -c $(CDEFS) $(zR1CFLAGS) -I$(R1Tdir) -o $@ -DDCPLX -DConj_ \
+              ATL_zger1.c
+ATL_zger1_dummy.o : ATL_zger1_dummy.c
+	$(ICC) -c $(ICCFLAGS) -I$(R1Tdir) -o $@ -DDCPLX ATL_zger1_dummy.c
+
+res/zR1RES : xr1search force_build
+	./xr1search -p z
+zinstall : xccobj
+	cp -f $(mySRCdir)/CASES/$(r1rout) $(GR1dir)/ATL_zger1.c
+	cp -f Make_zr1 $(GR1dir)/.
+	cp -f atlas_zr1.h $(INCAdir)/.
+	-@ cp -f xccobj $(GR1dir)/.
+	-@ cp -f xccobj.exe $(GR1dir)/.
+	touch $(INCSdir)/atlas_r1.h
+zl1lib :
+	cd $(BINdir) ; $(MAKE) zl1lib
+ztstlib :
+	cd $(BINdir) ; $(MAKE) ztstlib
+zcases.dsc : $(BINdir)/xsubstr $(mySRCdir)/CASES/zcases.dsc
+	$(BINdir)/xsubstr -i $(mySRCdir)/CASES/zcases.dsc -o $@ \
+           -s '^gcc' '$(GOODGCC)' -s ' gcc' ' $(GOODGCC)'
+
+$(BINdir)/xsubstr :
+	cd $(BINdir) ; $(MAKE) xsubstr
+$(BINdir)/xccobj :
+	cd $(BINdir) ; $(MAKE) xccobj
+xccobj : $(BINdir)/xccobj
+	-@ cp -f $(BINdir)/xccobj .
+	-@ cp -f $(BINdir)/xccobj.exe .

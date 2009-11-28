@@ -1,0 +1,218 @@
+########################################################################
+#  
+#  -- Automatically Tuned Linear Algebra Software (ATLAS)
+#     (C) Copyright 2000 All Rights Reserved
+#
+########################################################################
+#
+#  -- Copyright notice and Licensing terms:
+#
+#  Redistribution  and  use in  source and binary forms, with or without
+#  modification, are  permitted provided  that the following  conditions
+#  are met:
+#
+#  1. Redistributions  of  source  code  must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#  2. Redistributions in binary form must reproduce  the above copyright
+#     notice,  this list of conditions, and the  following disclaimer in
+#     the documentation and/or other materials provided with the distri-
+#     bution.
+#  3. The name of the University,  the ATLAS group,  or the names of its
+#     contributors  may not be used to endorse or promote products deri-
+#     ved from this software without specific written permission.
+#
+#  -- Disclaimer:
+#
+#  THIS  SOFTWARE  IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+#  ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES,  INCLUDING,  BUT NOT
+#  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+#  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE UNIVERSITY
+#  OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  INDIRECT, INCIDENTAL, SPE-
+#  CIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+#  TO,  PROCUREMENT  OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+#  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEO-
+#  RY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT  (IN-
+#  CLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+#  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#  
+########################################################################
+#
+include Make.inc
+mySRCdir = $(SRCdir)/src/pthreads/misc
+#
+########################################################################
+#
+INCMdep   = \
+   $(INCAdir)/atlas_pthreads.h     $(INCSdir)/atlas_aux.h      \
+   $(INCSdir)/atlas_enum.h      $(INCSdir)/atlas_misc.h     \
+   $(INCSdir)/atlas_rblas3.h    $(INCSdir)/atlas_level3.h   \
+   $(INCSdir)/atlas_ptmisc.h
+#
+## Object files ########################################################
+#
+ATL_alvlmobj = \
+   ATL_1dsplit.o ATL_Sgeadd_pt.o ATL_Sgescal_pt.o ATL_Sgezero_pt.o \
+   ATL_Stzscal_pt.o ATL_apply_tree.o ATL_create_tree.o ATL_free_node.o \
+   ATL_free_tree.o ATL_init_node.o ATL_join_tree.o ATL_print_node_id.o \
+   ATL_signal_tree.o ATL_thread_exit.o ATL_thread_init.o ATL_thread_tree.o \
+   ATL_traverse_tree.o ATL_tzsplit.o ATL_wait_tree.o
+#
+ATL_slvlmobj = \
+   ATL_sptgeadd.o ATL_sptgescal.o ATL_sptgezero.o ATL_spttrscal.o
+#
+ATL_dlvlmobj = \
+   ATL_dptgeadd.o ATL_dptgescal.o ATL_dptgezero.o ATL_dpttrscal.o
+#
+ATL_clvlmobj = \
+   ATL_cptgeadd.o ATL_cptgescal.o ATL_cptgezero.o ATL_cpthescal.o \
+   ATL_cpttrscal.o
+#
+ATL_zlvlmobj = \
+   ATL_zptgeadd.o ATL_zptgescal.o ATL_zptgezero.o ATL_zpthescal.o \
+   ATL_zpttrscal.o
+#
+## Targets #############################################################
+#
+all   : lib
+#
+lvlm  : lib
+#
+lib   : alib slib dlib clib zlib
+#
+alvlm : alib
+slvlm : slib
+dlvlm : dlib
+clvlm : clib
+zlvlm : zlib
+#
+alib  : alib.grd
+slib  : slib.grd
+dlib  : dlib.grd
+clib  : clib.grd
+zlib  : zlib.grd
+#
+alib.grd  : $(ATL_alvlmobj)
+	$(ARCHIVER) $(ARFLAGS) $(ATLASlib) $(ATL_alvlmobj)
+	$(RANLIB) $(ATLASlib)
+	touch alib.grd
+#
+slib.grd  : $(ATL_slvlmobj)
+	$(ARCHIVER) $(ARFLAGS) $(ATLASlib) $(ATL_slvlmobj)
+	$(RANLIB) $(ATLASlib)
+	touch slib.grd
+#
+dlib.grd  : $(ATL_dlvlmobj)
+	$(ARCHIVER) $(ARFLAGS) $(ATLASlib) $(ATL_dlvlmobj)
+	$(RANLIB) $(ATLASlib)
+	touch dlib.grd
+#
+clib.grd  : $(ATL_clvlmobj)
+	$(ARCHIVER) $(ARFLAGS) $(ATLASlib) $(ATL_clvlmobj)
+	$(RANLIB) $(ATLASlib)
+	touch clib.grd
+#
+zlib.grd  : $(ATL_zlvlmobj)
+	$(ARCHIVER) $(ARFLAGS) $(ATLASlib) $(ATL_zlvlmobj)
+	$(RANLIB) $(ATLASlib)
+	touch zlib.grd
+#
+########################################################################
+#
+ATL_Stzscal_pt.o             : $(mySRCdir)/ATL_Stzscal.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS $(mySRCdir)/ATL_Stzscal.c
+ATL_Sgezero_pt.o             : $(mySRCdir)/ATL_Sgezero.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS $(mySRCdir)/ATL_Sgezero.c
+ATL_Sgescal_pt.o             : $(mySRCdir)/ATL_Sgescal.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS $(mySRCdir)/ATL_Sgescal.c
+ATL_Sgeadd_pt.o              : $(mySRCdir)/ATL_Sgeadd.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS $(mySRCdir)/ATL_Sgeadd.c
+ATL_create_tree.o            : $(mySRCdir)/ATL_create_tree.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS $(mySRCdir)/ATL_create_tree.c
+ATL_free_tree.o              : $(mySRCdir)/ATL_free_tree.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS $(mySRCdir)/ATL_free_tree.c
+ATL_print_node_id.o          : $(mySRCdir)/ATL_print_node_id.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS $(mySRCdir)/ATL_print_node_id.c
+ATL_free_node.o              : $(mySRCdir)/ATL_free_node.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS $(mySRCdir)/ATL_free_node.c
+ATL_join_tree.o              : $(mySRCdir)/ATL_join_tree.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS $(mySRCdir)/ATL_join_tree.c
+ATL_signal_tree.o            : $(mySRCdir)/ATL_signal_tree.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS $(mySRCdir)/ATL_signal_tree.c
+ATL_wait_tree.o              : $(mySRCdir)/ATL_wait_tree.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS $(mySRCdir)/ATL_wait_tree.c
+ATL_thread_tree.o            : $(mySRCdir)/ATL_thread_tree.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS $(mySRCdir)/ATL_thread_tree.c
+ATL_thread_exit.o            : $(mySRCdir)/ATL_thread_exit.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS $(mySRCdir)/ATL_thread_exit.c
+ATL_thread_init.o            : $(mySRCdir)/ATL_thread_init.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS $(mySRCdir)/ATL_thread_init.c
+ATL_apply_tree.o             : $(mySRCdir)/ATL_apply_tree.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS $(mySRCdir)/ATL_apply_tree.c
+ATL_traverse_tree.o          : $(mySRCdir)/ATL_traverse_tree.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS $(mySRCdir)/ATL_traverse_tree.c
+ATL_init_node.o              : $(mySRCdir)/ATL_init_node.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS $(mySRCdir)/ATL_init_node.c
+ATL_tzsplit.o                : $(mySRCdir)/ATL_tzsplit.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS $(mySRCdir)/ATL_tzsplit.c
+ATL_1dsplit.o                : $(mySRCdir)/ATL_1dsplit.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS $(mySRCdir)/ATL_1dsplit.c
+#
+ATL_sptgeadd.o               : $(mySRCdir)/ATL_ptgeadd.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS -DSREAL $(mySRCdir)/ATL_ptgeadd.c
+ATL_sptgescal.o              : $(mySRCdir)/ATL_ptgescal.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS -DSREAL $(mySRCdir)/ATL_ptgescal.c
+ATL_sptgezero.o              : $(mySRCdir)/ATL_ptgezero.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS -DSREAL $(mySRCdir)/ATL_ptgezero.c
+ATL_spttrscal.o              : $(mySRCdir)/ATL_pttrscal.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS -DSREAL $(mySRCdir)/ATL_pttrscal.c
+#
+ATL_dptgeadd.o               : $(mySRCdir)/ATL_ptgeadd.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS -DDREAL $(mySRCdir)/ATL_ptgeadd.c
+ATL_dptgescal.o              : $(mySRCdir)/ATL_ptgescal.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS -DDREAL $(mySRCdir)/ATL_ptgescal.c
+ATL_dptgezero.o              : $(mySRCdir)/ATL_ptgezero.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS -DDREAL $(mySRCdir)/ATL_ptgezero.c
+ATL_dpttrscal.o              : $(mySRCdir)/ATL_pttrscal.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS -DDREAL $(mySRCdir)/ATL_pttrscal.c
+#
+ATL_cptgeadd.o               : $(mySRCdir)/ATL_ptgeadd.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS -DSCPLX $(mySRCdir)/ATL_ptgeadd.c
+ATL_cptgescal.o              : $(mySRCdir)/ATL_ptgescal.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS -DSCPLX $(mySRCdir)/ATL_ptgescal.c
+ATL_cptgezero.o              : $(mySRCdir)/ATL_ptgezero.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS -DSCPLX $(mySRCdir)/ATL_ptgezero.c
+ATL_cpttrscal.o              : $(mySRCdir)/ATL_pttrscal.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS -DSCPLX $(mySRCdir)/ATL_pttrscal.c
+ATL_cpthescal.o              : $(mySRCdir)/ATL_pthescal.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS -DSCPLX $(mySRCdir)/ATL_pthescal.c
+#
+ATL_zptgeadd.o               : $(mySRCdir)/ATL_ptgeadd.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS -DDCPLX $(mySRCdir)/ATL_ptgeadd.c
+ATL_zptgescal.o              : $(mySRCdir)/ATL_ptgescal.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS -DDCPLX $(mySRCdir)/ATL_ptgescal.c
+ATL_zptgezero.o              : $(mySRCdir)/ATL_ptgezero.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS -DDCPLX $(mySRCdir)/ATL_ptgezero.c
+ATL_zpttrscal.o              : $(mySRCdir)/ATL_pttrscal.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS -DDCPLX $(mySRCdir)/ATL_pttrscal.c
+ATL_zpthescal.o              : $(mySRCdir)/ATL_pthescal.c $(INCMdep)
+	$(ICC) -o $@ -c $(ICCFLAGS) -DATL_USEPTHREADS -DDCPLX $(mySRCdir)/ATL_pthescal.c
+#
+########################################################################
+#
+sclean           :
+	rm -f $(ATL_slvlmobj) $(ATL_alvlmobj) s*.grd a*.grd
+#
+dclean           :
+	rm -f $(ATL_dlvlmobj) $(ATL_alvlmobj) d*.grd a*.grd
+#
+cclean           :
+	rm -f $(ATL_clvlmobj) $(ATL_alvlmobj) c*.grd a*.grd
+#
+zclean           :
+	rm -f $(ATL_zlvlmobj) $(ATL_alvlmobj) z*.grd a*.grd
+#
+#
+clean            :
+	rm -f *.o *.grd
+#
+########################################################################

@@ -1,0 +1,358 @@
+include Make.inc
+mySRCdir = $(SRCdir)/src/lapack
+
+all : lib
+lib : dlib slib zlib clib
+clean : sclean dclean cclean zclean
+
+sobj = ATL_sgetrf.o ATL_sgetrfC.o ATL_sgetrfR.o ATL_sgetri.o ATL_sgetriC.o \
+       ATL_sgetriR.o ATL_sgetrs.o ATL_slaswp.o ATL_slauum.o ATL_slauumCL.o \
+       ATL_slauumCU.o ATL_slauumRL.o ATL_slauumRU.o ATL_spotrf.o \
+       ATL_spotrfL.o ATL_spotrfU.o ATL_spotrs.o ATL_strtri.o ATL_strtriCL.o \
+       ATL_strtriCU.o ATL_strtriRL.o ATL_strtriRU.o
+
+incdep = $(INCSdir)/atlas_lapack.h
+slib : 
+	$(PMAKE) slib.grd
+slib.grd : $(sobj)
+	$(ARCHIVER) $(ARFLAGS) $(LAPACKlib) $(sobj)
+	$(RANLIB) $(LAPACKlib)
+	touch slib.grd
+
+   
+ATL_spotrfL.o : $(mySRCdir)/ATL_potrfL.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_spotrfL.o -DSREAL \
+              $(mySRCdir)/ATL_potrfL.c
+ATL_spotrfU.o : $(mySRCdir)/ATL_potrfU.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_spotrfU.o -DSREAL \
+              $(mySRCdir)/ATL_potrfU.c
+ATL_spotrs.o : $(mySRCdir)/ATL_potrs.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_spotrs.o -DSREAL \
+              $(mySRCdir)/ATL_potrs.c
+ATL_spotrf.o : $(mySRCdir)/ATL_potrf.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_spotrf.o -DSREAL \
+              $(mySRCdir)/ATL_potrf.c
+ATL_sgetrfR.o : $(mySRCdir)/ATL_getrfR.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_sgetrfR.o -DSREAL \
+              $(mySRCdir)/ATL_getrfR.c
+ATL_sgetrfC.o : $(mySRCdir)/ATL_getrfC.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_sgetrfC.o -DSREAL \
+              $(mySRCdir)/ATL_getrfC.c
+ATL_sgetrs.o : $(mySRCdir)/ATL_getrs.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_sgetrs.o -DSREAL \
+              $(mySRCdir)/ATL_getrs.c
+ATL_sgetrf.o : $(mySRCdir)/ATL_getrf.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_sgetrf.o -DSREAL \
+              $(mySRCdir)/ATL_getrf.c
+ATL_slaswp.o : $(mySRCdir)/ATL_laswp.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_slaswp.o -DSREAL \
+              $(mySRCdir)/ATL_laswp.c
+ATL_sgetriC.o : $(mySRCdir)/ATL_getriC.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_sgetriC.o -DSREAL \
+              $(mySRCdir)/ATL_getriC.c
+ATL_sgetriR.o : $(mySRCdir)/ATL_getriR.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_sgetriR.o -DSREAL \
+              $(mySRCdir)/ATL_getriR.c
+ATL_sgetri.o : $(mySRCdir)/ATL_getri.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_sgetri.o -DSREAL \
+              $(mySRCdir)/ATL_getri.c
+ATL_slauum.o : $(mySRCdir)/ATL_lauum.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_slauum.o -DSREAL \
+              $(mySRCdir)/ATL_lauum.c
+ATL_strtriRL.o : $(mySRCdir)/ATL_trtriRL.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_strtriRL.o -DSREAL \
+              $(mySRCdir)/ATL_trtriRL.c
+ATL_strtriRU.o : $(mySRCdir)/ATL_trtriRU.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_strtriRU.o -DSREAL \
+              $(mySRCdir)/ATL_trtriRU.c
+ATL_strtriCL.o : $(mySRCdir)/ATL_trtriCL.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_strtriCL.o -DSREAL \
+              $(mySRCdir)/ATL_trtriCL.c
+ATL_strtriCU.o : $(mySRCdir)/ATL_trtriCU.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_strtriCU.o -DSREAL \
+              $(mySRCdir)/ATL_trtriCU.c
+ATL_strtri.o : $(mySRCdir)/ATL_trtri.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_strtri.o -DSREAL \
+              $(mySRCdir)/ATL_trtri.c
+ATL_slauumCL.o : $(mySRCdir)/ATL_lauumL.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_slauumCL.o -DSREAL -DColMajor_ \
+              $(mySRCdir)/ATL_lauumL.c
+ATL_slauumRL.o : $(mySRCdir)/ATL_lauumL.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_slauumRL.o -DSREAL -DRowMajor_ \
+              $(mySRCdir)/ATL_lauumL.c
+ATL_slauumCU.o : $(mySRCdir)/ATL_lauumU.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_slauumCU.o -DSREAL -DColMajor_ \
+              $(mySRCdir)/ATL_lauumU.c
+ATL_slauumRU.o : $(mySRCdir)/ATL_lauumU.c $(incdep)
+	$(SKC) $(sKCFLAGS) -c -o ATL_slauumRU.o -DSREAL -DRowMajor_ \
+              $(mySRCdir)/ATL_lauumU.c
+
+sclean :
+	rm -f $(sobj)
+dobj = ATL_dgetrf.o ATL_dgetrfC.o ATL_dgetrfR.o ATL_dgetri.o ATL_dgetriC.o \
+       ATL_dgetriR.o ATL_dgetrs.o ATL_dlaswp.o ATL_dlauum.o ATL_dlauumCL.o \
+       ATL_dlauumCU.o ATL_dlauumRL.o ATL_dlauumRU.o ATL_dpotrf.o \
+       ATL_dpotrfL.o ATL_dpotrfU.o ATL_dpotrs.o ATL_dtrtri.o ATL_dtrtriCL.o \
+       ATL_dtrtriCU.o ATL_dtrtriRL.o ATL_dtrtriRU.o
+
+incdep = $(INCSdir)/atlas_lapack.h
+dlib : 
+	$(PMAKE) dlib.grd
+dlib.grd : $(dobj)
+	$(ARCHIVER) $(ARFLAGS) $(LAPACKlib) $(dobj)
+	$(RANLIB) $(LAPACKlib)
+	touch dlib.grd
+
+   
+ATL_dpotrfL.o : $(mySRCdir)/ATL_potrfL.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dpotrfL.o -DDREAL \
+              $(mySRCdir)/ATL_potrfL.c
+ATL_dpotrfU.o : $(mySRCdir)/ATL_potrfU.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dpotrfU.o -DDREAL \
+              $(mySRCdir)/ATL_potrfU.c
+ATL_dpotrs.o : $(mySRCdir)/ATL_potrs.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dpotrs.o -DDREAL \
+              $(mySRCdir)/ATL_potrs.c
+ATL_dpotrf.o : $(mySRCdir)/ATL_potrf.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dpotrf.o -DDREAL \
+              $(mySRCdir)/ATL_potrf.c
+ATL_dgetrfR.o : $(mySRCdir)/ATL_getrfR.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dgetrfR.o -DDREAL \
+              $(mySRCdir)/ATL_getrfR.c
+ATL_dgetrfC.o : $(mySRCdir)/ATL_getrfC.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dgetrfC.o -DDREAL \
+              $(mySRCdir)/ATL_getrfC.c
+ATL_dgetrs.o : $(mySRCdir)/ATL_getrs.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dgetrs.o -DDREAL \
+              $(mySRCdir)/ATL_getrs.c
+ATL_dgetrf.o : $(mySRCdir)/ATL_getrf.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dgetrf.o -DDREAL \
+              $(mySRCdir)/ATL_getrf.c
+ATL_dlaswp.o : $(mySRCdir)/ATL_laswp.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dlaswp.o -DDREAL \
+              $(mySRCdir)/ATL_laswp.c
+ATL_dgetriC.o : $(mySRCdir)/ATL_getriC.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dgetriC.o -DDREAL \
+              $(mySRCdir)/ATL_getriC.c
+ATL_dgetriR.o : $(mySRCdir)/ATL_getriR.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dgetriR.o -DDREAL \
+              $(mySRCdir)/ATL_getriR.c
+ATL_dgetri.o : $(mySRCdir)/ATL_getri.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dgetri.o -DDREAL \
+              $(mySRCdir)/ATL_getri.c
+ATL_dlauum.o : $(mySRCdir)/ATL_lauum.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dlauum.o -DDREAL \
+              $(mySRCdir)/ATL_lauum.c
+ATL_dtrtriRL.o : $(mySRCdir)/ATL_trtriRL.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dtrtriRL.o -DDREAL \
+              $(mySRCdir)/ATL_trtriRL.c
+ATL_dtrtriRU.o : $(mySRCdir)/ATL_trtriRU.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dtrtriRU.o -DDREAL \
+              $(mySRCdir)/ATL_trtriRU.c
+ATL_dtrtriCL.o : $(mySRCdir)/ATL_trtriCL.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dtrtriCL.o -DDREAL \
+              $(mySRCdir)/ATL_trtriCL.c
+ATL_dtrtriCU.o : $(mySRCdir)/ATL_trtriCU.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dtrtriCU.o -DDREAL \
+              $(mySRCdir)/ATL_trtriCU.c
+ATL_dtrtri.o : $(mySRCdir)/ATL_trtri.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dtrtri.o -DDREAL \
+              $(mySRCdir)/ATL_trtri.c
+ATL_dlauumCL.o : $(mySRCdir)/ATL_lauumL.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dlauumCL.o -DDREAL -DColMajor_ \
+              $(mySRCdir)/ATL_lauumL.c
+ATL_dlauumRL.o : $(mySRCdir)/ATL_lauumL.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dlauumRL.o -DDREAL -DRowMajor_ \
+              $(mySRCdir)/ATL_lauumL.c
+ATL_dlauumCU.o : $(mySRCdir)/ATL_lauumU.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dlauumCU.o -DDREAL -DColMajor_ \
+              $(mySRCdir)/ATL_lauumU.c
+ATL_dlauumRU.o : $(mySRCdir)/ATL_lauumU.c $(incdep)
+	$(DKC) $(dKCFLAGS) -c -o ATL_dlauumRU.o -DDREAL -DRowMajor_ \
+              $(mySRCdir)/ATL_lauumU.c
+
+dclean :
+	rm -f $(dobj)
+cobj = ATL_cgetrf.o ATL_cgetrfC.o ATL_cgetrfR.o ATL_cgetri.o ATL_cgetriC.o \
+       ATL_cgetriR.o ATL_cgetrs.o ATL_claswp.o ATL_clauum.o ATL_clauumCL.o \
+       ATL_clauumCU.o ATL_clauumRL.o ATL_clauumRU.o ATL_cpotrf.o \
+       ATL_cpotrfL.o ATL_cpotrfRL.o ATL_cpotrfRU.o ATL_cpotrfU.o ATL_cpotrs.o \
+       ATL_ctrtri.o ATL_ctrtriCL.o ATL_ctrtriCU.o ATL_ctrtriRL.o \
+       ATL_ctrtriRU.o
+
+incdep = $(INCSdir)/atlas_lapack.h
+clib : 
+	$(PMAKE) clib.grd
+clib.grd : $(cobj)
+	$(ARCHIVER) $(ARFLAGS) $(LAPACKlib) $(cobj)
+	$(RANLIB) $(LAPACKlib)
+	touch clib.grd
+
+   
+ATL_cpotrfRU.o : $(mySRCdir)/ATL_potrfRU.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_cpotrfRU.o -DSCPLX \
+              $(mySRCdir)/ATL_potrfRU.c
+ATL_cpotrfRL.o : $(mySRCdir)/ATL_potrfRL.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_cpotrfRL.o -DSCPLX \
+              $(mySRCdir)/ATL_potrfRL.c
+ATL_cpotrfL.o : $(mySRCdir)/ATL_potrfL.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_cpotrfL.o -DSCPLX \
+              $(mySRCdir)/ATL_potrfL.c
+ATL_cpotrfU.o : $(mySRCdir)/ATL_potrfU.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_cpotrfU.o -DSCPLX \
+              $(mySRCdir)/ATL_potrfU.c
+ATL_cpotrs.o : $(mySRCdir)/ATL_potrs.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_cpotrs.o -DSCPLX \
+              $(mySRCdir)/ATL_potrs.c
+ATL_cpotrf.o : $(mySRCdir)/ATL_potrf.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_cpotrf.o -DSCPLX \
+              $(mySRCdir)/ATL_potrf.c
+ATL_cgetrfR.o : $(mySRCdir)/ATL_getrfR.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_cgetrfR.o -DSCPLX \
+              $(mySRCdir)/ATL_getrfR.c
+ATL_cgetrfC.o : $(mySRCdir)/ATL_getrfC.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_cgetrfC.o -DSCPLX \
+              $(mySRCdir)/ATL_getrfC.c
+ATL_cgetrs.o : $(mySRCdir)/ATL_getrs.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_cgetrs.o -DSCPLX \
+              $(mySRCdir)/ATL_getrs.c
+ATL_cgetrf.o : $(mySRCdir)/ATL_getrf.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_cgetrf.o -DSCPLX \
+              $(mySRCdir)/ATL_getrf.c
+ATL_claswp.o : $(mySRCdir)/ATL_laswp.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_claswp.o -DSCPLX \
+              $(mySRCdir)/ATL_laswp.c
+ATL_cgetriC.o : $(mySRCdir)/ATL_getriC.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_cgetriC.o -DSCPLX \
+              $(mySRCdir)/ATL_getriC.c
+ATL_cgetriR.o : $(mySRCdir)/ATL_getriR.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_cgetriR.o -DSCPLX \
+              $(mySRCdir)/ATL_getriR.c
+ATL_cgetri.o : $(mySRCdir)/ATL_getri.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_cgetri.o -DSCPLX \
+              $(mySRCdir)/ATL_getri.c
+ATL_clauum.o : $(mySRCdir)/ATL_lauum.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_clauum.o -DSCPLX \
+              $(mySRCdir)/ATL_lauum.c
+ATL_ctrtriRL.o : $(mySRCdir)/ATL_trtriRL.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_ctrtriRL.o -DSCPLX \
+              $(mySRCdir)/ATL_trtriRL.c
+ATL_ctrtriRU.o : $(mySRCdir)/ATL_trtriRU.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_ctrtriRU.o -DSCPLX \
+              $(mySRCdir)/ATL_trtriRU.c
+ATL_ctrtriCL.o : $(mySRCdir)/ATL_trtriCL.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_ctrtriCL.o -DSCPLX \
+              $(mySRCdir)/ATL_trtriCL.c
+ATL_ctrtriCU.o : $(mySRCdir)/ATL_trtriCU.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_ctrtriCU.o -DSCPLX \
+              $(mySRCdir)/ATL_trtriCU.c
+ATL_ctrtri.o : $(mySRCdir)/ATL_trtri.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_ctrtri.o -DSCPLX \
+              $(mySRCdir)/ATL_trtri.c
+ATL_clauumCL.o : $(mySRCdir)/ATL_lauumL.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_clauumCL.o -DSCPLX -DColMajor_ \
+              $(mySRCdir)/ATL_lauumL.c
+ATL_clauumRL.o : $(mySRCdir)/ATL_lauumL.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_clauumRL.o -DSCPLX -DRowMajor_ \
+              $(mySRCdir)/ATL_lauumL.c
+ATL_clauumCU.o : $(mySRCdir)/ATL_lauumU.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_clauumCU.o -DSCPLX -DColMajor_ \
+              $(mySRCdir)/ATL_lauumU.c
+ATL_clauumRU.o : $(mySRCdir)/ATL_lauumU.c $(incdep)
+	$(CKC) $(cKCFLAGS) -c -o ATL_clauumRU.o -DSCPLX -DRowMajor_ \
+              $(mySRCdir)/ATL_lauumU.c
+
+cclean :
+	rm -f $(cobj)
+zobj = ATL_zgetrf.o ATL_zgetrfC.o ATL_zgetrfR.o ATL_zgetri.o ATL_zgetriC.o \
+       ATL_zgetriR.o ATL_zgetrs.o ATL_zlaswp.o ATL_zlauum.o ATL_zlauumCL.o \
+       ATL_zlauumCU.o ATL_zlauumRL.o ATL_zlauumRU.o ATL_zpotrf.o \
+       ATL_zpotrfL.o ATL_zpotrfRL.o ATL_zpotrfRU.o ATL_zpotrfU.o ATL_zpotrs.o \
+       ATL_ztrtri.o ATL_ztrtriCL.o ATL_ztrtriCU.o ATL_ztrtriRL.o \
+       ATL_ztrtriRU.o
+
+incdep = $(INCSdir)/atlas_lapack.h
+zlib : 
+	$(PMAKE) zlib.grd
+zlib.grd : $(zobj)
+	$(ARCHIVER) $(ARFLAGS) $(LAPACKlib) $(zobj)
+	$(RANLIB) $(LAPACKlib)
+	touch zlib.grd
+
+   
+ATL_zpotrfRU.o : $(mySRCdir)/ATL_potrfRU.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_zpotrfRU.o -DDCPLX \
+              $(mySRCdir)/ATL_potrfRU.c
+ATL_zpotrfRL.o : $(mySRCdir)/ATL_potrfRL.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_zpotrfRL.o -DDCPLX \
+              $(mySRCdir)/ATL_potrfRL.c
+ATL_zpotrfL.o : $(mySRCdir)/ATL_potrfL.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_zpotrfL.o -DDCPLX \
+              $(mySRCdir)/ATL_potrfL.c
+ATL_zpotrfU.o : $(mySRCdir)/ATL_potrfU.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_zpotrfU.o -DDCPLX \
+              $(mySRCdir)/ATL_potrfU.c
+ATL_zpotrs.o : $(mySRCdir)/ATL_potrs.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_zpotrs.o -DDCPLX \
+              $(mySRCdir)/ATL_potrs.c
+ATL_zpotrf.o : $(mySRCdir)/ATL_potrf.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_zpotrf.o -DDCPLX \
+              $(mySRCdir)/ATL_potrf.c
+ATL_zgetrfR.o : $(mySRCdir)/ATL_getrfR.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_zgetrfR.o -DDCPLX \
+              $(mySRCdir)/ATL_getrfR.c
+ATL_zgetrfC.o : $(mySRCdir)/ATL_getrfC.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_zgetrfC.o -DDCPLX \
+              $(mySRCdir)/ATL_getrfC.c
+ATL_zgetrs.o : $(mySRCdir)/ATL_getrs.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_zgetrs.o -DDCPLX \
+              $(mySRCdir)/ATL_getrs.c
+ATL_zgetrf.o : $(mySRCdir)/ATL_getrf.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_zgetrf.o -DDCPLX \
+              $(mySRCdir)/ATL_getrf.c
+ATL_zlaswp.o : $(mySRCdir)/ATL_laswp.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_zlaswp.o -DDCPLX \
+              $(mySRCdir)/ATL_laswp.c
+ATL_zgetriC.o : $(mySRCdir)/ATL_getriC.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_zgetriC.o -DDCPLX \
+              $(mySRCdir)/ATL_getriC.c
+ATL_zgetriR.o : $(mySRCdir)/ATL_getriR.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_zgetriR.o -DDCPLX \
+              $(mySRCdir)/ATL_getriR.c
+ATL_zgetri.o : $(mySRCdir)/ATL_getri.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_zgetri.o -DDCPLX \
+              $(mySRCdir)/ATL_getri.c
+ATL_zlauum.o : $(mySRCdir)/ATL_lauum.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_zlauum.o -DDCPLX \
+              $(mySRCdir)/ATL_lauum.c
+ATL_ztrtriRL.o : $(mySRCdir)/ATL_trtriRL.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_ztrtriRL.o -DDCPLX \
+              $(mySRCdir)/ATL_trtriRL.c
+ATL_ztrtriRU.o : $(mySRCdir)/ATL_trtriRU.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_ztrtriRU.o -DDCPLX \
+              $(mySRCdir)/ATL_trtriRU.c
+ATL_ztrtriCL.o : $(mySRCdir)/ATL_trtriCL.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_ztrtriCL.o -DDCPLX \
+              $(mySRCdir)/ATL_trtriCL.c
+ATL_ztrtriCU.o : $(mySRCdir)/ATL_trtriCU.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_ztrtriCU.o -DDCPLX \
+              $(mySRCdir)/ATL_trtriCU.c
+ATL_ztrtri.o : $(mySRCdir)/ATL_trtri.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_ztrtri.o -DDCPLX \
+              $(mySRCdir)/ATL_trtri.c
+ATL_zlauumCL.o : $(mySRCdir)/ATL_lauumL.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_zlauumCL.o -DDCPLX -DColMajor_ \
+              $(mySRCdir)/ATL_lauumL.c
+ATL_zlauumRL.o : $(mySRCdir)/ATL_lauumL.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_zlauumRL.o -DDCPLX -DRowMajor_ \
+              $(mySRCdir)/ATL_lauumL.c
+ATL_zlauumCU.o : $(mySRCdir)/ATL_lauumU.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_zlauumCU.o -DDCPLX -DColMajor_ \
+              $(mySRCdir)/ATL_lauumU.c
+ATL_zlauumRU.o : $(mySRCdir)/ATL_lauumU.c $(incdep)
+	$(ZKC) $(zKCFLAGS) -c -o ATL_zlauumRU.o -DDCPLX -DRowMajor_ \
+              $(mySRCdir)/ATL_lauumU.c
+
+zclean :
+	rm -f $(zobj)
+

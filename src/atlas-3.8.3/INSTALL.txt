@@ -1,0 +1,248 @@
+This file is outdated and not very comprehensive.  ATLAS installation is
+covered in detail in ATLAS/doc/atlas_install.pdf.
+
+Before doing anything, scope the ATLAS errata file for known errors/problems:
+   http://math-atlas.sourceforge.net/errata.html
+and apply any bug fixes/workarounds you find there.
+
+Note that the documentation on the website will repeat most of this
+information, and will be much more current.  The docs in this tarfile
+are here mainly for convenience and for users not connected to the net.
+Others should scope the website for the most current documentation:
+   http://math-atlas.sourceforge.net/faq.html#doc
+
+If you are a Windows user please read ATLAS/doc/Windows.txt before proceeding.
+
+If you are used to the old build process, note that ATLAS's build mechanism
+changed significantly starting with ATLAS3.7.12, to make it more like gnu
+configure.
+
+There are two mandatory steps to ATLAS installation (config & build), as
+well as three optional steps (test, time, install) and these steps are
+described in detail below.  For the impatient, here is the basic outline:
+**************************************************
+   mkdir my_build_dir ; cd my_build_dir
+   /path/to/ATLAS/configure [flags]
+   make              ! tune and compile library
+   make check        ! perform sanity tests
+   make ptcheck      ! checks of threaded code for multiprocessor systems
+   make time         ! provide performance summary as % of clock rate
+   make install      ! Copy library and include files to other directories
+**************************************************
+
+If you want to build a dynamic/shared library, see below at header:
+                       BUILDING DYNAMIC/SHARED LIBRARIES
+If you want to build a full LAPACK library (i.e. all of the lapack library,
+including those lapack routines not natively provided by ATLAS), see:
+                   NOTE ON BUILDING A FULL LAPACK LIBRARY
+
+********** Important Install Information: CPU THROTTLING ***********
+Most OSes (including Linux) now turn on CPU throttling for power managment
+**even if you are using a desktop**.  CPU throttling makes pretty much all
+timings completely random, and so any ATLAS install will be junk.  Therefore,
+before installing ATLAS, turn off CPU throttling.  For most PCs, you can
+switch it off in the BIOS (eg., on my Athlon-64 machine, I can say "No" to
+"Cool and Quiet" under "Power Management").  Most OSes also provide a way
+to do switch off CPU throttling, but that varies from OS to OS.  Under Fedora,
+at any rate, the following command seemed to work:
+     /usr/bin/cpufreq-selector -g performance
+On my Core2Duo, cpufreq-selector only changes the parameters of the first CPU,
+regardless if which cpu you specify.  I suspect this is a bug, because on
+earlier systems, the remaining CPUs were controlled via a logical link to
+/sys/devices/system/cpu/cpu0/.  In this case, the only way I found to force
+the second processor to also run at its peak frequence was to issue the
+following as root after setting CPU0 to performance:
+   cp /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor \
+      /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+Under MacOS or Windows, you may be able to change this under the power settings.
+
+ATLAS config tries to detect if CPU throttling is enabled, but it may not
+always detect it, and sometimes may detect it after you have disabled it.
+In the latter case, to force the configure to continue regardless of the
+results of the CPU throttling probe, pass this flag to configure:
+   -Si cputhrchk 0
+
+********************************** CONFIG *************************************
+First, create a directory where you will build ATLAS.  It can be anywhere in
+your filesystem, and does not need to be under the ATLAS/ subdirectory
+(though it can be if you like).  In general, giving it a descriptive name
+is good, for instance:
+   mkdir ATLAS_Linux_P4E ; cd ATLAS_Linux_P4E
+
+From this directory, configure the new directory to build atlas with the
+command:
+   /path/to/ATLAS/configure [flags]
+Obviously, "/path/to/ATLAS" is the full or relative path from where you are
+to the directory created by the ATLAS tarfile.  To see a list of available
+flags to configure type "path/to/ATLAS/configure --help".  In general, no
+flags are required, but there are many useful flags for helping with various
+problems, in particular changing compilers, setting 32 or 64 bit libraries,
+etc.  To ensure building 32 bit libraries, add the flag -b 32, and -b 64
+to force 64 bit libraries (must be using a 64 bit-capable compiler on a
+64-bit Operating System).
+
+************ Important Compiler Advice **************
+For most systems, ATLAS defaults to using the Gnu compiler collection for
+its ATLAS install.  This means configure will automotically search for
+either g77/gcc or gfortran/gcc.  If it can't find them, it will typically
+stop with an error message.  For some platforms, ATLAS knows good flags
+to use for multiple compilers, and so you may get good flags by simply
+changing the compiler name.  If this doesn't work, you'll need to specify
+both the compiler name and the flags to use.  For the fortran compiler,
+you can switch the fortran compiler without performance or install penalty
+on all platforms.  To do so, simply add the flags:
+  -C if <fortran compiler with path> -F if 'fortran flags'
+to the configure command.  If you need to install ATLAS on a platform that
+doesn't have a working fortran compiler, you can do so by adding the flag:
+   --nof77
+instead.  Note that the fortran interface to BLAS and LAPACK cannot be built
+without a fortran compiler.
+
+You typically must build ATLAS's interface routines with the compiler that
+you use to do the linking, so that the proper libraries can be found.  We
+just discussed how to override the fortran choice; if you use a C compiler
+that does not seamlessly interoperate with gcc, you may need to override
+the C compiler as well.  Overriding all of ATLAS's C compilers will typically
+mean you can't use the architectural defaults, which will greatly increase
+your install time and will potentially decrease your performance by a large
+amount.  Therefore, it is usually advised to only override the C interface
+compiler, leaving the kernel routines to be compiled by the default C compiler
+(usually gnu gcc).  To override the C interface compiler, simply add these
+flags to your configure invocation:
+   -C ic <C compiler with path>  -F ic 'C compiler flags'
+
+Note that all compilers used in an ATLAS install must be able to interoperate.
+For more compiler-controlling flags, add --help to the configure command.
+
+*********** Important x86 Compiler Advice ***********
+If you are on an x86 and are using gcc 4.1, you should be aware that gcc 4.1
+produces x87 code that gets performance of between 56-75% of the code produced
+by gcc 3 (i.e. gcc3-produced code is almost twice as fast as gcc4's) depending
+on the architecture.  From our own timings, gcc 4.2 is superior to either
+4.1 or 3.  Gcc 4.1 produces adequate performance only on Intel Core
+machines.  See ATLAS/doc/atlas_install.pdf for further details.
+
+********************************** BUILD **************************************
+If config finishes without error, start the build/tuning process by:
+   make build
+(or just "make")
+
+Install times vary widely, depending on whether ATLAS has architectural
+defaults for your platform, and the speed of your compiler and computer.
+Under gcc/linux, an install may take as little as 15 minutes for all four
+types/precisions.  Under IRIX using SGI's rather slow (but high performance)
+compilers, the install might take as long as four hours.  1-2 hours is probably
+fairly typical.  However, the user is not required to enter any input during
+the install phase, and all operations are logged, so it is safe to start the
+install and ignore it until completion.
+
+If you experience problems, read the TROUBLESHOOTING section in
+ATLAS/doc/TroubleShoot.txt.  ATLAS/README provides an index of all
+included ATLAS documentation files.
+
+You should then read ATLAS/doc/TestTime.txt for instructions on testing
+and timing your installation.
+
+******************************* SANITY TEST ***********************************
+This optional step merely verifies that the built ATLAS libraries are able
+to pass basic correctness tests.  The standard BLAS testers (i.e. those
+that go with the API, as opposed to those written by the ATLAS group) are
+written in Fortran77, and so you will need a Fortran compiler installed to
+run them.  If you have no Fortran77, you can amend the directions below by
+prepending "C_" to all target names (eg., "make C_test") to run only those
+testers that require a C compiler, but note that in so doing you will get
+a less rigorously tested library.
+
+you can run all the sequential sanity tests by:
+   make check
+
+If you have elected to build the threaded library, you can run the same tests
+with the threaded library with:
+   make ptcheck
+
+A successful sanity test will dump a lot of compilation to the window, followed
+with something like:
+
+===========================================================================
+DONE BUILDING TESTERS, RUNNING:
+SCOPING FOR FAILURES IN BIN TESTS:
+fgrep -e fault -e FAULT -e error -e ERROR -e fail -e FAIL \
+        bin/Linux_PIIISSE1/sanity.out
+8 cases: 8 passed, 0 skipped, 0 failed
+4 cases: 4 passed, 0 skipped, 0 failed
+8 cases: 8 passed, 0 skipped, 0 failed
+4 cases: 4 passed, 0 skipped, 0 failed
+8 cases: 8 passed, 0 skipped, 0 failed
+4 cases: 4 passed, 0 skipped, 0 failed
+8 cases: 8 passed, 0 skipped, 0 failed
+4 cases: 4 passed, 0 skipped, 0 failed
+DONE
+SCOPING FOR FAILURES IN CBLAS TESTS:
+fgrep -e fault -e FAULT -e error -e ERROR -e fail -e FAIL \
+        interfaces/blas/C/testing/Linux_PIIISSE1/sanity.out | \
+                fgrep -v PASSED
+make[1]: [sanity_test] Error 1 (ignored)
+DONE
+SCOPING FOR FAILURES IN F77BLAS TESTS:
+fgrep -e fault -e FAULT -e error -e ERROR -e fail -e FAIL \
+        interfaces/blas/F77/testing/Linux_PIIISSE1/sanity.out | \
+                fgrep -v PASSED
+make[1]: [sanity_test] Error 1 (ignored)
+DONE
+make[1]: Leaving directory `/home/rwhaley/TEST/TEST/ATLAS3.3.15'
+===========================================================================
+
+Note that the "Error 1 (ignored)" is coming from grepping for failure, and
+grep is saying it doesn't find any . . .
+
+
+******************* INSTALLING ATLAS FOR MULTIPLE ARCHITECTURES ***************
+You can install ATLAS from the same source tree on multiple machines at once
+by simply creating different build directories for each architecture.
+
+********************** BUILDING DYNAMIC/SHARED LIBRARIES **********************
+ATLAS natively builds to a static library (i.e. libs that usually end in
+".a" under unix and ".lib" under windows).  ATLAS always builds such a library,
+but it can also optionally be requested to build a dynamic/shared library
+(typically ending in .so for unix or .dll windows).  In order to do so, you
+must tell ATLAS up front to compile with the proper flags  (the same is
+true when building netlib's LAPACK, see the LAPACK note below).  Assuming
+you are using the gnu C and Fortran compilers, you can add the following
+commands to your configure command:
+   -Fa alg -fPIC
+to force ATLAS to be built using position independent code (required for a
+dynamic lib).  If you use non-gnu compilers, you'll need to use -Fa to
+pass the correct flag(s) to append to force position independent code for
+each compiler (don't forget the gcc compiler used in the index files).
+NOTE: Since gcc uses one less int register when compiling with this flag, this
+      could potentially impact performance of the architectural defaults,
+      but we have not seen it so far.
+
+After you build is complete, you can cd to the OBJdir/lib directory, and
+ask ATLAS to build the .so you want.  If you want all libraries, including
+the Fortran77 routines, the target choices are :
+   shared    : Create shared versions of ATLAS's sequential libs
+   ptshared  : Create shared versions of ATLAS's threaded libs
+If you want only the C routines (eg. you don't have a fortran compiler):
+   cshared   : Create shared versions of ATLAS's sequential libs
+   cptshared : Create shared versions of ATLAS's threaded libs
+
+****************** NOTE ON BUILDING A FULL LAPACK LIBRARY *********************
+If you want to build a full LAPACK library, you must obtain and build
+netlib's LAPACK library (ATLAS provides only a few lapack routines natively).
+For the routines ATLAS does not provide natively, you will therefore only have
+the Fortran77 interface (ATLAS's native lapack routines have both F77 and C
+interfaces).  Install LAPACK first (minimally, doing a "make lib" after
+editing the make.inc for your system).
+  IMPORTANT NOTE: if you wish to build a dynamic library, remember to specify
+    -fPIC (assuming gfortran/g77) for both the OPTS and NOOPT macros of
+    lapack's make.inc!!
+
+Once the library is built, you have to tell ATLAS to use it during the
+configure, which you do by adding the following flag to configure:
+   --with-netlib-lapack=<path to lapack>
+(eg. --with-netlib-lapack=/home/whaley/LAPACK3.0/lapack_LINUX.a).
+
+If you want to add lapack symbols to a previously built ATLAS, see
+ATLAS/doc/LibReadme.txt for further info.
+

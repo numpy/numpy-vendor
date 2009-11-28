@@ -1,0 +1,80 @@
+
+topd = /home/whaley/atlas3.8/AtlasBase
+incs = -def topd /home/whaley/atlas3.8/AtlasBase \
+       -def incd /home/whaley/atlas3.8/AtlasBase/Clint \
+       -def BASEdir /home/whaley/atlas3.8/AtlasBase/Antoine/ \
+       -def basd /home/whaley/atlas3.8/AtlasBase/Clint
+ext  = extract
+extF = $(ext) -langF -lnlen71 -Remtblank -llwarn2 -LAPACK1 $(incs)
+extC = $(ext) -langC -lnlen79 -Remtblank -llwarn2 $(incs)
+extM = $(ext) -langM -lnlen79 -llwarn2 $(incs)
+
+default: all
+force_build:
+basd = /home/whaley/atlas3.8/AtlasBase/Clint
+basdRCW = /home/whaley/atlas3.8/AtlasBase/Clint
+basdAPP = /home/whaley/atlas3.8/AtlasBase/Antoine
+incf = /home/whaley/atlas3.8/AtlasBase/gen.inc
+
+basf = $(basdRCW)/atlconf.base
+
+
+files = ATLrun.sh CompMake.txt Makefile SpewMakeInc.c atlbench.c atlcomp.txt \
+        atlconf_misc.c config.c print_enums.c probe_OS.c probe_arch.c \
+        probe_asm.c probe_comp.c probe_f2c.c probe_pmake.c probe_vec.c \
+        wincc.c winf77.c
+
+all : $(files)
+force_build:
+dirall : all force_build
+	$(extM) -o ../include/Make.ext -langM -b $(topd)/make.base \
+                rout=ATLAS/CONFIG/include
+	cd ../include ; make -f Make.ext all
+	$(extM) -o backend/Make.ext -langM -b $(topd)/make.base \
+                rout=ATLAS/CONFIG/src/backend
+	cd backend ; make -f Make.ext all
+killall :
+	rm -f ../include/* backend/* $(files) x* *.o
+
+../../configure : $(basf)
+	$(extM) -b $(basf) -o ../../configure rout=configure
+	chmod a+x ../../configure
+ATLrun.sh: $(basf)
+	$(extM) -b $(basf) -o ATLrun.sh rout=ATLrun.sh
+	chmod a+x ATLrun.sh
+Makefile : $(basf)
+	$(extM) -b $(basf) -o Makefile rout=Makefile
+atlcomp.txt : $(basf)
+	$(extC) -b $(basf) -o atlcomp.txt rout=atlcomp.txt
+CompMake.txt : $(basf)
+	$(extC) -b $(basf) -o CompMake.txt rout=CompMake.txt
+
+atlconf_misc.c : $(basf)
+	$(extC) -b $(basf) -o atlconf_misc.c rout=atlconf_misc
+probe_OS.c : $(basf)
+	$(extC) -b $(basf) -o probe_OS.c rout=probe_OS
+probe_asm.c : $(basf)
+	$(extC) -b $(basf) -o probe_asm.c rout=probe_asm
+config.c : $(basf)
+	$(extC) -b $(basf) -o config.c rout=config
+probe_vec.c : $(basf)
+	$(extC) -b $(basf) -o probe_vec.c rout=probe_vec
+probe_arch.c : $(basf)
+	$(extC) -b $(basf) -o probe_arch.c rout=probe_arch
+print_enums.c : $(basf)
+	$(extC) -b $(basf) -o print_enums.c rout=print_enums
+probe_comp.c : $(basf)
+	$(extC) -b $(basf) -o probe_comp.c rout=probe_comp
+SpewMakeInc.c : $(basf)
+	$(extC) -b $(basf) -o SpewMakeInc.c rout=SpewMakeInc
+probe_f2c.c : $(basf)
+	$(extC) -b $(basf) -o probe_f2c.c rout=probe_f2c
+probe_pmake.c : $(basf)
+	$(extC) -b $(basf) -o probe_pmake.c rout=probe_pmake
+atlbench.c : $(basf)
+	$(extC) -b $(basf) -o atlbench.c rout=atlbench
+wincc.c : $(basf)
+	$(extC) -b $(basf) -o wincc.c rout=wincc
+winf77.c : $(basf)
+	$(extC) -b $(basf) -o winf77.c rout=winf77
+	

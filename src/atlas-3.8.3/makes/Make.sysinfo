@@ -1,0 +1,179 @@
+include Make.inc
+mySRCdir = $(SRCdir)/tune/sysinfo
+
+maxlat=6
+mflop=200
+
+sTestFlags : force_build
+	$(MAKE) srbob `cat res/sBEST` pre='s' type=float
+
+dTestFlags : force_build
+	$(MAKE) drbob `cat res/dBEST` pre='d' type=double
+
+res/L1CacheSize:
+	$(MAKE) RunL1 MaxL1=$(MaxL1)
+RunL1 : xL1
+	$(ATLRUN) $(SYSdir) xL1 $(MaxL1)
+
+$(INCAdir)/atlas_type.h:
+	$(MAKE) RunTyp
+	$(ATLFWAIT) -f $(INCAdir)/atlas_type.h
+sRunSysSum : $(INCAdir)/atlas_ssysinfo.h
+
+$(INCAdir)/atlas_ssysinfo.h : xsyssum $(ATLFWAIT)
+	$(SYSdir)/xsyssum s $(INCAdir)/atlas_ssysinfo.h
+	$(ATLFWAIT) -f $(INCAdir)/atlas_ssysinfo.h
+res/sMULADD : 
+	$(MAKE) RunMulAdd pre=s maxlat=$(maxlat) mflop=$(mflop)
+
+dRunSysSum : $(INCAdir)/atlas_dsysinfo.h
+
+$(INCAdir)/atlas_dsysinfo.h : xsyssum $(ATLFWAIT)
+	$(SYSdir)/xsyssum d $(INCAdir)/atlas_dsysinfo.h
+	$(ATLFWAIT) -f $(INCAdir)/atlas_dsysinfo.h
+res/dMULADD : 
+	$(MAKE) RunMulAdd pre=d maxlat=$(maxlat) mflop=$(mflop)
+
+cRunSysSum : $(INCAdir)/atlas_csysinfo.h
+
+$(INCAdir)/atlas_csysinfo.h : xsyssum $(ATLFWAIT)
+	$(SYSdir)/xsyssum c $(INCAdir)/atlas_csysinfo.h
+	$(ATLFWAIT) -f $(INCAdir)/atlas_csysinfo.h
+res/cMULADD : 
+	$(MAKE) RunMulAdd pre=c maxlat=$(maxlat) mflop=$(mflop)
+
+zRunSysSum : $(INCAdir)/atlas_zsysinfo.h
+
+$(INCAdir)/atlas_zsysinfo.h : xsyssum $(ATLFWAIT)
+	$(SYSdir)/xsyssum z $(INCAdir)/atlas_zsysinfo.h
+	$(ATLFWAIT) -f $(INCAdir)/atlas_zsysinfo.h
+res/zMULADD : 
+	$(MAKE) RunMulAdd pre=z maxlat=$(maxlat) mflop=$(mflop)
+
+	
+res/snreg :
+	cd $(MMTdir) ; $(MAKE) res/snreg
+	cd res ; ln -s $(MMTdir)/res/snreg snreg
+        
+res/dnreg :
+	cd $(MMTdir) ; $(MAKE) res/dnreg
+	cd res ; ln -s $(MMTdir)/res/dnreg dnreg
+        
+findNT : xfindNT
+	$(ATLRUN) $(SYSdir) xfindNT -o $(INCAdir)/atlas_pthreads.h
+
+RunTLB : xtlb
+	$(ATLRUN) $(SYSdir) xtlb
+
+RunMADef : xmasearch
+	./xmasearch $(pre) -2 $(mflop)
+
+RunMulAdd: xmasearch
+	./xmasearch $(pre) $(maxlat) $(mflop)
+
+RunTyp: xemit_typ
+	$(ATLRUN) $(SYSdir) xemit_typ > $(INCAdir)/atlas_type.h
+
+xemit_buildinfo : emit_buildinfo.o
+	$(XCC) $(XCCFLAGS) -o $@ emit_buildinfo.o
+xsyssum : GetSysSum.o
+	$(XCC) $(XCCFLAGS) -o $@ GetSysSum.o
+xmasearch : time.o masearch.o
+	$(XCC) $(XCCFLAGS) -o $@ masearch.o
+
+xL1 : time.o L1CacheSize.o
+	$(ICC) $(ICCFLAGS) -o $@ L1CacheSize.o time.o
+xfindNT : ATL_walltime.o findNT.o
+	$(ICC) $(ICCFLAGS) -o $@ findNT.o ATL_walltime.o $(LIBS)
+
+xtlb : time.o tlb.o
+	$(CLINKER) $(CLINKFLAGS) -o $@ tlb.o time.o
+
+xL2 : time.o L2CacheSize.o
+	$(CLINKER) $(CLINKFLAGS) -o $@ L2CacheSize.o time.o
+
+xemit_typ : emit_typ.o
+	$(ICC) $(ICCFLAGS) -o $@ emit_typ.o
+
+xmuladd : force_build time.o muladd.c 
+	$(ICC) $(MAFLAGS) -c muladd.c
+	$(CLINKER) $(CLINKFLAGS) -o xmuladd muladd.o time.o
+	$(ATLRUN) $(SYSdir) xmuladd
+xsmuladd : force_build time.o muladd.c 
+	$(SKC) $(SKCFLAGS) $(SMAFLAGS) -c muladd.c
+	$(SKC) $(SKCFLAGS) -o xsmuladd muladd.o time.o
+	$(ATLRUN) $(SYSdir) xsmuladd
+xdmuladd : force_build time.o muladd.c 
+	$(DKC) $(DKCFLAGS) $(DMAFLAGS) -c muladd.c
+	$(DKC) $(DKCFLAGS) -o xdmuladd muladd.o time.o
+	$(ATLRUN) $(SYSdir) xdmuladd
+
+ATL_cputime.c : 
+	cp $(mySRCdir)/ATL_cputime.c .
+ATL_cputime.o : ATL_cputime.c
+	$(ICC) -c $(ICCFLAGS) ATL_cputime.c
+
+ATL_walltime.c : 
+	cp $(mySRCdir)/ATL_walltime.c .
+ATL_walltime.o : ATL_walltime.c
+	$(ICC) -c $(ICCFLAGS) ATL_walltime.c
+
+ATL_Xwalltime.o : ATL_walltime.o
+	$(XCC) $(XCCFLAGS) -c -o ATL_Xwalltime.o ATL_walltime.c
+
+emit_buildinfo.o : $(mySRCdir)/emit_buildinfo.c
+	$(XCC) -c $(XCCFLAGS) $(mySRCdir)/emit_buildinfo.c
+GetSysSum.o : $(INCAdir)/atlas_type.h $(mySRCdir)/GetSysSum.c
+	$(XCC) -c $(XCCFLAGS) $(mySRCdir)/GetSysSum.c
+time.o : $(mySRCdir)/time.c
+	$(ICC) -c $(ICCFLAGS) -I./ $(mySRCdir)/time.c
+emit_typ.o : $(mySRCdir)/emit_typ.c
+	$(ICC) -c $(ICCFLAGS) $(mySRCdir)/emit_typ.c
+L1CacheSize.o : $(mySRCdir)/L1CacheSize.c
+	$(ICC) -c $(ICCFLAGS) $(mySRCdir)/L1CacheSize.c
+findNT.o : $(mySRCdir)/findNT.c
+	$(ICC) -c $(ICCFLAGS) $(mySRCdir)/findNT.c
+tlb.o : $(mySRCdir)/tlb.c
+	$(ICC) -c $(ICCFLAGS) $(mySRCdir)/tlb.c
+
+masearch.o : $(mySRCdir)/masearch.c
+	$(XCC) -c $(XCCFLAGS) $(mySRCdir)/masearch.c
+
+
+force_build :
+
+clean :
+	rm -f xL1 xtlb xmasearch xemit_typ xmuladd xsys_sum xfindNT *.o
+
+print_ARCH :
+	@echo $(ARCH)
+print_INSTFLAGS :
+	@echo $(INSTFLAGS)
+print_F2CDEFS :
+	@echo $(F2CDEFS)
+print_ARCHDEFS :
+	@echo $(ARCHDEFS)
+print_DKCFLAGS :
+	@echo $(DKCFLAGS)
+print_DKC :
+	@echo $(DKC)
+print_SKCFLAGS :
+	@echo $(SKCFLAGS)
+print_SKC :
+	@echo $(SKC)
+print_DMCFLAGS :
+	@echo $(DMCFLAGS)
+print_DMC :
+	@echo $(DMC)
+print_SMCFLAGS :
+	@echo $(SMCFLAGS)
+print_SMC :
+	@echo $(SMC)
+print_ICCFLAGS :
+	@echo $(ICCFLAGS)
+print_ICC :
+	@echo $(ICC)
+print_F77FLAGS :
+	@echo $(F77FLAGS)
+print_F77 :
+	@echo $(F77)
