@@ -51,6 +51,11 @@ cp $tarballs/msvcr90.dll lib/
 # we remove it:
 rm $HOME/.wine/drive_c/windows/winsxs/x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.30729.4148_none_deadbeef/msvcr90.dll
 
+# Install NSIS
+cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)/
+tar xzf $tarballs/NSIS.tar.gz
+
+
 # Add MinGW and NSIS into the PATH:
 cd $TMPDIR
 cat > regtmp <<EOF
@@ -110,5 +115,12 @@ cd ..
 
 tar xzf $tarballs/Paver-1.0.5.tar.gz
 cd Paver-1.0.5
+wine "C:\Python27\python" setup.py install
+cd ..
+
+# Install SCons only in Python 2.7:
+
+tar xzf $tarballs/scons-2.2.0.tar.gz
+cd scons-2.2.0
 wine "C:\Python27\python" setup.py install
 cd ..
