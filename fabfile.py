@@ -37,6 +37,11 @@ def setup_paver():
         with cd("Paver-1.0.5"):
             run("sudo python setup.py install")
 
+def numpy_cpucaps():
+    with cd("repos/numpy/tools/win32build/cpucaps"):
+            run('wine "C:\Python27\python" "C:\Python27\Scripts\scons.py"')
+            run(r"cp cpucaps.dll $HOME/.wine/drive_c/Program\ Files\ \(x86\)/NSIS/Plugins")
+
 def numpy_release():
     with cd("repos/numpy"):
         run("time paver bdist_superpack -p 3.2")
