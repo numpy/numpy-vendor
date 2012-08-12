@@ -5,6 +5,9 @@ def all():
     prepare()
     copy()
     setup_wine()
+    gitrepos()
+    setup_paver()
+    numpy_release()
 
 def prepare():
     sudo("apt-get -qq update")
@@ -20,11 +23,23 @@ def copy():
 def gitrepos():
     run("mkdir -p repos")
     with cd("repos"):
-        run("git clone --depth=1 https://github.com/certik/numpy-vendor")
+        run("git clone --depth=1 https://github.com/numpy/numpy")
+        with cd("numpy"):
+            run("git checkout -t origin/maintenance/1.7.x")
 
 def setup_wine():
     with cd("repos/numpy-vendor"):
         run("./setup-wine.sh")
+
+def setup_paver():
+    with cd("repos/numpy-vendor"):
+        run("tar xzf Paver-1.0.5.tar.gz")
+        with cd("Paver-1.0.5"):
+            run("sudo python setup.py install")
+
+def numpy_release():
+    with cd("repos/numpy"):
+        run("time paver bdist_superpack -p 3.2")
 
 # ------------------------------------------------
 # Vagrant related configuration
