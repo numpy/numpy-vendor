@@ -22,6 +22,8 @@ mkdir $TMPDIR
 # The script below should just work without modifications:
 
 rm -rf $HOME/.wine
+# Use bogus DISPLAY, so that wine doesn't pop up any windows
+export DISPLAY=:100
 
 # The ALLUSERS=1 is essential --- the following line:
 msiexec /i $tarballs/python-3.2.3.msi /qn ALLUSERS=1
