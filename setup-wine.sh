@@ -49,13 +49,13 @@ cp $tarballs/msvcr90.dll lib/
 # we remove it:
 rm $HOME/.wine/drive_c/windows/winsxs/x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.30729.4148_none_deadbeef/msvcr90.dll
 
-# Add MinGW into the PATH:
+# Add MinGW and NSIS into the PATH:
 cd $TMPDIR
 cat > regtmp <<EOF
 REGEDIT4
 
 [HKEY_CURRENT_USER\Environment]
-"PATH"="C:\\\\MinGW\\\\bin"
+"PATH"="C:\\\\MinGW\\\\bin;C:\\\\Program Files (x86)\\\\NSIS"
 EOF
 wine regedit regtmp
 
