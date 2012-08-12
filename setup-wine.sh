@@ -98,7 +98,6 @@ patch -p1 < nose.patch
 # Again, the "clean --all" target is essential (especially the "--all").
 # Without it it (silently!) installs and then fails at import time.
 wine "C:\Python25\python" setup.py install clean --all
-wine "C:\Python25\python" setup.py install clean --all
 wine "C:\Python26\python" setup.py install clean --all
 wine "C:\Python27\python" setup.py install clean --all
 wine "C:\Python31\python" setup.py install clean --all
