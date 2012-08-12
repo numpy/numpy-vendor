@@ -51,6 +51,11 @@ cp $tarballs/msvcr90.dll lib/
 # we remove it:
 rm $HOME/.wine/drive_c/windows/winsxs/x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.30729.4148_none_deadbeef/msvcr90.dll
 
+if [ ! -d "$HOME/.wine/drive_c/Program\ Files\ \(x86\)/" ]; then
+    # On 32 bits, this directory is not created, but we expect it to be there:
+    ln -s $HOME/.wine/drive_c/Program\ Files $HOME/.wine/drive_c/Program\ Files\ \(x86\)
+fi
+
 # Install NSIS
 cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)/
 tar xzf $tarballs/NSIS.tar.gz
