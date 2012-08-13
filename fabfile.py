@@ -1,4 +1,4 @@
-from fabric.api import env, local, run, sudo, cd, hide
+from fabric.api import env, local, run, sudo, cd, hide, prefix
 from fabric.contrib.files import append, exists
 
 def all():
