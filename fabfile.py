@@ -18,7 +18,7 @@ def prepare_apt():
     # This is needed to avoid the EULA dialog
     # (http://askubuntu.com/questions/16225/how-can-i-accept-the-agreement-in-a-terminal-like-for-ttf-mscorefonts-installer)
     sudo("echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections")
-    sudo("apt-get -y install git wine python-virtualenv texlive-latex-recommended make python-dev g++ libfreetype6-dev libpng-dev")
+    sudo("apt-get -y install git wine python-virtualenv texlive-latex-recommended texlive-latex-extra make python-dev g++ libfreetype6-dev libpng-dev")
 
 def copy():
     run("mkdir -p repos/numpy-vendor")
