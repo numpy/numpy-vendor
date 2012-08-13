@@ -70,7 +70,9 @@ def numpy_release():
             run("paver bdist_wininst_simple -p 2.7")
             run("paver bdist_wininst_simple -p 3.1")
             run("paver bdist_wininst_simple -p 3.2")
-        run("cp -r release /vagrant/")
+        run("cp -r release/ /vagrant/")
+        run("cp -r dist/ /vagrant/")
+        run("cp -r build_doc/ /vagrant/")
 
 # ------------------------------------------------
 # Vagrant related configuration
