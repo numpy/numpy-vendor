@@ -18,7 +18,7 @@ def prepare_apt():
     # This is needed to avoid the EULA dialog
     # (http://askubuntu.com/questions/16225/how-can-i-accept-the-agreement-in-a-terminal-like-for-ttf-mscorefonts-installer)
     sudo("echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections")
-    sudo("apt-get -y install git wine python-virtualenv texlive-latex-recommended make python-dev")
+    sudo("apt-get -y install git wine python-virtualenv texlive-latex-recommended make python-dev g++")
 
 def copy():
     run("mkdir -p repos/numpy-vendor")
@@ -46,9 +46,30 @@ def numpy_cpucaps():
             run('wine "C:\Python27\python" "C:\Python27\Scripts\scons.py"')
             run(r"cp cpucaps.dll $HOME/.wine/drive_c/Program\ Files\ \(x86\)/NSIS/Plugins")
 
-def numpy_release():
+def numpy_superpack_32():
+    # Just install the superpack for Python 3.2
     with cd("repos/numpy"):
         run("time paver bdist_superpack -p 3.2")
+
+def numpy_release():
+    with cd("repos/numpy"):
+        run("paver sdist")
+        run("paver bootstrap")
+        with prefix("source bootstrap/bin/activate"):
+            run("python setup.py install")
+            run("paver pdf")
+            run("paver bdist_superpack -p 3.2")
+            run("paver bdist_superpack -p 3.1")
+            run("paver bdist_superpack -p 2.7")
+            run("paver bdist_superpack -p 2.6")
+            run("paver bdist_superpack -p 2.5")
+            run("paver write_release_and_log")
+            run("paver bdist_wininst_simple -p 2.5")
+            run("paver bdist_wininst_simple -p 2.6")
+            run("paver bdist_wininst_simple -p 2.7")
+            run("paver bdist_wininst_simple -p 3.1")
+            run("paver bdist_wininst_simple -p 3.2")
+        run("cp -r release /vagrant/")
 
 # ------------------------------------------------
 # Vagrant related configuration
