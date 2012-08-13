@@ -7,6 +7,7 @@ def all():
     setup_wine()
     gitrepos()
     setup_paver()
+    numpy_cpucaps()
     numpy_release()
 
 def prepare():
