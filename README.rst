@@ -16,3 +16,7 @@ etc.)::
 Do the release (build general and windows binaries)::
 
     fab vagrant numpy_release
+
+And the directories ``release``, ``dist`` and ``build_doc`` will be copied to
+the current directory from the VM. If you need anything else, just login using
+``vagrant ssh`` and copy it to ``/vagrant`` inside the VM.
