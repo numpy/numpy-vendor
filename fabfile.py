@@ -3,14 +3,17 @@ from fabric.contrib.files import append, exists
 
 def all():
     prepare()
-    copy()
-    setup_wine()
-    gitrepos()
-    setup_paver()
-    numpy_cpucaps()
     numpy_release()
 
 def prepare():
+    prepare_apt()
+    copy()
+    setup_wine()
+    setup_paver()
+    gitrepos()
+    numpy_cpucaps()
+
+def prepare_apt():
     sudo("apt-get -qq update")
     # This is needed to avoid the EULA dialog
     # (http://askubuntu.com/questions/16225/how-can-i-accept-the-agreement-in-a-terminal-like-for-ttf-mscorefonts-installer)
