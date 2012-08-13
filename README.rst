@@ -1,5 +1,11 @@
+NumPy Vendor
+============
+
+This builds Linux and Windows release binaries and sources for NumPy using
+a Vagrant VM. It should be 100% reproducible. You need Vagrant and Fabric.
+
 How To Use
-==========
+----------
 
 Do::
 
