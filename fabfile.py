@@ -27,7 +27,7 @@ def copy():
 def gitrepos():
     run("mkdir -p repos")
     with cd("repos"):
-        run("git clone --depth=1 https://github.com/numpy/numpy")
+        run("git clone https://github.com/numpy/numpy")
         with cd("numpy"):
             run("git checkout -t origin/maintenance/1.7.x")
 
