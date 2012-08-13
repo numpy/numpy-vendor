@@ -32,11 +32,11 @@ The basic.nsi script
 ====================
 
 You need NSIS to use it: http://nsis.sourceforge.net/Main_Page You also need a
-small plugin cpu_caps, to tell NSIS wether the running CPU supports SSE2,
+small plugin cpu_caps, to tell NSIS whether the running CPU supports SSE2,
 SSE3, etc...
 
 It will look for binaries in the binaries directory: one directory per arch. A
-subdir mingw32 is used for differentiatin with the not-yet supported Win64.
+subdir mingw32 is used for differentiating with the not-yet supported Win64.
 
 Note
 ----
@@ -51,7 +51,7 @@ CAVEATS
 =======
 
 The build.py script is really basic. It does not handle failure well, and it
-may be difficult to interrupt (windows indiosyncraties wrt process management
+may be difficult to interrupt (windows idiosyncrasies wrt process management
 and lack of signals do not help; add cygwin on the top of it to make things
 more complex).
 
