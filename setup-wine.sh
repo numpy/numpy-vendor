@@ -37,6 +37,14 @@ msiexec /i $tarballs/python-2.5.4.msi /qn ALLUSERS=1
 # Python will segfault on basic operations.
 
 cd $HOME/.wine/drive_c/
+
+# Install Atlas binaries:
+mkdir -p local/lib/
+cd local/lib
+cp -r $tarballs/atlas .
+ln -s atlas yop  # This is needed for older versions of NumPy
+cd ../..
+
 mkdir MinGW
 cd MinGW
 tar xzf $tarballs/binutils-2.20-1-mingw32-bin.tar.gz
