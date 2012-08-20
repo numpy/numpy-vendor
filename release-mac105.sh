@@ -1,8 +1,13 @@
 #! /bin/sh
-# Script to build OS X installers on OS X
-# Copy this script to a Mac 10.5 box and run it.
 
 set -e
+
+# Script to build OS X installers on OS X
+# Copy this script to a Mac 10.5 box and run it.
+# Modify the version here to be used to download the docs from sourceforge (see
+# below):
+
+SF_VERSION=1.7.0b1
 
 # Note that we build the corresponding set of OS X binaries to the python.org
 # downloads, i.e. two versions for Python 2.7. The Intel 32/64-bit version is
@@ -32,6 +37,13 @@ fi
 paver bootstrap
 source bootstrap/bin/activate
 python setup.py install
+
+# Download the current docs from sourceforge:
+
+mkdir -p build_doc/pdf
+curl -o build_doc/pdf/userguide.pdf -L "http://sourceforge.net/projects/numpy/files/NumPy/$SF_VERSION/userguide.pdf/download"
+curl -o build_doc/pdf/reference.pdf -L "http://sourceforge.net/projects/numpy/files/NumPy/$SF_VERSION/reference.pdf/download"
+
 
 paver dmg -p 2.7   # 32/64-bit version
 
