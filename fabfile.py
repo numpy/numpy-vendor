@@ -22,7 +22,7 @@ def prepare_apt():
 
 def copy():
     run("mkdir -p repos/numpy-vendor")
-    run("cp /vagrant/* repos/numpy-vendor/")
+    run("cp -r /vagrant/* repos/numpy-vendor/")
 
 def gitrepos():
     run("mkdir -p repos")
