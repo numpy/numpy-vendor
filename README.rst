@@ -13,13 +13,14 @@ Do::
     fab vagrant prepare
 
 Log in and manually inspect the numpy repository (do some last minute fixes,
-etc.)::
+checkout a branch, etc.)::
 
     vagrant ssh
     cd repos/numpy
     # Do any changes that are not in official repositories
 
-Do the release (build general and windows binaries)::
+Do the release (build general and windows binaries from the ``repos/numpy``
+directory in the Vagrant VM)::
 
     fab vagrant numpy_release
 
