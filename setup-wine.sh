@@ -26,6 +26,7 @@ rm -rf $HOME/.wine
 export DISPLAY=:100
 
 # The ALLUSERS=1 is essential --- the following line:
+msiexec /i $tarballs/python-3.3.0.msi /qn ALLUSERS=1
 msiexec /i $tarballs/python-3.2.3.msi /qn ALLUSERS=1
 msiexec /i $tarballs/python-3.1.4.msi /qn ALLUSERS=1
 msiexec /i $tarballs/python-2.7.3.msi /qn ALLUSERS=1
@@ -92,6 +93,7 @@ wine "C:\Python26\python" setup.py install clean
 wine "C:\Python27\python" setup.py install clean
 wine "C:\Python31\python" setup.py install clean
 wine "C:\Python32\python" setup.py install clean
+wine "C:\Python33\python" setup.py install clean
 cd ..
 
 tar xzf $tarballs/nose-1.1.2.tar.gz
@@ -122,6 +124,7 @@ wine "C:\Python26\python" setup.py install clean --all
 wine "C:\Python27\python" setup.py install clean --all
 wine "C:\Python31\python" setup.py install clean --all
 wine "C:\Python32\python" setup.py install clean --all
+wine "C:\Python33\python" setup.py install clean --all
 cd ..
 
 # Install Paver only in Python 2.7:

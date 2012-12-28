@@ -59,6 +59,7 @@ def numpy_release():
             run("python setup.py install")
             run("pip install matplotlib")
             run("paver pdf")
+            run("paver bdist_superpack -p 3.3")
             run("paver bdist_superpack -p 3.2")
             run("paver bdist_superpack -p 3.1")
             run("paver bdist_superpack -p 2.7")
@@ -70,7 +71,8 @@ def numpy_release():
             run("paver bdist_wininst_simple -p 2.7")
             run("paver bdist_wininst_simple -p 3.1")
             run("paver bdist_wininst_simple -p 3.2")
-            # Copy the 3.1 and 3.2 installers into dist:
+            run("paver bdist_wininst_simple -p 3.3")
+            # Copy the 3.x installers into dist:
             run("cp build/py3k/dist/* dist/")
         run("cp -r release/ /vagrant/")
         run("cp -r dist/ /vagrant/")
