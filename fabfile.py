@@ -52,7 +52,8 @@ def setup_paver():
     with cd("repos/numpy-vendor"):
         run("tar xzf Paver-1.0.5.tar.gz")
         with cd("Paver-1.0.5"):
-            run("sudo python setup.py install")
+            run("python setup.py build")
+            sudo("python setup.py install")
 
 def numpy_cpucaps():
     with cd("repos/numpy/tools/win32build/cpucaps"):
