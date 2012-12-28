@@ -35,6 +35,19 @@ And the directories ``release``, ``dist`` and ``build_doc`` will be copied to
 the current directory from the VM. If you need anything else, just login using
 ``vagrant ssh`` and copy it to ``/vagrant`` inside the VM.
 
+Expert Usage
+------------
+
+If you want to start from scratch, but want to reuse the existing vagrant
+image, you can keep all the deb packages, but reinstall everything else
+(NumPy, Wine, ...) from scratch. Do::
+
+    fab vagrant remove_userspace
+    fab vagrant prepare_userspace
+
+This will delete all builds and other possible changes that you made into
+the vagrant image. This is equivalent to ``fab vagrant prepare``, but faster.
+
 SourceForge
 -----------
 

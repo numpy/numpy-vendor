@@ -7,6 +7,12 @@ def all():
 
 def prepare():
     prepare_apt()
+    prepare_userspace()
+
+def prepare_userspace():
+    """
+    This can be reverted by executing 'remove_userspace'.
+    """
     copy()
     setup_wine()
     setup_paver()
@@ -19,6 +25,13 @@ def prepare_apt():
     # (http://askubuntu.com/questions/16225/how-can-i-accept-the-agreement-in-a-terminal-like-for-ttf-mscorefonts-installer)
     sudo("echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections")
     sudo("apt-get -y install git wine python-virtualenv texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended make python-dev g++ libfreetype6-dev libpng-dev")
+
+def remove_userspace():
+    """
+    Deletes (!) the NumPy and Wine changes. Use with great care.
+    """
+    run("rm -rf repos")
+    run("rm -rf .wine")
 
 def copy():
     run("mkdir -p repos/numpy-vendor")
