@@ -56,6 +56,7 @@ tar xzf $tarballs/gcc-g++-3.4.5-20051220-1.tar.gz
 tar xzf $tarballs/w32api-3.7.tar.gz
 
 cp $tarballs/msvcr90.dll lib/
+cp $tarballs/msvcr100.dll lib/
 # This library is installed by Wine, but it doesn't work with our "objdump", so
 # we remove it:
 rm $HOME/.wine/drive_c/windows/winsxs/x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.30729.4148_none_deadbeef/msvcr90.dll
