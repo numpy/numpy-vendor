@@ -60,11 +60,6 @@ def numpy_cpucaps():
             run('wine "C:\Python27\python" "C:\Python27\Scripts\scons.py"')
             run(r"cp cpucaps.dll $HOME/.wine/drive_c/Program\ Files\ \(x86\)/NSIS/Plugins")
 
-def numpy_superpack_32():
-    # Just install the superpack for Python 3.2
-    with cd("repos/numpy"):
-        run("time paver bdist_superpack -p 3.2")
-
 def numpy_release():
     with cd("repos/numpy"):
         run("paver sdist")
