@@ -97,6 +97,13 @@ def mac_setup_paver():
         with cd("Paver-1.0.5"):
             run("python setup.py install --prefix=../usr")
 
+def mac_setup_virtualenv():
+    with cd("repos"):
+        put("virtualenv-1.8.4.tar.gz", ".")
+        run("tar xzf virtualenv-1.8.4.tar.gz")
+        with cd("virtualenv-1.8.4"):
+            run("python setup.py install --prefix=../usr")
+
 def mac_run():
     with cd("repos/numpy"):
         with prefix('export PYTHONPATH="$HOME/repos/usr/lib/python2.6/site-packages/" PATH="$HOME/repos/usr/bin:$PATH"'):
