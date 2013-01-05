@@ -19,8 +19,8 @@ Do::
     vagrant up
     fab vagrant prepare
 
-Log in and manually inspect the numpy repository, the release branch
-will be checked out. Do some last minute fixes, checkout a different branch, etc.::
+Log in and manually inspect the numpy repository, the release branch will be
+checked out. Do some last minute fixes, checkout a different branch, etc.::
 
     vagrant ssh
     cd repos/numpy
@@ -39,12 +39,13 @@ Typically you want to at least apply a diff like this::
     -ISRELEASED          = False
     +ISRELEASED          = True
      VERSION             = '%d.%d.%drc1' % (MAJOR, MINOR, MICRO)
-     
+
      # Return the git revision as a string
 
-And make sure the ``VERSION`` variable is set properly. Commit it and make sure that
-you push this exact commit into the official repository after the release.
-Alternatively you can also commit this into numpy ahead of time if you are *sure* that it will build.
+And make sure the ``VERSION`` variable is set properly. Commit it and make sure
+that you push this exact commit into the official repository after the release.
+Alternatively you can also commit this into numpy ahead of time if you are
+*sure* that it will build.
 
 Do the release (build general and windows binaries from the ``repos/numpy``
 directory in the Vagrant VM)::
