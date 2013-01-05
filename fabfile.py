@@ -1,5 +1,7 @@
 from fabric.api import env, local, run, sudo, cd, hide, prefix
+from fabric.operations import put
 from fabric.contrib.files import append, exists
+env.use_ssh_config = True
 
 def all():
     prepare()
@@ -86,6 +88,17 @@ def numpy_release():
         run("cp -r release/ /vagrant/")
         run("cp -r dist/ /vagrant/")
         run("cp -r build_doc/ /vagrant/")
+
+def mac_setup_paver():
+    with cd("repos"):
+        put("Paver-1.0.5.tar.gz", ".")
+        run("tar xzf Paver-1.0.5.tar.gz")
+        with cd("Paver-1.0.5"):
+            run("python setup.py install --prefix=../usr")
+
+def mac_run():
+    with cd("repos/numpy"):
+        run('PYTHONPATH="$HOME/repos/usr/lib/python2.6/site-packages/" ../usr/bin/paver sdist')
 
 # ------------------------------------------------
 # Vagrant related configuration
