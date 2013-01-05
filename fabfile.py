@@ -124,6 +124,12 @@ def mac_numpy_release():
                 run("paver pdf")
                 run("paver dmg -p 2.6")
 
+def mac_numpy_release2():
+    with cd("repos/numpy"):
+        with prefix(mac_prefix):
+            with prefix("source bootstrap/bin/activate"):
+                run("paver dmg -p 2.6")
+
 
 # ------------------------------------------------
 # Vagrant related configuration
