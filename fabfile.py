@@ -1,4 +1,5 @@
 from fabric.api import env, local, run, sudo, cd, hide, prefix
+from fabric.context_managers import shell_env, prefix
 from fabric.operations import put
 from fabric.contrib.files import append, exists
 env.use_ssh_config = True
@@ -98,7 +99,20 @@ def mac_setup_paver():
 
 def mac_run():
     with cd("repos/numpy"):
-        run('PYTHONPATH="$HOME/repos/usr/lib/python2.6/site-packages/" ../usr/bin/paver sdist')
+        with prefix('export PYTHONPATH="$HOME/repos/usr/lib/python2.6/site-packages/" PATH="$HOME/repos/usr/bin:$PATH"'):
+            run("paver sdist")
+
+def mac_numpy_release():
+    with cd("repos/numpy"):
+        with prefix('export PYTHONPATH="$HOME/repos/usr/lib/python2.6/site-packages/" PATH="$HOME/repos/usr/bin:$PATH"'):
+            run("paver sdist")
+            run("paver bootstrap")
+            with prefix("source bootstrap/bin/activate"):
+                run("python setup.py install")
+                run("pip install matplotlib")
+                run("paver pdf")
+                run("paver dmg -p 2.6")
+
 
 # ------------------------------------------------
 # Vagrant related configuration
