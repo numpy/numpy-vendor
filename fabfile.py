@@ -90,28 +90,32 @@ def numpy_release():
         run("cp -r dist/ /vagrant/")
         run("cp -r build_doc/ /vagrant/")
 
+mac_prefix = 'export PYTHONPATH="$HOME/repos/usr/lib/python2.6/site-packages/" PATH="$HOME/repos/usr/bin:$PATH"'
+
 def mac_setup_paver():
     with cd("repos"):
-        put("Paver-1.0.5.tar.gz", ".")
-        run("tar xzf Paver-1.0.5.tar.gz")
-        with cd("Paver-1.0.5"):
-            run("python setup.py install --prefix=../usr")
+        with prefix(mac_prefix):
+            put("Paver-1.0.5.tar.gz", ".")
+            run("tar xzf Paver-1.0.5.tar.gz")
+            with cd("Paver-1.0.5"):
+                run("python setup.py install --prefix=../usr")
 
 def mac_setup_virtualenv():
     with cd("repos"):
-        put("virtualenv-1.8.4.tar.gz", ".")
-        run("tar xzf virtualenv-1.8.4.tar.gz")
-        with cd("virtualenv-1.8.4"):
-            run("python setup.py install --prefix=../usr")
+        with prefix(mac_prefix):
+            put("virtualenv-1.8.4.tar.gz", ".")
+            run("tar xzf virtualenv-1.8.4.tar.gz")
+            with cd("virtualenv-1.8.4"):
+                run("python setup.py install --prefix=../usr")
 
 def mac_run():
     with cd("repos/numpy"):
-        with prefix('export PYTHONPATH="$HOME/repos/usr/lib/python2.6/site-packages/" PATH="$HOME/repos/usr/bin:$PATH"'):
+        with prefix(mac_prefix):
             run("paver sdist")
 
 def mac_numpy_release():
     with cd("repos/numpy"):
-        with prefix('export PYTHONPATH="$HOME/repos/usr/lib/python2.6/site-packages/" PATH="$HOME/repos/usr/bin:$PATH"'):
+        with prefix(mac_prefix):
             run("paver sdist")
             run("paver bootstrap")
             with prefix("source bootstrap/bin/activate"):
