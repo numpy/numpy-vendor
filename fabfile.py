@@ -1,6 +1,6 @@
 from fabric.api import env, local, run, sudo, cd, hide, prefix
 from fabric.context_managers import shell_env, prefix
-from fabric.operations import put
+from fabric.operations import put, get
 from fabric.contrib.files import append, exists
 env.use_ssh_config = True
 
@@ -95,10 +95,26 @@ def numpy_copy_release_files():
         run("rm -r installers")
         run("mv NOTES.txt README.txt")
 
-mac_prefix = 'export PYTHONPATH="$HOME/repos/usr/lib/python2.6/site-packages/" PATH="$HOME/repos/usr/bin:$PATH"'
+mac_tmp = "numpy_tmp" # NumPy and dependencies will be built in $HOME/"mac_tmp"
+mac_prefix = 'export PYTHONPATH="$HOME/%s/usr/lib/python2.6/site-packages/" PATH="$HOME/%s/usr/bin:$PATH"' % (mac_tmp, mac_tmp)
+
+def mac_setup():
+    run("mkdir %s" % mac_tmp)
+    mac_setup_numpy()
+    mac_setup_paver()
+    mac_setup_virtualenv()
+
+def mac_remove_userspace():
+    run("rm -rf %s" % mac_tmp)
+
+def mac_setup_numpy():
+    with cd(mac_tmp):
+        run("git clone https://github.com/numpy/numpy")
+        with cd("numpy"):
+            run("git checkout -t origin/maintenance/1.7.x")
 
 def mac_setup_paver():
-    with cd("repos"):
+    with cd(mac_tmp):
         with prefix(mac_prefix):
             put("Paver-1.0.5.tar.gz", ".")
             run("tar xzf Paver-1.0.5.tar.gz")
@@ -106,35 +122,24 @@ def mac_setup_paver():
                 run("python setup.py install --prefix=../usr")
 
 def mac_setup_virtualenv():
-    with cd("repos"):
+    with cd(mac_tmp):
         with prefix(mac_prefix):
             put("virtualenv-1.8.4.tar.gz", ".")
             run("tar xzf virtualenv-1.8.4.tar.gz")
             with cd("virtualenv-1.8.4"):
                 run("python setup.py install --prefix=../usr")
 
-def mac_run():
-    with cd("repos/numpy"):
-        with prefix(mac_prefix):
-            run("paver sdist")
-
 def mac_numpy_release():
-    with cd("repos/numpy"):
+    with cd(mac_tmp + "/numpy"):
+        run("mkdir -p build_doc/pdf")
+        put("release/reference.pdf", "build_doc/pdf/")
+        put("release/userguide.pdf", "build_doc/pdf/")
         with prefix(mac_prefix):
             run("paver sdist")
             run("paver bootstrap")
             with prefix("source bootstrap/bin/activate"):
-                run("python setup.py install")
-                run("pip install matplotlib")
-                run("paver pdf")
                 run("paver dmg -p 2.6")
-
-def mac_numpy_release2():
-    with cd("repos/numpy"):
-        with prefix(mac_prefix):
-            with prefix("source bootstrap/bin/activate"):
-                run("paver dmg -p 2.6")
-
+        get("release/installers/*.dmg", "release/")
 
 # ------------------------------------------------
 # Vagrant related configuration
