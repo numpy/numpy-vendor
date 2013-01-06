@@ -101,8 +101,16 @@ mac_prefix = 'export PYTHONPATH="$HOME/%s/usr/lib/python2.6/site-packages/" PATH
 def mac_setup():
     run("mkdir %s" % mac_tmp)
     mac_setup_numpy()
+    mac_setup_bdist_mpkg()
     mac_setup_paver()
     mac_setup_virtualenv()
+    mac_copy_pdf()
+
+def mac_copy_pdf():
+    with cd(mac_tmp + "/numpy"):
+        run("mkdir -p build_doc/pdf")
+        put("release/reference.pdf", "build_doc/pdf/")
+        put("release/userguide.pdf", "build_doc/pdf/")
 
 def mac_remove_userspace():
     run("rm -rf %s" % mac_tmp)
@@ -112,6 +120,13 @@ def mac_setup_numpy():
         run("git clone https://github.com/numpy/numpy")
         with cd("numpy"):
             run("git checkout -t origin/maintenance/1.7.x")
+
+def mac_setup_bdist_mpkg():
+    with cd(mac_tmp):
+        run("git clone https://github.com/rgommers/bdist_mpkg.git")
+        with cd("bdist_mpkg"):
+            with prefix(mac_prefix):
+                run("python setup.py install --prefix=../usr")
 
 def mac_setup_paver():
     with cd(mac_tmp):
@@ -131,9 +146,6 @@ def mac_setup_virtualenv():
 
 def mac_numpy_release():
     with cd(mac_tmp + "/numpy"):
-        run("mkdir -p build_doc/pdf")
-        put("release/reference.pdf", "build_doc/pdf/")
-        put("release/userguide.pdf", "build_doc/pdf/")
         with prefix(mac_prefix):
             run("paver sdist")
             run("paver bootstrap")
