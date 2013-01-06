@@ -101,9 +101,9 @@ mac_prefix = 'export PYTHONPATH="$HOME/%s/usr/lib/python2.6/site-packages/" PATH
 def mac_setup():
     run("mkdir %s" % mac_tmp)
     mac_setup_numpy()
-    mac_setup_bdist_mpkg()
     mac_setup_paver()
     mac_setup_virtualenv()
+    mac_setup_bdist_mpkg()
     mac_copy_pdf()
 
 def mac_copy_pdf():
