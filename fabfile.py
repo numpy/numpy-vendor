@@ -84,11 +84,16 @@ def numpy_release():
             run("paver bdist_wininst_simple -p 3.1")
             run("paver bdist_wininst_simple -p 3.2")
             run("paver bdist_wininst_simple -p 3.3")
-            # Copy the 3.x installers into dist:
-            run("cp build/py3k/dist/* dist/")
+        numpy_copy_release_files()
+
+def numpy_copy_release_files():
+    with cd("repos/numpy"):
         run("cp -r release/ /vagrant/")
-        run("cp -r dist/ /vagrant/")
-        run("cp -r build_doc/ /vagrant/")
+        run("cp build_doc/pdf/*.pdf /vagrant/release/")
+    with cd("/vagrant/release"):
+        run("mv installers/* .")
+        run("rm -r installers")
+        run("mv NOTES.txt README.txt")
 
 mac_prefix = 'export PYTHONPATH="$HOME/repos/usr/lib/python2.6/site-packages/" PATH="$HOME/repos/usr/bin:$PATH"'
 
