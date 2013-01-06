@@ -45,7 +45,13 @@ Typically you want to at least apply a diff like this::
 And make sure the ``VERSION`` variable is set properly. Commit it and make sure
 that you push this exact commit into the official repository after the release.
 Alternatively you can also commit this into numpy ahead of time if you are
-*sure* that it will build.
+*sure* that it will build. Also you want to change/check the following
+variables in ``pavement.py``::
+
+    RELEASE_NOTES = 'doc/release/1.7.0-notes.rst'
+    LOG_START = 'v1.6.0'
+    LOG_END = 'maintenance/1.7.x'
+
 
 Do the release (build general and windows binaries from the ``repos/numpy``
 directory in the Vagrant VM)::
