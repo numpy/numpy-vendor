@@ -96,14 +96,16 @@ def numpy_copy_release_files():
         run("mv NOTES.txt README.txt")
 
 mac_tmp = "numpy_tmp" # NumPy and dependencies will be built in $HOME/"mac_tmp"
-mac_prefix = 'export PYTHONPATH="$HOME/%s/usr/lib/python2.6/site-packages/" PATH="$HOME/%s/usr/bin:$PATH"' % (mac_tmp, mac_tmp)
+#FIXME: the Python path is hardwired here...
+#TODO: just remove this hack:
+mac_prefix = 'export PYTHONPATH="$HOME/%s/usr/lib/python2.7/site-packages/" PATH="$HOME/%s/usr/bin:$PATH"' % (mac_tmp, mac_tmp)
 
 def mac_setup():
     run("mkdir %s" % mac_tmp)
     mac_setup_numpy()
-    mac_setup_paver()
-    mac_setup_virtualenv()
-    mac_setup_bdist_mpkg()
+    #mac_setup_paver()
+    #mac_setup_virtualenv()
+    #mac_setup_bdist_mpkg()
     mac_copy_pdf()
 
 def mac_copy_pdf():
