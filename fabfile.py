@@ -146,11 +146,10 @@ def mac_setup_virtualenv():
 
 def mac_numpy_release():
     with cd(mac_tmp + "/numpy"):
-        with prefix(mac_prefix):
-            run("paver sdist")
-            run("paver bootstrap")
-            with prefix("source bootstrap/bin/activate"):
-                run("paver dmg -p 2.6")
+        run("paver sdist")
+        run("paver dmg -p 2.5")
+        run("paver dmg -p 2.6")
+        run("paver dmg -p 2.7")
         get("release/installers/*.dmg", "release/")
 
 # ------------------------------------------------
