@@ -70,6 +70,7 @@ def numpy_release():
         with prefix("source bootstrap/bin/activate"):
             run("python setup.py install")
             run("pip install matplotlib")
+            run("pip install docutils jinja2 pygments")
             run("paver pdf")
             run("paver bdist_superpack -p 3.3")
             run("paver bdist_superpack -p 3.2")
