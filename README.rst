@@ -26,7 +26,15 @@ checked out. Do some last minute fixes, checkout a different branch, etc.::
     cd repos/numpy
     # Do any changes that are not in official repositories
 
-Typically you want to at least apply a diff like this::
+First, change/check the following variables in ``pavement.py`` depending on the
+release version::
+
+    RELEASE_NOTES = 'doc/release/1.7.0-notes.rst'
+    LOG_START = 'v1.6.0'
+    LOG_END = 'maintenance/1.7.x'
+
+Do any other changes. When you are ready to release,
+do the following changes::
 
     diff --git a/setup.py b/setup.py
     index b1f53e3..8b36dbe 100755
@@ -42,16 +50,15 @@ Typically you want to at least apply a diff like this::
 
      # Return the git revision as a string
 
-And make sure the ``VERSION`` variable is set properly. Commit it and make sure
-that you push this exact commit into the official repository after the release.
-Alternatively you can also commit this into numpy ahead of time if you are
-*sure* that it will build. Also you want to change/check the following
-variables in ``pavement.py``::
+And make sure the ``VERSION`` variable is set properly. Commit it::
 
-    RELEASE_NOTES = 'doc/release/1.7.0-notes.rst'
-    LOG_START = 'v1.6.0'
-    LOG_END = 'maintenance/1.7.x'
+    git commit -a -m "REL: Release 1.7.0rc1"
 
+*If* everything builds correctly below, only then tag this commit::
+
+    git tag v1.7.0rc1
+
+and push this commit into the official repository and upload the binaries.
 
 Do the release (build general and windows binaries from the ``repos/numpy``
 directory in the Vagrant VM)::
