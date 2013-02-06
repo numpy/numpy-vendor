@@ -54,11 +54,14 @@ And make sure the ``VERSION`` variable is set properly. Commit it::
 
     git commit -a -m "REL: Release 1.7.0rc1"
 
-*If* everything builds correctly below, only then tag this commit::
+Push this commit into your local github account, not the official repository
+yet, for example by::
 
-    git tag v1.7.0rc1
+    vagrah ssh
+    cd repos/numpy
+    git push git@github.com:certik/numpy maintenance/1.7.x:release_test
 
-and push this commit into the official repository and upload the binaries.
+which will work, because ``vagrant ssh`` forwards the ssh keys.
 
 Do the release (build general and windows binaries from the ``repos/numpy``
 directory in the Vagrant VM)::
@@ -68,6 +71,14 @@ directory in the Vagrant VM)::
 And the directory ``release`` will be created in
 the current directory from the VM. If you need anything else, just login using
 ``vagrant ssh`` and copy it to ``/vagrant`` inside the VM.
+
+If everything worked correctly, get the release commit from your github,
+tag it::
+
+    git tag v1.7.0rc1
+
+and push this commit and tag into the official repository.
+Finally, upload the binaries.
 
 Expert Usage
 ------------
