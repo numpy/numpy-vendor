@@ -122,7 +122,9 @@ Then generate the binaries by::
     fab -H mac_host mac_numpy_release
 
 The Mac binaries will be copied to the ``release`` directory locally.
+To remove temporary files from the Mac, use::
 
+    fab -H mac_host mac_remove_userspace
 
 SourceForge
 -----------
