@@ -126,6 +126,10 @@ To remove temporary files from the Mac, use::
 
     fab -H mac_host mac_remove_userspace
 
+Append the checksums at the end of README.txt in the release directory::
+
+    md5sum *.dmg >> README.txt
+
 SourceForge
 -----------
 
