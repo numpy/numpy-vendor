@@ -85,7 +85,7 @@ def numpy_release():
             run("paver bdist_wininst_simple -p 3.1")
             run("paver bdist_wininst_simple -p 3.2")
             run("paver bdist_wininst_simple -p 3.3")
-        numpy_copy_release_files()
+    numpy_copy_release_files()
 
 def numpy_copy_release_files():
     with cd("repos/numpy"):
