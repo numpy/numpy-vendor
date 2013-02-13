@@ -91,6 +91,9 @@ def numpy_copy_release_files():
     with cd("repos/numpy"):
         run("cp -r release/ /vagrant/")
         run("cp build_doc/pdf/*.pdf /vagrant/release/")
+        run("mkdir /vagrant/release/pypi")
+        run("cp dist/*.exe /vagrant/release/pypi/")
+        run("cp build/py3k/dist/*.exe /vagrant/release/pypi/")
     with cd("/vagrant/release"):
         run("mv installers/* .")
         run("rm -r installers")
