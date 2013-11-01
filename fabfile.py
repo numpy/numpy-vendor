@@ -27,7 +27,7 @@ def prepare_apt():
     # This is needed to avoid the EULA dialog
     # (http://askubuntu.com/questions/16225/how-can-i-accept-the-agreement-in-a-terminal-like-for-ttf-mscorefonts-installer)
     sudo("echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections")
-    sudo("apt-get -y install git wine python-virtualenv texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended make python-dev g++ libfreetype6-dev libpng-dev")
+    sudo("apt-get -y install git wine python-virtualenv texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended make python-dev g++ libfreetype6-dev libpng-dev python-matplotlib python-setuptools python-jinja python-pygments python-docutils python-sphinx")
 
 def remove_userspace():
     """
@@ -66,25 +66,21 @@ def numpy_cpucaps():
 def numpy_release():
     with cd("repos/numpy"):
         run("paver sdist")
-        run("paver bootstrap")
-        with prefix("source bootstrap/bin/activate"):
-            run("python setup.py install")
-            run("pip install matplotlib")
-            run("pip install docutils jinja2 pygments")
-            run("paver pdf")
-            run("paver bdist_superpack -p 3.3")
-            run("paver bdist_superpack -p 3.2")
-            run("paver bdist_superpack -p 3.1")
-            run("paver bdist_superpack -p 2.7")
-            run("paver bdist_superpack -p 2.6")
-            run("paver bdist_superpack -p 2.5")
-            run("paver write_release_and_log")
-            run("paver bdist_wininst_simple -p 2.5")
-            run("paver bdist_wininst_simple -p 2.6")
-            run("paver bdist_wininst_simple -p 2.7")
-            run("paver bdist_wininst_simple -p 3.1")
-            run("paver bdist_wininst_simple -p 3.2")
-            run("paver bdist_wininst_simple -p 3.3")
+        run("python setup.py install --prefix ../local")
+        run("paver pdf")
+        run("paver bdist_superpack -p 3.3")
+        run("paver bdist_superpack -p 3.2")
+        run("paver bdist_superpack -p 3.1")
+        run("paver bdist_superpack -p 2.7")
+        run("paver bdist_superpack -p 2.6")
+        run("paver bdist_superpack -p 2.5")
+        run("paver write_release_and_log")
+        run("paver bdist_wininst_simple -p 2.5")
+        run("paver bdist_wininst_simple -p 2.6")
+        run("paver bdist_wininst_simple -p 2.7")
+        run("paver bdist_wininst_simple -p 3.1")
+        run("paver bdist_wininst_simple -p 3.2")
+        run("paver bdist_wininst_simple -p 3.3")
     numpy_copy_release_files()
 
 def numpy_copy_release_files():
