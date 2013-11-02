@@ -23,6 +23,7 @@ def prepare_userspace():
     numpy_cpucaps()
 
 def prepare_apt():
+    #sudo("add-apt-repository -y ppa:ubuntu-wine/ppa") required for > precise install wine1.6
     sudo("apt-get -qq update")
     # This is needed to avoid the EULA dialog
     # (http://askubuntu.com/questions/16225/how-can-i-accept-the-agreement-in-a-terminal-like-for-ttf-mscorefonts-installer)
