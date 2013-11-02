@@ -59,7 +59,7 @@ cp $tarballs/msvcr90.dll lib/
 cp $tarballs/msvcr100.dll lib/
 # This library is installed by Wine, but it doesn't work with our "objdump", so
 # we remove it:
-rm $HOME/.wine/drive_c/windows/winsxs/x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.30729.4148_none_deadbeef/msvcr90.dll
+rm -f $HOME/.wine/drive_c/windows/winsxs/x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.30729.4148_none_deadbeef/msvcr90.dll
 
 if [ ! -d "$HOME/.wine/drive_c/Program\ Files\ \(x86\)/" ]; then
     # On 32 bits, this directory is not created, but we expect it to be there:
