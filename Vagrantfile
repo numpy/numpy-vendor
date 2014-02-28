@@ -12,5 +12,7 @@ Vagrant::Config.run do |config|
 # needs newer wine (bug in 1.4.1), e.g. from ppa, cpuid does not build
 #config.vm.box = "raring32"
 #config.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-i386-vagrant-disk1.box"
+#config.vm.box = "trusty32"
+#config.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-i386-vagrant-disk1.box"
   config.ssh.forward_agent = true
 end
