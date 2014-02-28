@@ -46,7 +46,9 @@ def gitrepos():
     with cd("repos"):
         run("git clone https://github.com/numpy/numpy")
         with cd("numpy"):
-            run("git checkout -t origin/maintenance/1.7.x")
+            run("git submodule init")
+            run("git checkout -t origin/maintenance/1.8.x")
+            run("git submodule update")
 
 def setup_wine():
     with cd("repos/numpy-vendor"):
@@ -54,8 +56,8 @@ def setup_wine():
 
 def setup_paver():
     with cd("repos/numpy-vendor"):
-        run("tar xzf Paver-1.0.5.tar.gz")
-        with cd("Paver-1.0.5"):
+        run("tar xzf Paver-1.2.2.tar.gz")
+        with cd("Paver-1.2.2"):
             run("python setup.py build")
             sudo("python setup.py install")
 
@@ -69,19 +71,17 @@ def numpy_release():
         run("paver sdist")
         run("python setup.py install --prefix ../local")
         run("paver pdf")
+        run("paver bdist_superpack -p 3.4")
         run("paver bdist_superpack -p 3.3")
         run("paver bdist_superpack -p 3.2")
-        run("paver bdist_superpack -p 3.1")
         run("paver bdist_superpack -p 2.7")
         run("paver bdist_superpack -p 2.6")
-        run("paver bdist_superpack -p 2.5")
         run("paver write_release_and_log")
-        run("paver bdist_wininst_simple -p 2.5")
         run("paver bdist_wininst_simple -p 2.6")
         run("paver bdist_wininst_simple -p 2.7")
-        run("paver bdist_wininst_simple -p 3.1")
         run("paver bdist_wininst_simple -p 3.2")
         run("paver bdist_wininst_simple -p 3.3")
+        run("paver bdist_wininst_simple -p 3.4")
     numpy_copy_release_files()
 
 def numpy_copy_release_files():
@@ -122,7 +122,9 @@ def mac_setup_numpy():
     with cd(mac_tmp):
         run("git clone https://github.com/numpy/numpy")
         with cd("numpy"):
-            run("git checkout -t origin/maintenance/1.7.x")
+            run("git submodule init")
+            run("git checkout -t origin/maintenance/1.8.x")
+            run("git submodule update")
 
 def mac_setup_bdist_mpkg():
     with cd(mac_tmp):
@@ -134,9 +136,9 @@ def mac_setup_bdist_mpkg():
 def mac_setup_paver():
     with cd(mac_tmp):
         with prefix(mac_prefix):
-            put("Paver-1.0.5.tar.gz", ".")
-            run("tar xzf Paver-1.0.5.tar.gz")
-            with cd("Paver-1.0.5"):
+            put("Paver-1.2.2.tar.gz", ".")
+            run("tar xzf Paver-1.2.2.tar.gz")
+            with cd("Paver-1.2.2"):
                 run("python setup.py install --prefix=../usr")
 
 def mac_setup_virtualenv():
@@ -150,7 +152,6 @@ def mac_setup_virtualenv():
 def mac_numpy_release():
     with cd(mac_tmp + "/numpy"):
         run("paver sdist")
-        run("paver dmg -p 2.5")
         run("paver dmg -p 2.6")
         run("paver dmg -p 2.7")
         get("release/installers/*.dmg", "release/")

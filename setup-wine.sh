@@ -1,6 +1,6 @@
 #! /bin/bash
 
-set -e
+set -ex
 
 # This script sets up the Wine environment so that one can start compiling
 # NumPy for Windows.
@@ -26,12 +26,11 @@ rm -rf $HOME/.wine
 export DISPLAY=:100
 
 # The ALLUSERS=1 is essential --- the following line:
-msiexec /i $tarballs/python-3.3.0.msi /qn ALLUSERS=1
-msiexec /i $tarballs/python-3.2.3.msi /qn ALLUSERS=1
-msiexec /i $tarballs/python-3.1.4.msi /qn ALLUSERS=1
-msiexec /i $tarballs/python-2.7.3.msi /qn ALLUSERS=1
+msiexec /i $tarballs/python-3.4.0.msi /qn ALLUSERS=1
+msiexec /i $tarballs/python-3.3.5.msi /qn ALLUSERS=1
+msiexec /i $tarballs/python-3.2.5.msi /qn ALLUSERS=1
+msiexec /i $tarballs/python-2.7.6.msi /qn ALLUSERS=1
 msiexec /i $tarballs/python-2.6.6.msi /qn ALLUSERS=1
-msiexec /i $tarballs/python-2.5.4.msi /qn ALLUSERS=1
 # is then exactly equivalent to the following line:
 #msiexec /i $tarballs/python-2.7.3.msi
 # But doesn't require any user interaction. Without ALLUSERS=1, the installed
@@ -84,17 +83,16 @@ wine regedit regtmp
 
 # Install Nose:
 
-tar xzf $tarballs/distribute-0.6.28.tar.gz
-cd distribute-0.6.28
+tar xzf $tarballs/distribute-0.6.49.tar.gz
+cd distribute-0.6.49
 # The "clean" target here is essential, otherwise distribute fails to install
 # properly in Python 3 (silently!) and then the Nose install fails at install
 # time.
-wine "C:\Python25\python" setup.py install clean
 wine "C:\Python26\python" setup.py install clean
 wine "C:\Python27\python" setup.py install clean
-wine "C:\Python31\python" setup.py install clean
 wine "C:\Python32\python" setup.py install clean
 wine "C:\Python33\python" setup.py install clean
+wine "C:\Python34\python" setup.py install clean
 cd ..
 
 tar xzf $tarballs/nose-1.1.2.tar.gz
@@ -120,24 +118,23 @@ patch -p1 < nose.patch
 
 # Again, the "clean --all" target is essential (especially the "--all").
 # Without it it (silently!) installs and then fails at import time.
-wine "C:\Python25\python" setup.py install clean --all
 wine "C:\Python26\python" setup.py install clean --all
 wine "C:\Python27\python" setup.py install clean --all
-wine "C:\Python31\python" setup.py install clean --all
 wine "C:\Python32\python" setup.py install clean --all
 wine "C:\Python33\python" setup.py install clean --all
+wine "C:\Python34\python" setup.py install clean --all
 cd ..
 
 # Install Paver only in Python 2.7:
 
-tar xzf $tarballs/Paver-1.0.5.tar.gz
-cd Paver-1.0.5
+tar xzf $tarballs/Paver-1.2.2.tar.gz
+cd Paver-1.2.2
 wine "C:\Python27\python" setup.py install
 cd ..
 
 # Install SCons only in Python 2.7:
 
-tar xzf $tarballs/scons-2.2.0.tar.gz
-cd scons-2.2.0
+tar xzf $tarballs/scons-2.3.0.tar.gz
+cd scons-2.3.0
 wine "C:\Python27\python" setup.py install
 cd ..
