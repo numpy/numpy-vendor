@@ -67,7 +67,8 @@ def numpy_cpucaps():
             run(r"cp cpucaps.dll $HOME/.wine/drive_c/Program\ Files\ \(x86\)/NSIS/Plugins")
 
 def numpy_release():
-    with cd("repos/numpy"), shell_env(PYTHONPATH='/home/vagrant/repos/local/lib/python2.7/site-packages'):
+    with cd("repos/numpy"), shell_env(PYTHONPATH='/home/vagrant/repos/local/lib/python2.7/site-packages',
+                                      NPY_SEPARATE_COMPILATION='0'):
         run("rm -rf ../local")
         run("paver sdist")
         run("python setup.py install --prefix ../local")
