@@ -47,7 +47,7 @@ def gitrepos():
         run("git clone https://github.com/numpy/numpy")
         with cd("numpy"):
             run("git submodule init")
-            run("git checkout -t origin/maintenance/1.8.x")
+            run("git checkout -t origin/maintenance/1.9.x")
             run("git submodule update")
 
 def setup_wine():
@@ -62,8 +62,8 @@ def setup_paver():
             sudo("python setup.py install")
 
 def numpy_cpucaps():
-    with cd("repos/numpy/tools/win32build/cpucaps"):
-            run('wine "C:\Python27\python" "C:\Python27\Scripts\scons.py"')
+    with cd("repos/numpy/tools/win32build"):
+            run('wine "C:\Python27\python" build-cpucaps.py')
             run(r"cp cpucaps.dll $HOME/.wine/drive_c/Program\ Files\ \(x86\)/NSIS/Plugins")
 
 def numpy_release():
@@ -75,13 +75,9 @@ def numpy_release():
         run("paver pdf")
         run("paver bdist_superpack -p 3.4")
         run("paver bdist_superpack -p 3.3")
-        run("paver bdist_superpack -p 3.2")
         run("paver bdist_superpack -p 2.7")
-        run("paver bdist_superpack -p 2.6")
         run("paver write_release_and_log")
-        run("paver bdist_wininst_simple -p 2.6")
         run("paver bdist_wininst_simple -p 2.7")
-        run("paver bdist_wininst_simple -p 3.2")
         run("paver bdist_wininst_simple -p 3.3")
         run("paver bdist_wininst_simple -p 3.4")
     numpy_copy_release_files()
@@ -124,7 +120,7 @@ def mac_setup_numpy():
         run("git clone https://github.com/numpy/numpy")
         with cd("numpy"):
             run("git submodule init")
-            run("git checkout -t origin/maintenance/1.8.x")
+            run("git checkout -t origin/maintenance/1.9.x")
             run("git submodule update")
 
 def mac_setup_bdist_mpkg():
