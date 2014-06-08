@@ -29,6 +29,9 @@ def prepare_apt():
     # (http://askubuntu.com/questions/16225/how-can-i-accept-the-agreement-in-a-terminal-like-for-ttf-mscorefonts-installer)
     sudo("echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections")
     sudo("apt-get -y install git wine python-virtualenv texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended make python-dev g++ libfreetype6-dev libpng-dev python-matplotlib python-setuptools python-jinja2 python-pygments python-docutils python-sphinx --no-install-recommends")
+    # trusty cython, should probably be replaced with a regular upstream wheel
+    sudo("dpkg -i /vagrant/cython_0.20.2-1_i386.deb")
+    sudo("apt-get install -f")
 
 def remove_userspace():
     """
