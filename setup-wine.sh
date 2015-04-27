@@ -41,8 +41,8 @@ cd $HOME/.wine/drive_c/
 # Install Atlas binaries:
 mkdir -p local/lib/
 cd local/lib
-cp -r $tarballs/atlas .
-ln -s atlas yop  # This is needed for older versions of NumPy
+cp -r $tarballs/atlas/binaries .
+ln -s atlas/binaries yop  # This is needed for older versions of NumPy
 cd ../..
 
 mkdir MinGW
