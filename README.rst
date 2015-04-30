@@ -98,7 +98,7 @@ Mac Binaries
 
 First prepare the Mac build box as follows:
 
-* Install Python 2.5, 2.6, 2.7 from python.org using the dmg disk image
+* Install Python 2.7, 3.3 and 3.4 from python.org using the dmg disk image
 * Install setuptools and bdist_mpkg into all these Pythons
 * Install Paver into the default Python
 
