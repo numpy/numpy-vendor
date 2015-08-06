@@ -9,7 +9,46 @@ The NumPy release notes are here:
 https://github.com/numpy/numpy/blob/master/doc/HOWTO_RELEASE.rst.txt
 
 But most of it is automated by numpy-vendor, so once the release branch is
-approved for release, just follow the instructions below.
+approved for release, just follow the instructions below. Note that Fedora
+requires root to manage virtual machines.
+
+Fedora 22 prep
+~~~~~~~~~~~~~~
+numpy-vendor will not run out of the box on Fedora 22. In order to use kvm/qemu
+for the virtualization the following need to be installed. Some of these
+may be dependencies of the others.
+
+- fabric
+- vagrant
+- vagrant-libvirt
+- libvirt
+- libvirt-devel
+- libvirt-daemon-kvm
+- qemu-kvm
+
+The box file needs to be libvirt compatible. That can be achieved with the
+following commands.
+
+$ vagrant plugin install vagrant-mutate
+$ vagrant box add precise32 http://files.vagrantup.com/precise32.box
+$ vagrant mutate precise32 libvirt
+
+The firewall needs to be opened up for nfs.
+
+$ sudo firewall-config
+
+The default zone should be WorkStation (or some such). For that zone allow
+
+- nfs
+- rpc-bind
+- mountd
+
+The default udp port range should be OK, needs to include 2049.
+
+Create an .ssh/config file to avoid many warnings::
+
+    $ touch /home/charris/.ssh/config
+    $ chmod 644 ~/.ssh/config
 
 How To Use
 ----------
@@ -57,7 +96,7 @@ And make sure the ``VERSION`` variable is set properly. Commit it::
 Push this commit into your local github account, not the official repository
 yet, for example by::
 
-    vagrah ssh
+    vagrant ssh
     cd repos/numpy
     git push git@github.com:certik/numpy maintenance/1.7.x:release_test
 
