@@ -71,7 +71,8 @@ def numpy_cpucaps():
 
 def numpy_release():
     with cd("repos/numpy"), shell_env(PYTHONPATH='/home/vagrant/repos/local/lib/python2.7/site-packages',
-                                      NPY_SEPARATE_COMPILATION='0'):
+                                      NPY_SEPARATE_COMPILATION='1',
+                                      OSTYPE='msys'):
         run("rm -rf ../local")
         run("paver sdist")
         run("python setup.py install --prefix ../local")
