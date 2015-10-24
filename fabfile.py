@@ -50,7 +50,7 @@ def gitrepos():
         run("git clone https://github.com/numpy/numpy")
         with cd("numpy"):
             run("git submodule init")
-            run("git checkout -t origin/maintenance/1.9.x")
+            run("git checkout -t origin/maintenance/1.10.x")
             run("git submodule update")
 
 def setup_wine():
