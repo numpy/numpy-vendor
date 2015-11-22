@@ -53,6 +53,14 @@ def gitrepos():
             run("git checkout -t origin/maintenance/1.10.x")
             run("git submodule update")
 
+def prepare_scipy():
+    run("mkdir -p repos")
+    with cd("repos"):
+        run("git clone https://github.com/scipy/scipy")
+        with cd("scipy"):
+            run("git submodule init")
+            run("git submodule update")
+
 def setup_wine():
     with cd("repos/numpy-vendor"):
         run("./setup-wine.sh")
