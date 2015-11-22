@@ -61,6 +61,17 @@ def prepare_scipy():
             run("git submodule init")
             run("git submodule update")
 
+    install_numpy_for_scipy()
+
+def install_numpy_for_scipy():
+    install_cmd = "setup.py config --compiler=mingw32 build --compiler=mingw32 install"
+    with cd("repos/numpy"):
+        for pyver, npver in (('27', '1.6.2'), ('33', '1.7.2'), ('34', '1.7.2')):
+            run("git clean -xdf")
+            run("rm -rf doc/sphinxext")  # otherwise cannot checkout old tags
+            run("git checkout v" + npver)
+            run("wine 'C:\Python%s\python' %s" % (pyver, install_cmd))
+
 def setup_wine():
     with cd("repos/numpy-vendor"):
         run("./setup-wine.sh")
