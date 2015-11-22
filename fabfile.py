@@ -61,6 +61,7 @@ def prepare_scipy():
             run("git submodule init")
             run("git submodule update")
 
+    sudo("sudo apt-get install libatlas-base-dev")
     install_numpy_for_scipy()
 
 def install_numpy_for_scipy():
