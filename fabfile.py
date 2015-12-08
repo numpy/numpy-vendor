@@ -1,8 +1,10 @@
-from fabric.api import env, local, run, sudo, cd, hide, prefix
+from fabric.api import env, local, run, sudo, cd
 from fabric.context_managers import shell_env, prefix
 from fabric.operations import put, get
-from fabric.contrib.files import append, exists
+
+
 env.use_ssh_config = True
+
 
 def all():
     prepare()
@@ -56,6 +58,29 @@ def gitrepos():
             run("git submodule init")
             run("git checkout -t origin/maintenance/1.10.x")
             run("git submodule update")
+
+def prepare_scipy(fork='scipy'):
+    """
+    Use a custom repo with: ``$ fab vagrant prepare_scipy:username``.
+    """
+    run("mkdir -p repos")
+    with cd("repos"):
+        run("git clone https://github.com/%s/scipy" % fork)
+        with cd("scipy"):
+            run("git submodule init")
+            run("git submodule update")
+
+    sudo("apt-get -y install libatlas-base-dev")
+    install_numpy_for_scipy()
+
+def install_numpy_for_scipy():
+    install_cmd = "setup.py config --compiler=mingw32 build --compiler=mingw32 install"
+    with cd("repos/numpy"):
+        for pyver, npver in (('27', '1.6.2'), ('33', '1.7.2'), ('34', '1.7.2')):
+            run("git clean -xdf")
+            run("rm -rf doc/sphinxext")  # otherwise cannot checkout old tags
+            run("git checkout v" + npver)
+            run("wine 'C:\Python%s\python' %s" % (pyver, install_cmd))
 
 def setup_wine():
     with cd("repos/numpy-vendor"):
