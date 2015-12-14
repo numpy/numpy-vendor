@@ -90,7 +90,7 @@ def numpy_copy_release_files():
     with cd("repos/numpy"):
         run("cp -r release/ /vagrant/")
         run("cp build_doc/pdf/*.pdf /vagrant/release/")
-        run("mkdir /vagrant/release/pypi")
+        run("mkdir -p /vagrant/release/pypi")
         run("cp dist/*.exe /vagrant/release/pypi/")
     with cd("/vagrant/release"):
         run("mv installers/* .")
@@ -103,7 +103,7 @@ mac_tmp = "numpy_tmp" # NumPy and dependencies will be built in $HOME/"mac_tmp"
 mac_prefix = 'export PYTHONPATH="$HOME/%s/usr/lib/python2.7/site-packages/" PATH="$HOME/%s/usr/bin:$PATH"' % (mac_tmp, mac_tmp)
 
 def mac_setup():
-    run("mkdir %s" % mac_tmp)
+    run("mkdir -p %s" % mac_tmp)
     mac_setup_numpy()
     #mac_setup_paver()
     #mac_setup_virtualenv()
